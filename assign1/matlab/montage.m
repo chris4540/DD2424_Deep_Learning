@@ -87,7 +87,7 @@ if ischar(I)
   if isempty(I)
     % No images found
     return
-  end  
+  end
 end
 
 if isnumeric(I)
@@ -318,7 +318,7 @@ end
 return
 
 %% Get the names of all images in a directory
-function L = get_im_names
+function L = get_im_names()
 D = dir;
 n = 0;
 L = cell(size(D));
