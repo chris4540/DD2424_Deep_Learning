@@ -9,6 +9,12 @@ class OneLayerNetwork:
     eta = 0.01
     n_epochs = 40
 
+    W_mat = None
+    b_vec = None
+
+    train_costs = []
+    valid_costs = []
+
     def __init__(self, nclass, ndim, lambda_=0.0):
         """
         Args:
@@ -54,10 +60,16 @@ class OneLayerNetwork:
             self._mini_batch_train(X_train, Y_train)
 
             # calcualte the cost function
-            train_loss = self.compute_cost(X_train, Y_train)
-            valid_loss = self.compute_cost(self.X_valid, self.Y_valid)
+            train_cost = self.compute_cost(X_train, Y_train)
+            valid_cost = self.compute_cost(self.X_valid, self.Y_valid)
+
+            # print out
             print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}".format(
-                iter_, train_loss, valid_loss))
+                iter_, train_cost, valid_cost))
+
+            # append the cost
+            self.train_costs.append(train_cost)
+            self.valid_costs.append(valid_cost)
 
     def _mini_batch_train(self, X_train, Y_train):
         """
