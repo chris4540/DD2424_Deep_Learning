@@ -17,8 +17,8 @@ class OneLayerNetwork:
     b_vec = None
 
     # for saving the history of training
-    train_costs = []
-    valid_costs = []
+    train_costs = None
+    valid_costs = None
 
     #
     _verbose = True
@@ -47,11 +47,13 @@ class OneLayerNetwork:
                 print("{}: {}".format(k, getattr(self, k)))
             print("-------- MODEL PARAMS --------")
 
-
         # initialize classifier parameters
         self.init_param()
         # set the default values for the training parameters
         self.set_train_params()
+
+        self.train_costs = list()
+        self.valid_costs = list()
 
     def init_param(self):
 

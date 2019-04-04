@@ -8,7 +8,7 @@ import visual
 # get the training data
 train_data = load_batch("cifar-10-batches-py/data_batch_1")
 valid_data = load_batch("cifar-10-batches-py/data_batch_2")
-test_data = load_batch("cifar-10-batches-py/data_batch_3")
+test_data = load_batch("cifar-10-batches-py/test_batch")
 
 def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
 
@@ -26,9 +26,11 @@ def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
 
     plt = visual.plot_loss(ann)
     plt.savefig("loss_{}.png".format(case_tag))
+    plt.close()
 
     plt = visual.plot_weight_mat(ann)
     plt.savefig("wgt_{}.png".format(case_tag))
+    plt.close()
 
 if __name__ == '__main__':
     perform_testing("case1", lambda_=0.0, n_epochs=40, n_batch=100, eta=0.1)

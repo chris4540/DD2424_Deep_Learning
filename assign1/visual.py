@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from load_batch import unpickle
 
 def plot_sample_img(file):
@@ -47,10 +48,14 @@ def plot_weight_mat(network):
 
 
 def plot_loss(network):
+
     x = list(range(1, len(network.train_costs)+1))
+    ax = plt.figure().gca()
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+
     plt.plot(x, network.train_costs, label='training loss')
     plt.plot(x, network.valid_costs, label='validation loss')
-    plt.ylim(1.6, 2.1)
     plt.xlim(left=1)
     plt.legend(loc='upper right')
     plt.title("Plot training and validation loss at each epoch")
