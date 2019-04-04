@@ -5,34 +5,58 @@ import numpy as np
 
 class OneLayerNetwork:
 
-    n_batch = 100
-    eta = 0.01
-    n_epochs = 40
+    # mini-batch gradient descent params
+    N_BATCH_DEFAULT = 100
+    ETA_DEFAULT = 0.01
+    N_EPOCHS_DEFAULT = 10
+
+    # variance for init paramters (W and b)
+    sigma = 0.01 ** 2
 
     W_mat = None
     b_vec = None
 
+    # for saving the history of training
     train_costs = []
     valid_costs = []
 
-    def __init__(self, nclass, ndim, lambda_=0.0):
+    #
+    _verbose = True
+
+    def __init__(self, nclass, ndim, lambda_=0.0, verbose=True):
         """
+        Initialize the model with parameters
+
         Args:
             nclass: the number of classes
             ndim: the size of the input vector (X)
+            lambda_: the weight of the regularization term
         """
-        self.lambda_ = lambda_
-
+        # set network parameters
         self.nclass = nclass
         self.ndim = ndim
+        # set hyperparameter: the weight of the regularization term
+        self.lambda_ = lambda_
 
+        # set if verbose
+        self._verbose = verbose
+
+        if self._verbose:
+            print("-------- MODEL PARAMS --------")
+            for k in ["nclass", "ndim", "lambda_"]:
+                print("{}: {}".format(k, getattr(self, k)))
+            print("-------- MODEL PARAMS --------")
+
+
+        # initialize classifier parameters
         self.init_param()
+        # set the default values for the training parameters
+        self.set_train_params()
 
     def init_param(self):
-        sigma = 0.01 ** 2
 
-        self.W_mat = sigma * np.random.randn(self.nclass, self.ndim)
-        self.b_vec = sigma * np.random.randn(self.nclass, 1)
+        self.W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
+        self.b_vec = self.sigma * np.random.randn(self.nclass, 1)
 
     def set_train_data(self, X_train, Y_train):
         # copy the training set
@@ -43,7 +67,23 @@ class OneLayerNetwork:
         self.X_valid = np.copy(X_valid)
         self.Y_valid = np.copy(Y_valid)
 
+    def set_train_params(self, *args, **kwargs):
+        """
+        Set the training parameters
+        """
+        self.n_batch = kwargs.get("n_batch", self.N_BATCH_DEFAULT)
+        self.n_epochs = kwargs.get("n_epochs", self.N_EPOCHS_DEFAULT)
+        self.eta = kwargs.get("eta", self.ETA_DEFAULT)
+
     def train(self):
+
+        if self._verbose:
+            # print training params
+            print("-------- TRAINING PARAMS --------")
+            for k in ["n_batch", "n_epochs", "eta"]:
+                print("{}: {}".format(k, getattr(self, k)))
+            print("-------- TRAINING PARAMS --------")
+
         X_train = self.X_train
         Y_train = self.Y_train
 
@@ -64,8 +104,9 @@ class OneLayerNetwork:
             valid_cost = self.compute_cost(self.X_valid, self.Y_valid)
 
             # print out
-            print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}".format(
-                iter_, train_cost, valid_cost))
+            if self._verbose:
+                print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}".format(
+                    iter_, train_cost, valid_cost))
 
             # append the cost
             self.train_costs.append(train_cost)
@@ -110,13 +151,8 @@ class OneLayerNetwork:
 
         cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
 
-        ret = (np.sum(cross_entro) / n_data) + self.get_regular_term()
+        ret = (np.sum(cross_entro) / n_data) + self.lambda_*np.sum(self.W_mat**2)
         return ret
-
-    def get_regular_term(self):
-        """
-        """
-        return self.lambda_ * np.sum(self.W_mat**2)
 
     def compute_accuracy(self, X_mat, y_val):
         """
@@ -137,13 +173,13 @@ class OneLayerNetwork:
         k = self.nclass
         # nclass x n_data
         p_mat = self.evaluate(X_mat)
-        assert p_mat.shape == (k, n_data)
-        assert Y_mat.shape == (k, n_data)
+        # assert p_mat.shape == (k, n_data)
+        # assert Y_mat.shape == (k, n_data)
         g_mat = -(Y_mat - p_mat)
 
         # G * 1_{n_b} / n_b: take mean over axis 1
         grad_b = np.mean(g_mat, axis=1)
-        assert grad_b.shape == (k,)
+        # assert grad_b.shape == (k,)
         grad_b = grad_b.reshape((k, 1))
 
         grad_W = g_mat.dot(X_mat.T) / n_data
