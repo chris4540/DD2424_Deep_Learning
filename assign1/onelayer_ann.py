@@ -84,52 +84,9 @@ class OneLayerNetwork:
         # G * 1_{n_b} / n_b: take mean over axis 1
         grad_b = np.mean(g_mat, axis=1)
         assert grad_b.shape == (k,)
-        grad_b.reshape((k, 1))
+        grad_b = grad_b.reshape((k, 1))
 
         grad_W = g_mat.dot(X_mat.T) / n_data
         grad_W += 2 * self.lambda_ * self.W_mat
-
-        return (grad_W, grad_b)
-
-    def compute_grads_num(self, X_mat, Y_mat):
-        """
-        Translated from matlab version of ComputeGradsNum
-        """
-        h = 1e-6
-        nclass = self.nclass
-
-        ndim = self.ndim
-
-        grad_W = np.zeros(self.W_mat.shape)
-
-        grad_b = np.zeros((nclass, 1))
-
-        cost = self.compute_cost(X_mat, Y_mat);
-
-        b = np.copy(self.b_vec)
-        W = np.copy(self.W_mat)
-
-
-        for i in range(nclass):
-            b_old = self.b_vec[i, 0]
-
-            self.b_vec[i, 0] = self.b_vec[i, 0] + h
-            new_cost = self.compute_cost(X_mat, Y_mat)
-            grad_b[i, 0] = (new_cost - cost) / h
-
-            self.b_vec[i, 0] = b_old
-
-        self.b_vec = np.copy(b)
-
-        for idx in np.ndindex(W.shape):
-            w_old = self.W_mat[idx]
-
-            self.W_mat[idx] = self.W_mat[idx] + h
-            new_cost = self.compute_cost(X_mat, Y_mat)
-            grad_W[idx] = (new_cost - cost) / h
-
-            self.W_mat[idx] = w_old
-
-        self.W_mat = np.copy(W)
 
         return (grad_W, grad_b)
