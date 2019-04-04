@@ -4,6 +4,8 @@ Ref: https://stackoverflow.com/a/40144107/8654623
 """
 import pickle
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from load_batch import unpickle
 
