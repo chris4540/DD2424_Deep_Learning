@@ -34,27 +34,30 @@ class OneLayerNetwork:
         self.Y_train = np.copy(Y_train)
 
     def set_valid_data(self, X_valid, Y_valid):
-        pass
+        self.X_valid = np.copy(X_valid)
+        self.Y_valid = np.copy(Y_valid)
 
     def train(self):
-
+        X_train = self.X_train
+        Y_train = self.Y_train
 
         for iter_ in range(self.n_epochs):
             # shuffle the samples
-            if True:
-                idx = np.random.rand(self.X_train.shape[1]).argsort()
+            if iter_!= 0 and iter_ % 10 == 0:
+                # idx = np.random.rand(self.X_train.shape[1]).argsort()
+                idx = np.arange(X_train.shape[1])
+                np.random.shuffle(idx)
                 X_train = np.take(self.X_train, idx, axis=1)
                 Y_train = np.take(self.Y_train, idx, axis=1)
-            else:
-                X_train = self.X_train
-                Y_train = self.Y_train
 
             # mini-batch training
             self._mini_batch_train(X_train, Y_train)
 
             # calcualte the cost function
-            cost = self.compute_cost(X_train, Y_train)
-            print("Iteration %d: Cost = %f" % (iter_, cost))
+            train_loss = self.compute_cost(X_train, Y_train)
+            valid_loss = self.compute_cost(self.X_valid, self.Y_valid)
+            print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}".format(
+                iter_, train_loss, valid_loss))
 
     def _mini_batch_train(self, X_train, Y_train):
         """
@@ -107,7 +110,7 @@ class OneLayerNetwork:
         """
         """
         p_mat = self.evaluate(X_mat)
-        y_pred = np.argmax(p, axis=0)
+        y_pred = np.argmax(p_mat, axis=0)
 
         ret = (y_pred == y_val).mean()
         return ret
