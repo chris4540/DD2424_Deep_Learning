@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from numpy.testing import assert_allclose
-from onelayer_ann import OneLayerNetwork
+from one_layer_ann import OneLayerNetwork
 from load_batch import load_batch
 
 class OneLayerNetworkNumGrad(OneLayerNetwork):

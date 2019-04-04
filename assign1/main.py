@@ -1,7 +1,7 @@
 """
 This file is for the Exercise 1 described in the assignment1.pdf
 """
-from onelayer_ann import OneLayerNetwork
+from one_layer_ann import OneLayerNetwork
 from load_batch import load_batch
 
 if __name__ == '__main__':
