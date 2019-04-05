@@ -98,8 +98,8 @@ class TestOneLayerNetworkGradientCal(unittest.TestCase):
 
         nclass = self.Y_mat.shape[0]
 
-        self.ann_small = OneLayerNetworkNumGrad(nclass, ndim_small, lambda_=0.0)
-        self.ann = OneLayerNetworkNumGrad(nclass, ndim, lambda_=0.0)
+        self.ann_small = OneLayerNetworkNumGrad(nclass, ndim_small, lambda_=0.0, verbose=False)
+        self.ann = OneLayerNetworkNumGrad(nclass, ndim, lambda_=0.0, verbose=False)
 
     def test_grad_fwd_diff_small(self):
         X_mat = self.X_mat_small
@@ -143,8 +143,8 @@ class TestOneLayerNetworkGradientCal(unittest.TestCase):
     def check_all_close_central_diff(network, X_mat, Y_mat):
         grad_W, grad_b = network.compute_grad(X_mat, Y_mat)
         grad_W2, grad_b2 = network.compute_grad_central_diff(X_mat, Y_mat)
-        assert_allclose(grad_W, grad_W2, atol=1e-09)
-        assert_allclose(grad_b, grad_b2, atol=1e-09)
+        assert_allclose(grad_W, grad_W2, rtol=1e-07, atol=1e-09)
+        assert_allclose(grad_b, grad_b2, rtol=1e-07, atol=1e-09)
 
 
 if __name__ == '__main__':
