@@ -1,6 +1,9 @@
 \documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -29,4 +32,42 @@ I set \texttt{atol} as \num{1e-7} and \texttt{rtol} as \num{1e-06} for the
 forward difference method and set \texttt{atol} as \num{1e-9} and \texttt{rtol} as \num{1e-07}
 for the central difference method.
 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{loss_case1.png}
+        \caption[]%
+        {{\small Network 1}}
+        \label{fig:mean and std of net14}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{loss_case1.png}
+        \caption[]%
+        {{\small Network 2}}
+        \label{fig:mean and std of net24}
+    \end{subfigure}
+    \vskip\baselineskip
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{loss_case1.png}
+        \caption[]%
+        {{\small Network 3}}
+        \label{fig:mean and std of net34}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{loss_case1.png}
+        \caption[]%
+        {{\small Network 4}}
+        \label{fig:mean and std of net44}
+    \end{subfigure}
+    \caption[ The average and standard deviation of critical parameters ]
+    {\small The average and standard deviation of critical parameters: Region R4}
+    \label{fig:mean and std of nets}
+\end{figure}
 \end{document}
