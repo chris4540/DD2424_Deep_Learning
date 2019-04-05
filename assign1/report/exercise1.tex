@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{siunitx}
+
+\begin{document}
+
+\title{DD2424 Deep Learning in Data Science Assignment 1 Ex. 1}
+\author{Lin Chun Hung, chlin3@kth.se}
+
+\maketitle
+
+In this exercise, a python version of multi-linear classifier was implemented.
+The function to compute the gradient with analytical method was competed.
+
+Unit tests for the function computing the gradient were written. In those unit tests,
+I used \texttt{numpy.testing.assert\_allclose} to check if all the elements of two pairs of gradients,
+\texttt{gradW} and \texttt{gradb}, computed from the analytical method and the numerical methods are closed.
+In the assertion, the following equation is element-wise true, otherwise the unit test will fail.
+
+\begin{equation*}
+    % absolute(a - b) <= (atol + rtol * absolute(b))
+    |a - b| \leq (\texttt{atol} + \texttt{rtol} * |b|)
+\end{equation*}
+where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
+
+Since the forward difference method is less accurate than the central difference method,
+the tolerance parameters are different when comparing them to analytical method.
+I set \texttt{atol} as \num{1e-7} and \texttt{rtol} as \num{1e-06} for the
+forward difference method and set \texttt{atol} as \num{1e-9} and \texttt{rtol} as \num{1e-07}
+for the central difference method.
+
+\end{document}
