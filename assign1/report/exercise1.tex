@@ -4,6 +4,9 @@
 \usepackage{siunitx}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{csvsimple}
+
+\setlength{\parskip}{1em}
 
 \begin{document}
 
@@ -32,42 +35,91 @@ I set \texttt{atol} as \num{1e-7} and \texttt{rtol} as \num{1e-06} for the
 forward difference method and set \texttt{atol} as \num{1e-9} and \texttt{rtol} as \num{1e-07}
 for the central difference method.
 
+We have four parameter sets and they are:
+\begin{enumerate}
+    \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.1}
+    \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.01}
+    \item  \texttt{lambda=0.1, n\_epochs=40, n\_batch=100, eta=0.01}
+    \item  \texttt{lambda=1.0, n\_epochs=40, n\_batch=100, eta=0.01}
+\end{enumerate}
 
+% The cost function
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
         \includegraphics[width=\textwidth]{loss_case1.png}
         \caption[]%
-        {{\small Network 1}}
-        \label{fig:mean and std of net14}
+        {{\small Parameter set 1}}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{loss_case1.png}
+        \includegraphics[width=\textwidth]{loss_case2.png}
         \caption[]%
-        {{\small Network 2}}
-        \label{fig:mean and std of net24}
+        {{\small Parameter set 2}}
     \end{subfigure}
     \vskip\baselineskip
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{loss_case1.png}
+        \includegraphics[width=\textwidth]{loss_case3.png}
         \caption[]%
-        {{\small Network 3}}
-        \label{fig:mean and std of net34}
+        {{\small Parameter set 3}}
     \end{subfigure}
     \quad
     \begin{subfigure}[b]{0.475\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{loss_case1.png}
+        \includegraphics[width=\textwidth]{loss_case4.png}
         \caption[]%
-        {{\small Network 4}}
-        \label{fig:mean and std of net44}
+        {{\small Parameter set 4}}
     \end{subfigure}
-    \caption[ The average and standard deviation of critical parameters ]
-    {\small The average and standard deviation of critical parameters: Region R4}
-    \label{fig:mean and std of nets}
+    \caption[]
+    {\small The graph of the training and validation loss computed after each epoch}
 \end{figure}
+
+% The learnt weight matrix
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{wgt_case1.png}
+        \caption[]%
+        {{\small Parameter set 1}}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{wgt_case2.png}
+        \caption[]%
+        {{\small Parameter set 2}}
+    \end{subfigure}
+    \vskip\baselineskip
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{wgt_case3.png}
+        \caption[]%
+        {{\small Parameter set 3}}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{wgt_case4.png}
+        \caption[]%
+        {{\small Parameter set 4}}
+    \end{subfigure}
+    \caption[]
+    {\small The Images representing the learnt weight matrix after the completion of training}
+\end{figure}
+
+\begin{table}
+    \centering
+    \csvreader[tabular=|c|c|,respect percent=true,
+        table head=\hline Parameter set & Accuracy \\\hline,
+        late after line = \\\hline]
+    {test_accuracy.csv}
+    {param_set=\paramset,accuracy=\accuracy}
+    {\paramset & \accuracy}
+    \caption{<your caption>}
+\end{table}
+
 \end{document}
