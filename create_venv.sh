@@ -11,13 +11,13 @@
 #
 
 # remove the venv package
-rm -rf venv
+rm -rf ~/venv
 
 # create the venv environment
-virtualenv -p /usr/bin/python3 venv
+virtualenv -p /usr/bin/python3 ~/venv
 
 # activate the environment
-source venv/bin/activate
+source ~/venv/bin/activate
 
 # Update pip
 pip install --upgrade pip
