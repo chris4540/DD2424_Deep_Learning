@@ -110,3 +110,6 @@ venv.bak/
 *.fdb_latexmk
 *.synctex.gz
 *.png
+
+# vscode
+.vscode/

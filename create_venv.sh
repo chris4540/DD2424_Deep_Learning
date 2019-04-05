@@ -5,9 +5,7 @@
 #
 #   The target packages are:
 #       numpy
-#       scipy
 #       matplotlib   -  for visualize the route result in testing routine
-#       pandas       -  for analyze the benchmark results
 #
 
 # remove the venv package
@@ -24,6 +22,5 @@ pip install --upgrade pip
 
 # install packages in binary format (wheel)
 pip install numpy
-# pip install scipy
 pip install matplotlib
-# pip install pandas
+
