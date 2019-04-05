@@ -1,13 +1,13 @@
 """
-Example code to visualize the dataset
-Ref: https://stackoverflow.com/a/40144107/8654623
+Code to visualize the dataset and the training process
 """
 import pickle
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
+# from matplotlib.ticker import MaxNLocator
+import matplotlib.ticker as plticker
 from load_batch import unpickle
 
 def plot_sample_img(file):
@@ -44,15 +44,23 @@ def plot_weight_mat(network):
         k = i % 5
         axs[j][k].axis("off")
         axs[j][k].imshow(im_rescale)
+    plt.tight_layout()
     return plt
 
 
 def plot_loss(network):
 
-    x = list(range(1, len(network.train_costs)+1))
     ax = plt.figure().gca()
-    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+    x = list(range(1, len(network.train_costs)+1))
+    max_y_val = np.max(network.train_costs)
+    min_y_val = np.max(network.train_costs)
+    if max_y_val > 3:
+        loc = plticker.MultipleLocator(base=1.0)
+    else:
+        loc = plticker.MultipleLocator(base=0.05)
+
+    ax.yaxis.set_major_locator(loc)
+
 
     plt.plot(x, network.train_costs, label='training loss')
     plt.plot(x, network.valid_costs, label='validation loss')
@@ -61,6 +69,7 @@ def plot_loss(network):
     plt.title("Plot training and validation loss at each epoch")
     plt.ylabel("loss")
     plt.xlabel("epoch")
+    plt.tight_layout()
     return plt
 
 if __name__ == '__main__':
