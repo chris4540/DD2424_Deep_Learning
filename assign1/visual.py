@@ -44,6 +44,7 @@ def plot_weight_mat(network):
         k = i % 5
         axs[j][k].axis("off")
         axs[j][k].imshow(im_rescale)
+
     plt.tight_layout()
     return plt
 
@@ -53,14 +54,11 @@ def plot_loss(network):
     ax = plt.figure().gca()
     x = list(range(1, len(network.train_costs)+1))
     max_y_val = np.max(network.train_costs)
-    min_y_val = np.max(network.train_costs)
     if max_y_val > 3:
         loc = plticker.MultipleLocator(base=1.0)
-    else:
-        loc = plticker.MultipleLocator(base=0.05)
-
-    ax.yaxis.set_major_locator(loc)
-
+        ax.yaxis.set_major_locator(loc)
+    # else:
+    #     loc = plticker.MultipleLocator(base=0.05)
 
     plt.plot(x, network.train_costs, label='training loss')
     plt.plot(x, network.valid_costs, label='validation loss')
