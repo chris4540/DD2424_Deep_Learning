@@ -25,11 +25,11 @@ def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
     print("{}: Accuracy: {}".format(case_tag, acc))
 
     plt = visual.plot_loss(ann)
-    plt.savefig("loss_{}.png".format(case_tag))
+    plt.savefig("report/loss_{}.png".format(case_tag))
     plt.close()
 
     plt = visual.plot_weight_mat(ann)
-    plt.savefig("wgt_{}.png".format(case_tag))
+    plt.savefig("report/wgt_{}.png".format(case_tag))
     plt.close()
 
 if __name__ == '__main__':
