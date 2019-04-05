@@ -1,5 +1,5 @@
 """
-One layer network
+One layer network for multi-linear classifier
 """
 import numpy as np
 
@@ -173,15 +173,13 @@ class OneLayerNetwork:
         """
         n_data = X_mat.shape[1]
         k = self.nclass
-        # nclass x n_data
+        # p_mat.shape == (nclass, n_data)
         p_mat = self.evaluate(X_mat)
-        # assert p_mat.shape == (k, n_data)
-        # assert Y_mat.shape == (k, n_data)
+
         g_mat = -(Y_mat - p_mat)
 
         # G * 1_{n_b} / n_b: take mean over axis 1
         grad_b = np.mean(g_mat, axis=1)
-        # assert grad_b.shape == (k,)
         grad_b = grad_b.reshape((k, 1))
 
         grad_W = g_mat.dot(X_mat.T) / n_data
