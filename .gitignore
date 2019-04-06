@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# ipython notebook
+*.ipynb
+
 # latex
 *.pdf
 *.aux
@@ -113,3 +116,6 @@ venv.bak/
 
 # vscode
 .vscode/
+
+# reference
+ref.txt
