@@ -16,12 +16,12 @@
 \maketitle
 
 In this exercise, a python version of multi-linear classifier was implemented.
-The function to compute the gradient with analytical method was competed.
+The function for computing the gradients with analytical method was sucessfully implemented.
 
 Unit tests for the function computing the gradient were written. In those unit tests,
 I used \texttt{numpy.testing.assert\_allclose} to check if all the elements of two pairs of gradients,
 \texttt{gradW} and \texttt{gradb}, computed from the analytical method and the numerical methods are closed.
-In the assertion, the following equation is element-wise true, otherwise the unit test will fail.
+In the testing assertion, the following equation is element-wise true, otherwise the unit test will fail.
 
 \begin{equation*}
     % absolute(a - b) <= (atol + rtol * absolute(b))
@@ -31,17 +31,34 @@ where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
 
 Since the forward difference method is less accurate than the central difference method,
 the tolerance parameters are different when comparing them to analytical method.
+In the test setting, comparing the analytical method with 
+the forward difference method is loose while
+comparing with the central difference method is tight.
 I set \texttt{atol} as \num{1e-7} and \texttt{rtol} as \num{1e-06} for the
 forward difference method and set \texttt{atol} as \num{1e-9} and \texttt{rtol} as \num{1e-07}
 for the central difference method.
 
-We have four parameter sets and they are:
+Here is the four parameter sets:
 \begin{enumerate}
     \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.1}
     \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.01}
     \item  \texttt{lambda=0.1, n\_epochs=40, n\_batch=100, eta=0.01}
     \item  \texttt{lambda=1.0, n\_epochs=40, n\_batch=100, eta=0.01}
 \end{enumerate}
+These four parameter sets are called as parameter set 1, parameter set 2,
+and so on in the figures and the table.
+
+The cost functions, the learnt weight matrices and the accuracies of these four
+sets of parameters are persented in figure \ref{fig:cost_fun}, figure \ref{fig:wgt_mat},
+and table \ref{table:accuracy} respectively.
+
+We can see that parameter set 1 has a high learning rate when refering to parameter set 2. 
+The minimization is kind of overshoot and therefore the cost function
+value is oscillating and fail to converge.
+
+When increasing the weighting of the regularization term, the learnt weight matrix
+becomes more blurred. The regularization limits the total amount of the weighting
+values and as the result the contrast of the elements in the weighting matrix is smaller.
 
 % The cost function
 \begin{figure}
@@ -75,6 +92,7 @@ We have four parameter sets and they are:
     \end{subfigure}
     \caption[]
     {\small The graph of the training and validation loss computed after each epoch}
+    \label{fig:cost_fun}
 \end{figure}
 
 % The learnt weight matrix
@@ -109,6 +127,7 @@ We have four parameter sets and they are:
     \end{subfigure}
     \caption[]
     {\small The Images representing the learnt weight matrix after the completion of training}
+    \label{fig:wgt_mat}
 \end{figure}
 
 \begin{table}
@@ -119,7 +138,8 @@ We have four parameter sets and they are:
     {test_accuracy.csv}
     {param_set=\paramset,accuracy=\accuracy}
     {\paramset & \accuracy}
-    \caption{<your caption>}
+    \caption{The accuracies of different parameter set}
+    \label{table:accuracy}
 \end{table}
 
 \end{document}
