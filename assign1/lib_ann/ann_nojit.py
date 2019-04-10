@@ -1,10 +1,10 @@
 """
 Python/Numpy implementation of ANN related fucntions
 """
-# import numba as nb
+import numba
 import numpy as np
 
-def softmax(x, axis):
+def softmax(x, axis=None):
     return np.exp(x)/np.sum(np.exp(x), axis)
 
 def evaluate_classifier(X_mat, W_mat, b_vec):

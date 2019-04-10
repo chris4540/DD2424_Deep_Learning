@@ -4,6 +4,7 @@ This file is for the Exercise 1 described in the assignment1.pdf
 from one_layer_ann import OneLayerNetwork
 from load_batch import load_batch
 import visual
+from time import time
 
 # get the training data
 train_data = load_batch("cifar-10-batches-py/data_batch_1")
@@ -20,7 +21,10 @@ def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
     ann.set_train_data(train_data["pixel_data"], train_data["onehot_labels"])
     ann.set_valid_data(valid_data["pixel_data"], valid_data["onehot_labels"])
     ann.set_train_params(n_epochs=n_epochs, n_batch=n_batch, eta=eta)
+    st = time()
     ann.train()
+    ts = time() - st
+    print("Total used time = ", ts)
     acc = ann.compute_accuracy(test_data["pixel_data"], test_data["labels"])
     print("{}: Accuracy: {}".format(case_tag, acc))
 
