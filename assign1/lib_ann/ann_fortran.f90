@@ -27,3 +27,48 @@ function softmax(x, axis) result(ret)
         end do
     end if
 end function softmax
+
+! function evaluate_classifier(X_mat, W_mat, b_vec) result(ret)
+!     real(kind=8), dimension(:, :), intent(in) :: X_mat
+!     real(kind=8), dimension(:, :), intent(in) :: W_mat
+!     real(kind=8), dimension(:, :), intent(in) :: b_vec
+!     real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: ret
+!     INTERFACE
+!         FUNCTION softmax(inarg, axis) result(ret)
+!             real(kind=8), dimension(:, :), intent(in) :: inarg
+!             integer(kind=4), intent(in),optional :: axis
+!             real(kind=8), dimension(size(inarg,1), size(inarg,2)) :: ret
+!         END FUNCTION  softmax
+!     END INTERFACE
+
+
+!     ret = softmax(ret, 0)
+! end function evaluate_classifier
+
+function evaluate_classifier(X_mat, W_mat, b_vec) result(ret)
+    implicit none
+    real(kind=8), dimension(:, :), intent(in) :: X_mat
+    real(kind=8), dimension(:, :), intent(in) :: W_mat
+    real(kind=8), dimension(:, :), intent(in) :: b_vec
+    real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: ret
+    INTERFACE
+        FUNCTION softmax(inarg, axis) result(ret)
+            real(kind=8), dimension(:, :), intent(in) :: inarg
+            integer(kind=4), intent(in),optional :: axis
+            real(kind=8), dimension(size(inarg,1), size(inarg,2)) :: ret
+        END FUNCTION  softmax
+    END INTERFACE
+    ! ===============================================================
+    integer(kind=4) :: i
+
+    ret = matmul(W_mat, X_mat)
+
+    ! Another implementation
+    ! ret = matmul(W_mat, X_mat) + SPREAD(reshape(b_vec, [size(W_mat,1)]), 2, size(X_mat,2))
+    do i = 1, ubound(ret, 1)
+        ret(:, i) = ret(:, i) + b_vec(:, 1)
+    end do
+
+    ret = softmax(ret, 0)
+end function evaluate_classifier
+
