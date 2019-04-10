@@ -94,12 +94,12 @@ class OneLayerNetwork:
 
         for iter_ in range(self.n_epochs):
             # shuffle the samples
-            if iter_!= 0 and iter_ % 10 == 0:
-                # idx = np.random.rand(self.X_train.shape[1]).argsort()
-                idx = np.arange(X_train.shape[1])
-                np.random.shuffle(idx)
-                X_train = np.take(self.X_train, idx, axis=1)
-                Y_train = np.take(self.Y_train, idx, axis=1)
+            # if iter_!= 0 and iter_ % 10 == 0:
+            #     # idx = np.random.rand(self.X_train.shape[1]).argsort()
+            #     idx = np.arange(X_train.shape[1])
+            #     np.random.shuffle(idx)
+            #     X_train = np.take(self.X_train, idx, axis=1)
+            #     Y_train = np.take(self.Y_train, idx, axis=1)
 
             # mini-batch training
             self._mini_batch_train(X_train, Y_train)
