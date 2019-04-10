@@ -2,6 +2,7 @@
 One layer network for multi-linear classifier
 """
 import numpy as np
+import lib_ann.ann
 
 class OneLayerNetwork:
 
@@ -56,7 +57,6 @@ class OneLayerNetwork:
         self.valid_costs = list()
 
     def init_param(self):
-
         self.W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
         self.b_vec = self.sigma * np.random.randn(self.nclass, 1)
 
@@ -137,33 +137,17 @@ class OneLayerNetwork:
         """
         X_mat: The data, X_mat.shape == (ndim, ndata)
         """
-        s_mat = self.W_mat.dot(X_mat) + self.b_vec
-        p_mat = self.softmax(s_mat, axis=0)
-        return p_mat
-
-    @staticmethod
-    def softmax(x, axis=None):
-        return np.exp(x)/np.sum(np.exp(x), axis)
+        return lib_ann.ann.evaluate_classifier(X_mat, self.W_mat, self.b_vec)
 
     def compute_cost(self, X_mat, Y_mat):
-        n_data = X_mat.shape[1]
-
-        # get the cross-entropy term
-        p_mat = self.evaluate(X_mat)
-
-        cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
-
-        ret = (np.sum(cross_entro) / n_data) + self.lambda_*np.sum(self.W_mat**2)
+        ret = lib_ann.ann.compute_cost(
+            X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return ret
 
     def compute_accuracy(self, X_mat, y_val):
         """
         """
-        p_mat = self.evaluate(X_mat)
-        y_pred = np.argmax(p_mat, axis=0)
-
-        ret = (y_pred == y_val).mean()
-        return ret
+        return lib_ann.ann.compute_accuracy(X_mat, y_val, self.W_mat, self.b_vec)
 
     def compute_grad(self, X_mat, Y_mat):
         """
@@ -171,18 +155,21 @@ class OneLayerNetwork:
             grad_W: shape = (nclass, ndim)
             grad_b: shape = (nclass, 1)
         """
-        n_data = X_mat.shape[1]
-        k = self.nclass
-        # p_mat.shape == (nclass, n_data)
-        p_mat = self.evaluate(X_mat)
+        grad_W, grad_b = lib_ann.ann.compute_gradients(
+            X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
+        return grad_W, grad_b
+        # n_data = X_mat.shape[1]
+        # k = self.nclass
+        # # p_mat.shape == (nclass, n_data)
+        # p_mat = self.evaluate(X_mat)
 
-        g_mat = -(Y_mat - p_mat)
+        # g_mat = -(Y_mat - p_mat)
 
-        # G * 1_{n_b} / n_b: take mean over axis 1
-        grad_b = np.mean(g_mat, axis=1)
-        grad_b = grad_b.reshape((k, 1))
+        # # G * 1_{n_b} / n_b: take mean over axis 1
+        # grad_b = np.mean(g_mat, axis=1)
+        # grad_b = grad_b.reshape((k, 1))
 
-        grad_W = g_mat.dot(X_mat.T) / n_data
-        grad_W += 2 * self.lambda_ * self.W_mat
+        # grad_W = g_mat.dot(X_mat.T) / n_data
+        # grad_W += 2 * self.lambda_ * self.W_mat
 
-        return (grad_W, grad_b)
+        # return (grad_W, grad_b)
