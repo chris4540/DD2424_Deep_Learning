@@ -10,4 +10,4 @@ clean:
 
 test:
 	${RUNTEST} tests/test_ann_fortran.py
-	# ${RUNTEST} ${TESTCASES}
+	${RUNTEST} ${TESTCASES}
