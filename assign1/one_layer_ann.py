@@ -57,20 +57,20 @@ class OneLayerNetwork:
         self.valid_costs = list()
 
     def init_param(self):
-        W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
-        b_vec = self.sigma * np.random.randn(self.nclass, 1)
-        # speed up for using aligning one type of array
-        self.W_mat = np.asfortranarray(W_mat)
-        self.b_vec = np.asfortranarray(b_vec)
+        self.W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
+        self.b_vec = self.sigma * np.random.randn(self.nclass, 1)
+        # # speed up for using aligning one type of array
+        # self.W_mat = np.asfortranarray(W_mat)
+        # self.b_vec = np.asfortranarray(b_vec)
 
     def set_train_data(self, X_train, Y_train):
         # copy the training set
-        self.X_train = np.copy(X_train, order="F")
-        self.Y_train = np.copy(Y_train, order="F")
+        self.X_train = np.copy(X_train, order="C")
+        self.Y_train = np.copy(Y_train, order="C")
 
     def set_valid_data(self, X_valid, Y_valid):
-        self.X_valid = np.copy(X_valid, order="F")
-        self.Y_valid = np.copy(Y_valid, order="F")
+        self.X_valid = np.copy(X_valid, order="C")
+        self.Y_valid = np.copy(Y_valid, order="C")
 
     def set_train_params(self, *args, **kwargs):
         """
