@@ -38,9 +38,8 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
     g_mat = -(Y_mat - p_mat)
 
     # G * 1_{n_b} / n_b: take mean over axis 1
-    # grad_b = np.mean(g_mat, axis=1)
+    grad_b = np.mean(g_mat, axis=1)[:, np.newaxis]
     # grad_b = grad_b.reshape((k, 1))
-    grad_b = g_mat.dot(np.full((n_data,1), 1/n_data))
 
 
     grad_W = g_mat.dot(X_mat.T) / n_data

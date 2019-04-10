@@ -59,18 +59,15 @@ class OneLayerNetwork:
     def init_param(self):
         self.W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
         self.b_vec = self.sigma * np.random.randn(self.nclass, 1)
-        # # speed up for using aligning one type of array
-        # self.W_mat = np.asfortranarray(W_mat)
-        # self.b_vec = np.asfortranarray(b_vec)
 
     def set_train_data(self, X_train, Y_train):
         # copy the training set
-        self.X_train = np.copy(X_train, order="C")
-        self.Y_train = np.copy(Y_train, order="C")
+        self.X_train = np.copy(X_train)
+        self.Y_train = np.copy(Y_train)
 
     def set_valid_data(self, X_valid, Y_valid):
-        self.X_valid = np.copy(X_valid, order="C")
-        self.Y_valid = np.copy(Y_valid, order="C")
+        self.X_valid = np.copy(X_valid)
+        self.Y_valid = np.copy(Y_valid)
 
     def set_train_params(self, *args, **kwargs):
         """
@@ -161,18 +158,4 @@ class OneLayerNetwork:
         grad_W, grad_b = lib_ann.ann.compute_gradients(
             X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return grad_W, grad_b
-        # n_data = X_mat.shape[1]
-        # k = self.nclass
-        # # p_mat.shape == (nclass, n_data)
-        # p_mat = self.evaluate(X_mat)
 
-        # g_mat = -(Y_mat - p_mat)
-
-        # # G * 1_{n_b} / n_b: take mean over axis 1
-        # grad_b = np.mean(g_mat, axis=1)
-        # grad_b = grad_b.reshape((k, 1))
-
-        # grad_W = g_mat.dot(X_mat.T) / n_data
-        # grad_W += 2 * self.lambda_ * self.W_mat
-
-        # return (grad_W, grad_b)
