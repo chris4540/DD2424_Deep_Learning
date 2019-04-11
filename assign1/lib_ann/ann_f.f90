@@ -1,4 +1,25 @@
-module ann_f
+module ann_for
+    ! Experimental f2py testing for rewriting the ann.py to fortran
+    ! Python + numpy use performs better in matrix multiplication than fortran
+    ! Using np.asfortranarray can avoid copying due to C-layout or fortran layout
+    !
+    ! Testing CPU:
+    ! Intel(R) Celeron(R) CPU  N2840  @ 2.16GHz
+    ! Testing results:
+    !
+    ! evaluate_classifier:
+    !   >>> ann_py.evaluate_classifier(X_mat, W_mat, b_vec)
+    !   244 ms ± 26.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+    !   >>> ann_f.evaluate_classifier(X_mat_f, W_mat_f, b_vec_f)
+    !   436 ms ± 3.46 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+    !   >>> X_mat.shape
+    !   (3072, 10000)
+    !
+    ! softmax:
+    !   >>> ann_py.softmax(s_mat)
+    !   13.3 ms ± 688 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+    !   >>> ann_f.softmax(s_mat)
+    !   7.93 ms ± 75.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 contains
 function softmax(x, axis) result(ret)
     implicit none
@@ -37,16 +58,7 @@ function evaluate_classifier(X_mat, W_mat, b_vec) result(ret)
     real(kind=8), dimension(:, :), intent(in) :: b_vec
     real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: ret
     ! ===============================================================
-    ! integer(kind=4) :: i
-
-    ret = matmul(W_mat, X_mat)
-
-    ! Another implementation
     ret = matmul(W_mat, X_mat) + SPREAD(reshape(b_vec, [size(W_mat,1)]), 2, size(X_mat,2))
-    ! do i = 1, ubound(ret, 1)
-    !     ret(:, i) = ret(:, i) + b_vec(:, 1)
-    ! end do
-
     ret = softmax(ret, 0)
 end function evaluate_classifier
 
@@ -94,9 +106,7 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     grad_b = reshape(sum(g_mat, dim=2), [n_class, 1])
     grad_b = grad_b / n_data
 
-    ! grad_W = g_mat.dot(X_mat.T) / n_data
     grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
-    ! grad_W += 2 * lambda_ * W_mat
     grad_W = grad_W + 2 *lambda_ * W_mat
-end subroutine
-end module
+end subroutine compute_gradients
+end module ann_for

@@ -2,7 +2,8 @@
 One layer network for multi-linear classifier
 """
 import numpy as np
-import lib_ann.ann
+import lib_ann.ann as ann_func
+
 
 class OneLayerNetwork:
 
@@ -137,10 +138,10 @@ class OneLayerNetwork:
         """
         X_mat: The data, X_mat.shape == (ndim, ndata)
         """
-        return lib_ann.ann.evaluate_classifier(X_mat, self.W_mat, self.b_vec)
+        return ann_func.evaluate_classifier(X_mat, self.W_mat, self.b_vec)
 
     def compute_cost(self, X_mat, Y_mat):
-        ret = lib_ann.ann.compute_cost(
+        ret = ann_func.compute_cost(
             X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return ret
 
@@ -155,7 +156,7 @@ class OneLayerNetwork:
             grad_W: shape = (nclass, ndim)
             grad_b: shape = (nclass, 1)
         """
-        grad_W, grad_b = lib_ann.ann.compute_gradients(
+        grad_W, grad_b = ann_func.compute_gradients(
             X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return grad_W, grad_b
 

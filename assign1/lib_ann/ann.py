@@ -3,15 +3,11 @@ Python/Numpy implementation of ANN related fucntions
 """
 # import numba as nb
 import numpy as np
+import lib_ann.ann_f
 
-def softmax(x, axis=0):
-    if axis == 0:
-        ret = np.exp(x)/np.sum(np.exp(x), 0)
-    elif axis == 1:
-        ret = (np.exp(x).T/np.sum(np.exp(x), 1)).T
-    else:
-        raise ValueError("Not support axis > 1")
-    return ret
+# fortran implementation is faster 30%.
+# Therefore, use fortran one
+softmax = lib_ann.ann_f.ann_for.softmax
 
 def evaluate_classifier(X_mat, W_mat, b_vec):
     s_mat = W_mat.dot(X_mat) + b_vec
@@ -46,7 +42,6 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
     # G * 1_{n_b} / n_b: take mean over axis 1
     grad_b = np.mean(g_mat, axis=1)[:, np.newaxis]
     # grad_b = grad_b.reshape((k, 1))
-
 
     grad_W = g_mat.dot(X_mat.T) / n_data
     grad_W += 2 * lambda_ * W_mat

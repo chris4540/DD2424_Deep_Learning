@@ -1,9 +1,16 @@
 EXT_SUFFIX := $(shell python-config --extension-suffix)
+RUNTEST=python -m unittest -v
+TESTCASES=tests/*.py
 
-default: ann_fortran$(EXT_SUFFIX)
+default: ann_f$(EXT_SUFFIX)
 
 %$(EXT_SUFFIX): %.f90
-	bash ./compile.sh
+	f2py $< -m $*  -h $*.pyf --overwrite-signature
+	gfortran -O3 -c -fPIC -ftree-vectorize $< -o $*.o
+	f2py -c $*.pyf -I. --opt="-O3 -ftree-vectorize" $*.o
 
 clean:
-	rm ann_fortran$(EXT_SUFFIX)
+	rm *.so
+
+test:
+	${RUNTEST} ${TESTCASES}

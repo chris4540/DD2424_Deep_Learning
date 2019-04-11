@@ -2,12 +2,15 @@ RUNTEST=python -m unittest -v
 
 TESTCASES=tests/*.py
 
-ann_fortran:
+default:lib_ann
+
+.PHONY: lib_ann
+
+lib_ann:
 	make -C lib_ann
 
 clean:
 	make -C lib_ann clean
 
 test:
-	${RUNTEST} tests/test_ann_fortran.py
-# 	${RUNTEST} ${TESTCASES}
+	${RUNTEST} ${TESTCASES}

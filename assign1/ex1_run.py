@@ -37,7 +37,7 @@ def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
     plt.close()
 
 if __name__ == '__main__':
-    perform_testing("case1", lambda_=0.0, n_epochs=40, n_batch=100, eta=0.1)
-    perform_testing("case2", lambda_=0.0, n_epochs=40, n_batch=100, eta=0.01)
-    perform_testing("case3", lambda_=0.1, n_epochs=40, n_batch=100, eta=0.01)
-    perform_testing("case4", lambda_=1.0, n_epochs=40, n_batch=100, eta=0.01)
+    # perform_testing("case1", lambda_=0.0, n_epochs=40, n_batch=100, eta=0.1)
+    perform_testing("case2", lambda_=0.0, n_epochs=10, n_batch=100, eta=0.01)
+    # perform_testing("case3", lambda_=0.1, n_epochs=40, n_batch=100, eta=0.01)
+    # perform_testing("case4", lambda_=1.0, n_epochs=40, n_batch=100, eta=0.01)
