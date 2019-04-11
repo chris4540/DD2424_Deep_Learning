@@ -13,7 +13,7 @@ class OneLayerNetwork:
         "n_epochs": 40,
         "n_batch": 100,
         "eta": 0.01,
-        "decay": 0.9
+        "decay": 0.95
     }
 
     # variance for init paramters (W and b)
@@ -53,7 +53,7 @@ class OneLayerNetwork:
         self.X_valid = X_valid
         self.Y_valid = Y_valid
 
-    def get_params(self, deep=False):
+    def get_params(self):
         ret = dict()
         for k in self.DEFAULT_PARAMS.keys():
             ret[k] = getattr(self, k)
