@@ -119,3 +119,6 @@ venv.bak/
 
 # reference
 ref.txt
+
+# fortran module
+*.mod
