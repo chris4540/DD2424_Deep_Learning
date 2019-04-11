@@ -148,7 +148,7 @@ class OneLayerNetwork:
     def compute_accuracy(self, X_mat, y_val):
         """
         """
-        return lib_ann.ann.compute_accuracy(X_mat, y_val, self.W_mat, self.b_vec)
+        return ann_func.compute_accuracy(X_mat, y_val, self.W_mat, self.b_vec)
 
     def compute_grad(self, X_mat, Y_mat):
         """
