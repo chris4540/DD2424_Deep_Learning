@@ -8,10 +8,13 @@ import lib_ann.ann as ann_func
 class OneLayerNetwork:
 
     # mini-batch gradient descent params
-    N_BATCH_DEFAULT = 100
-    ETA_DEFAULT = 0.01
-    N_EPOCHS_DEFAULT = 10
-    DECAY_DEFAULT = 0.9
+    DEFAULT_PARAMS = {
+        "lambda_": 0.0,
+        "n_epochs": 40,
+        "n_batch": 100,
+        "eta": 0.01,
+        "decay": 0.9
+    }
 
     # variance for init paramters (W and b)
     sigma = 0.01 ** 2
@@ -22,85 +25,63 @@ class OneLayerNetwork:
     # for saving the history of training
     train_costs = None
     valid_costs = None
+    lrates = None
 
     #
     _verbose = True
 
-    def __init__(self, nclass, ndim, lambda_=0.0, verbose=True):
-        """
-        Initialize the model with parameters
-
-        Args:
-            nclass: the number of classes
-            ndim: the size of the input vector (X)
-            lambda_: the weight of the regularization term
-        """
-        # set network parameters
-        self.nclass = nclass
-        self.ndim = ndim
-        # set hyperparameter: the weight of the regularization term
-        self.lambda_ = lambda_
-
-        # set if verbose
+    def __init__(self, verbose=True):
         self._verbose = verbose
-
-        if self._verbose:
-            print("-------- MODEL PARAMS --------")
-            for k in ["nclass", "ndim", "lambda_"]:
-                print("{}: {}".format(k, getattr(self, k)))
-            print("-------- MODEL PARAMS --------")
-
-        # initialize classifier parameters
-        self.init_param()
-        # set the default values for the training parameters
-        self.set_train_params()
-
         self.train_costs = list()
         self.valid_costs = list()
+        self.lrates = list()
+        self.set_params()
 
-    def init_param(self):
+    def init_weighting(self):
         self.W_mat = self.sigma * np.random.randn(self.nclass, self.ndim)
         self.b_vec = self.sigma * np.random.randn(self.nclass, 1)
 
     def set_train_data(self, X_train, Y_train):
+        self.ndim = X_train.shape[0]
+        self.nclass = Y_train.shape[0]
+
         # copy the training set
-        self.X_train = np.copy(X_train)
-        self.Y_train = np.copy(Y_train)
+        self.X_train = X_train
+        self.Y_train = Y_train
 
     def set_valid_data(self, X_valid, Y_valid):
-        self.X_valid = np.copy(X_valid)
-        self.Y_valid = np.copy(Y_valid)
+        self.X_valid = X_valid
+        self.Y_valid = Y_valid
 
-    def set_train_params(self, *args, **kwargs):
-        """
-        Set the training parameters
-        """
-        self.n_batch = kwargs.get("n_batch", self.N_BATCH_DEFAULT)
-        self.n_epochs = kwargs.get("n_epochs", self.N_EPOCHS_DEFAULT)
-        self.eta = kwargs.get("eta", self.ETA_DEFAULT)
-        self.decay = kwargs.get("decay", self.ETA_DEFAULT)
+    def get_params(self, deep=False):
+        ret = dict()
+        for k in self.DEFAULT_PARAMS.keys():
+            ret[k] = getattr(self, k)
+
+        return ret
+
+    def set_params(self, **params):
+        for k in self.DEFAULT_PARAMS.keys():
+            val = params.get(k, self.DEFAULT_PARAMS[k])
+            setattr(self, k, val)
+        return self
 
     def train(self):
+        self.init_weighting()
 
         if self._verbose:
             # print training params
             print("-------- TRAINING PARAMS --------")
-            for k in ["n_batch", "n_epochs", "eta", "decay"]:
+            for k in self.DEFAULT_PARAMS.keys():
                 print("{}: {}".format(k, getattr(self, k)))
             print("-------- TRAINING PARAMS --------")
+
 
         X_train = self.X_train
         Y_train = self.Y_train
         self.lrate = self.eta
 
         for iter_ in range(self.n_epochs):
-            # shuffle the samples
-            # if iter_!= 0 and iter_ % 10 == 0:
-            #     # idx = np.random.rand(self.X_train.shape[1]).argsort()
-            #     idx = np.arange(X_train.shape[1])
-            #     np.random.shuffle(idx)
-            #     X_train = np.take(self.X_train, idx, axis=1)
-            #     Y_train = np.take(self.Y_train, idx, axis=1)
 
             # mini-batch training
             self._mini_batch_train(X_train, Y_train)
@@ -114,11 +95,12 @@ class OneLayerNetwork:
                 print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}; lrate = {:f}".format(
                     iter_, train_cost, valid_cost, self.lrate))
 
-            # update the learning rate
-            self.lrate *= self.decay
             # append the cost
+            self.lrates.append(self.lrate)
             self.train_costs.append(train_cost)
             self.valid_costs.append(valid_cost)
+            # update the learning rate
+            self.lrate *= self.decay
 
     def _mini_batch_train(self, X_train, Y_train):
         """
