@@ -11,6 +11,7 @@ class OneLayerNetwork:
     N_BATCH_DEFAULT = 100
     ETA_DEFAULT = 0.01
     N_EPOCHS_DEFAULT = 10
+    DECAY_DEFAULT = 0.9
 
     # variance for init paramters (W and b)
     sigma = 0.01 ** 2
@@ -77,18 +78,20 @@ class OneLayerNetwork:
         self.n_batch = kwargs.get("n_batch", self.N_BATCH_DEFAULT)
         self.n_epochs = kwargs.get("n_epochs", self.N_EPOCHS_DEFAULT)
         self.eta = kwargs.get("eta", self.ETA_DEFAULT)
+        self.decay = kwargs.get("decay", self.ETA_DEFAULT)
 
     def train(self):
 
         if self._verbose:
             # print training params
             print("-------- TRAINING PARAMS --------")
-            for k in ["n_batch", "n_epochs", "eta"]:
+            for k in ["n_batch", "n_epochs", "eta", "decay"]:
                 print("{}: {}".format(k, getattr(self, k)))
             print("-------- TRAINING PARAMS --------")
 
         X_train = self.X_train
         Y_train = self.Y_train
+        self.lrate = self.eta
 
         for iter_ in range(self.n_epochs):
             # shuffle the samples
@@ -108,9 +111,11 @@ class OneLayerNetwork:
 
             # print out
             if self._verbose:
-                print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}".format(
-                    iter_, train_cost, valid_cost))
+                print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}; lrate = {:f}".format(
+                    iter_, train_cost, valid_cost, self.lrate))
 
+            # update the learning rate
+            self.lrate *= self.decay
             # append the cost
             self.train_costs.append(train_cost)
             self.valid_costs.append(valid_cost)
@@ -131,8 +136,8 @@ class OneLayerNetwork:
             grad_W, grad_b = self.compute_grad(X_batch, Y_batch)
 
             # update the params
-            self.W_mat = self.W_mat - self.eta * grad_W
-            self.b_vec = self.b_vec - self.eta * grad_b
+            self.W_mat = self.W_mat - self.lrate * grad_W
+            self.b_vec = self.b_vec - self.lrate * grad_b
 
     def evaluate(self, X_mat):
         """
