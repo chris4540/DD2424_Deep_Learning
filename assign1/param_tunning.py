@@ -45,7 +45,7 @@ def perform_testing(case_tag, params):
     ndim = train_data["pixel_data"].shape[0]
 
     # default case
-    ann = OneLayerNetwork(nclass, ndim, lambda_)
+    ann = OneLayerNetwork(nclass, ndim, params["lambda_"])
     ann.set_train_data(train_data["pixel_data"], train_data["onehot_labels"])
     ann.set_valid_data(valid_data["pixel_data"], valid_data["onehot_labels"])
     ann.set_train_params(**params)
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         "lambda_": 0.0,
         "n_epochs": 40,
         "n_batch": 100,
-        "eta": 0.01
+        "eta": 0.01,
         "decay": 0.9
     }
     perform_testing("tuning", params)
