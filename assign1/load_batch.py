@@ -52,3 +52,15 @@ def load_batch(filename):
     }
 
     return ret
+
+def merge_batch(list_of_filenames):
+    ret = None
+    for f in list_of_filenames:
+        tmp = load_batch(f)
+        if ret is None:
+            ret = tmp
+        else:
+            for k in ret.keys():
+                ret[k] = np.hstack((ret[k], tmp[k]))
+
+    return ret
