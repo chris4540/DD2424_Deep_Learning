@@ -1,17 +1,9 @@
 """
 Python/Numpy implementation of ANN related fucntions
 """
+import scipy
+from scipy.special import softmax
 import numpy as np
-from lib_ann import softmax
-
-def _softmax_py(x, axis=0):
-    if axis == 0:
-        ret = np.exp(x)/np.sum(np.exp(x), 0)
-    elif axis == 1:
-        ret = (np.exp(x).T/np.sum(np.exp(x), 1)).T
-    else:
-        raise ValueError("Not support axis > 1")
-    return ret
 
 def evaluate_classifier(X_mat, W_mat, b_vec):
     s_mat = W_mat.dot(X_mat) + b_vec

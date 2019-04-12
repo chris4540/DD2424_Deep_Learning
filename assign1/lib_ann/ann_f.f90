@@ -3,8 +3,15 @@ module ann_for
     ! Python + numpy use performs better in matrix multiplication than fortran
     ! Using np.asfortranarray can avoid copying due to C-layout or fortran layout
     !
+    ! Freeze this project
+    !
     ! Testing CPU:
-    ! Intel(R) Celeron(R) CPU  N2840  @ 2.16GHz
+    !   Intel(R) Celeron(R) CPU  N2840  @ 2.16GHz
+    ! Testing OS:
+    !   Linux 4.15.0-42-generic
+    ! Testing Compiler:
+    !   GNU Fortran (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0
+    ! ==========================================================================
     ! Testing results:
     !
     ! evaluate_classifier:
@@ -26,12 +33,12 @@ function softmax(x, axis) result(ret)
     real(kind=8), dimension(:, :), intent(in) :: x
     integer(kind=4), intent(in), optional :: axis
     real(kind=8), dimension(size(x,1), size(x,2)) :: ret
-    ! local var
+    ! local variable
     real(kind=8), dimension(size(x,1), size(x,2)) :: exp_prob
     integer(kind=4) :: axis_
-    integer :: i
+    integer(kind=4) :: i  ! an index iterator
 
-    if(present(axis))then
+    if (present(axis)) then
         axis_ = axis
     else
         axis_ = 0
@@ -94,9 +101,11 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     ! ======================================================
     real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: p_mat
     real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: g_mat
-    integer :: n_data
-    integer :: n_class
+    integer(kind=4) :: n_data
+    integer(kind=4) :: n_class
+    integer(kind=4) :: n_dim
     ! ======================================================
+    n_dim = size(X_mat,1)
     n_data = size(X_mat,2)
     n_class = size(W_mat,1)
     p_mat = evaluate_classifier(X_mat, W_mat, b_vec)
@@ -108,5 +117,13 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
 
     grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
     grad_W = grad_W + 2 *lambda_ * W_mat
+    ! ===============================================
+    ! call blas
+    ! grad_W = W_mat
+    ! call DGEMM(  &
+    !  &  'N', 'T', n_class, n_dim, n_data, &
+    !  &  1.0/n_data, g_mat, n_class, X_mat, n_dim, &
+    !  &  2*lambda_, grad_W, n_class)
+    ! ===============================================
 end subroutine compute_gradients
 end module ann_for
