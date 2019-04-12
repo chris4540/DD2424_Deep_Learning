@@ -98,8 +98,15 @@ class TestOneLayerNetworkGradientCal(unittest.TestCase):
 
         nclass = self.Y_mat.shape[0]
 
-        self.ann_small = OneLayerNetworkNumGrad(nclass, ndim_small, lambda_=0.0, verbose=False)
-        self.ann = OneLayerNetworkNumGrad(nclass, ndim, lambda_=0.0, verbose=False)
+        self.ann_small = OneLayerNetworkNumGrad()
+        self.ann_small.ndim = ndim_small
+        self.ann_small.nclass = nclass
+        self.ann_small.init_weighting()
+
+        self.ann = OneLayerNetworkNumGrad()
+        self.ann.ndim = ndim
+        self.ann.nclass = nclass
+        self.ann.init_weighting()
 
     def test_grad_fwd_diff_small(self):
         X_mat = self.X_mat_small
