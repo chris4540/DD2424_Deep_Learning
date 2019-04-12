@@ -1,8 +1,11 @@
 """
 One layer network for multi-linear classifier
+
+TODO:
+    rewrite to fit sckit-learn style for easy cooperate with
 """
 import numpy as np
-import lib_ann.ann as ann_func
+import lib_ann
 
 
 class OneLayerNetwork:
@@ -125,17 +128,17 @@ class OneLayerNetwork:
         """
         X_mat: The data, X_mat.shape == (ndim, ndata)
         """
-        return ann_func.evaluate_classifier(X_mat, self.W_mat, self.b_vec)
+        return lib_ann.evaluate_classifier(X_mat, self.W_mat, self.b_vec)
 
     def compute_cost(self, X_mat, Y_mat):
-        ret = ann_func.compute_cost(
+        ret = lib_ann.compute_cost(
             X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return ret
 
     def compute_accuracy(self, X_mat, y_val):
         """
         """
-        return ann_func.compute_accuracy(X_mat, y_val, self.W_mat, self.b_vec)
+        return lib_ann.compute_accuracy(X_mat, y_val, self.W_mat, self.b_vec)
 
     def compute_grad(self, X_mat, Y_mat):
         """
@@ -143,7 +146,6 @@ class OneLayerNetwork:
             grad_W: shape = (nclass, ndim)
             grad_b: shape = (nclass, 1)
         """
-        grad_W, grad_b = ann_func.compute_gradients(
+        grad_W, grad_b = lib_ann.compute_gradients(
             X_mat, Y_mat, self.W_mat, self.b_vec, self.lambda_)
         return grad_W, grad_b
-

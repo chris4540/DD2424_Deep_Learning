@@ -1,13 +1,17 @@
 """
 Python/Numpy implementation of ANN related fucntions
 """
-# import numba as nb
 import numpy as np
-import lib_ann.ann_f
+from lib_ann import softmax
 
-# fortran implementation is faster 30%.
-# Therefore, use fortran one
-softmax = lib_ann.ann_f.ann_for.softmax
+def _softmax_py(x, axis=0):
+    if axis == 0:
+        ret = np.exp(x)/np.sum(np.exp(x), 0)
+    elif axis == 1:
+        ret = (np.exp(x).T/np.sum(np.exp(x), 1)).T
+    else:
+        raise ValueError("Not support axis > 1")
+    return ret
 
 def evaluate_classifier(X_mat, W_mat, b_vec):
     s_mat = W_mat.dot(X_mat) + b_vec

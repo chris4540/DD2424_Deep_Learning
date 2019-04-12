@@ -8,15 +8,6 @@ from time import time
 # alias
 ann_f = ann_f.ann_for
 
-def _softmax_py(x, axis=0):
-    if axis == 0:
-        ret = np.exp(x)/np.sum(np.exp(x), 0)
-    elif axis == 1:
-        ret = (np.exp(x).T/np.sum(np.exp(x), 1)).T
-    else:
-        raise ValueError("Not support axis > 1")
-    return ret
-
 class TestANNFortran(unittest.TestCase):
 
     @classmethod
@@ -32,15 +23,15 @@ class TestANNFortran(unittest.TestCase):
 
     def test_softmax(self):
         arr = self.W_mat.dot(self.X_mat) + self.b_vec
-        assert_allclose(_softmax_py(arr, 0), ann_f.softmax(arr, 0))
-        assert_allclose(_softmax_py(arr, 1), ann_f.softmax(arr, 1))
+        assert_allclose(ann_py._softmax_py(arr, 0), ann_f.softmax(arr, 0))
+        assert_allclose(ann_py._softmax_py(arr, 1), ann_f.softmax(arr, 1))
 
     def test_softmax_performance(self):
         N = 100
         arr = self.W_mat.dot(self.X_mat) + self.b_vec
         st = time()
         for _ in range(N):
-            _softmax_py(arr, 0)
+            ann_py._softmax_py(arr, 0)
         py_time = time() - st
 
         st = time()
