@@ -6,7 +6,7 @@ from clsr.svm import SupportVectorMachine
 from time import time
 
 if __name__ == '__main__':
-    svm = SupportVectorMachine(n_epochs=10)
+    svm = SupportVectorMachine()
 
     # load data
     train_data = load_batch("cifar-10-batches-py/data_batch_1")
