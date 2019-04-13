@@ -6,8 +6,7 @@ default: ann_f$(EXT_SUFFIX)
 
 %$(EXT_SUFFIX): %.f90
 	f2py $< -m $*  -h $*.pyf --overwrite-signature
-	gfortran -O3 -c -fPIC -ftree-vectorize $< -o $*.o
-	f2py -c $*.pyf -I. --opt="-O3 -ftree-vectorize" $*.o
+	f2py -c $*.pyf --opt="-O3 -fexternal-blas" --link-openblas $<
 
 clean:
 	rm *.so

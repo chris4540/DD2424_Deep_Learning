@@ -115,15 +115,15 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     grad_b = reshape(sum(g_mat, dim=2), [n_class, 1])
     grad_b = grad_b / n_data
 
-    grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
-    grad_W = grad_W + 2 *lambda_ * W_mat
     ! ===============================================
-    ! call blas
-    ! grad_W = W_mat
-    ! call DGEMM(  &
-    !  &  'N', 'T', n_class, n_dim, n_data, &
-    !  &  1.0/n_data, g_mat, n_class, X_mat, n_dim, &
-    !  &  2*lambda_, grad_W, n_class)
+    ! call blas to compute g*X'/n + 2*lambda_*W_mat
+    ! grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
+    ! grad_W = grad_W + 2 *lambda_ * W_mat
+    grad_W = W_mat
+    call DGEMM(  &
+     &  'N', 'T', n_class, n_dim, n_data, &
+     &  1.0/n_data, g_mat, n_class, X_mat, n_dim, &
+     &  2*lambda_, grad_W, n_class)
     ! ===============================================
 end subroutine compute_gradients
 end module ann_for
