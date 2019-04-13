@@ -2,15 +2,15 @@ RUNTEST=python -m unittest -v
 
 TESTCASES=tests/*.py
 
-default:lib_ann
+default:lib_clsr
 
-.PHONY: lib_ann
+.PHONY: lib_clsr
 
-lib_ann:
-	make -C lib_ann
+lib_clsr:
+	make -C lib_clsr
 
 clean:
-	make -C lib_ann clean
+	make -C lib_clsr clean
 
 test:
 	${RUNTEST} ${TESTCASES}

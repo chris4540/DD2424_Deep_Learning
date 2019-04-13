@@ -1,5 +1,5 @@
 """
-A pure procedural-based package for ann related functions
+A pure procedural-based package for classifier related functions
 """
 
 from .ann import evaluate_classifier

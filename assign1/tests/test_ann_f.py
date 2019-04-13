@@ -1,6 +1,6 @@
-import lib_ann
-from lib_ann import ann_f
-from lib_ann import ann as ann_py
+import lib_clsr
+from lib_clsr import ann_f
+from lib_clsr import ann as ann_py
 import unittest
 import numpy as np
 from numpy.testing import assert_allclose
