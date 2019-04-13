@@ -1,9 +1,11 @@
 module ann_for
     ! Experimental f2py testing for rewriting the ann.py to fortran
-    ! Python + numpy use performs better in matrix multiplication than fortran
-    ! Using np.asfortranarray can avoid copying due to C-layout or fortran layout
+    ! It is necessary to use blas to compute matrix multiplication and adding
+    ! Using np.asfortranarray can avoid copying due to the np.ndarray of C-layout
     !
-    ! Freeze this project
+    ! Freeze this module
+    !
+    ! Performance
     !
     ! Testing CPU:
     !   Intel(R) Celeron(R) CPU  N2840  @ 2.16GHz
@@ -11,22 +13,31 @@ module ann_for
     !   Linux 4.15.0-42-generic
     ! Testing Compiler:
     !   GNU Fortran (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0
+    ! Compile command:
+    !   f2py -c ann_f.pyf -I. --opt="-O3 -fexternal-blas" --link-openblas ann_f.f90
     ! ==========================================================================
     ! Testing results:
+    ! k = 12        # number of classes
+    ! d = 4000      # number of dim
+    ! n = 100       # number of data
+    ! softmax:
+    !   >>> ann_py.softmax(s_mat)
+    !   304 µs ± 5.63 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+    !   >>> ann_f.softmax(s_mat)
+    !   96.2 µs ± 779 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
     !
     ! evaluate_classifier:
     !   >>> ann_py.evaluate_classifier(X_mat, W_mat, b_vec)
-    !   244 ms ± 26.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+    !   4.05 ms ± 524 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
     !   >>> ann_f.evaluate_classifier(X_mat_f, W_mat_f, b_vec_f)
-    !   436 ms ± 3.46 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-    !   >>> X_mat.shape
-    !   (3072, 10000)
+    !   3.43 ms ± 887 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
     !
-    ! softmax:
-    !   >>> ann_py.softmax(s_mat)
-    !   13.3 ms ± 688 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-    !   >>> ann_f.softmax(s_mat)
-    !   7.93 ms ± 75.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+    ! compute_gradients:
+    !   >>> ann_py.compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_)
+    !   12.1 ms ± 2.2 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
+    !   >>> ann_f.compute_gradients(X_mat_f, Y_mat_f, W_mat_f, b_vec_f, lambda_)
+    !   6.1 ms ± 168 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)z
+    !
 contains
 function softmax(x, axis) result(ret)
     implicit none

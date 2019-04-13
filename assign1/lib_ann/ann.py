@@ -28,7 +28,7 @@ def compute_accuracy(X_mat, y_val, W_mat, b_vec):
 
 def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
     n_data = X_mat.shape[1]
-    k = W_mat.shape[0]
+    # k = W_mat.shape[0]
 
     # p_mat.shape == (nclass, n_data)
     p_mat = evaluate_classifier(X_mat, W_mat, b_vec)
