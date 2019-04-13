@@ -104,6 +104,8 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     integer(kind=4) :: n_data
     integer(kind=4) :: n_class
     integer(kind=4) :: n_dim
+    real(kind=8) :: alpha
+    real(kind=8) :: beta
     ! ======================================================
     n_dim = size(X_mat,1)
     n_data = size(X_mat,2)
@@ -119,11 +121,13 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     ! call blas to compute g*X'/n + 2*lambda_*W_mat
     ! grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
     ! grad_W = grad_W + 2 *lambda_ * W_mat
+    alpha = 1.D0 / n_data
+    beta = 2.D0 * lambda_
     grad_W = W_mat
     call DGEMM(  &
      &  'N', 'T', n_class, n_dim, n_data, &
-     &  1.0/n_data, g_mat, n_class, X_mat, n_dim, &
-     &  2*lambda_, grad_W, n_class)
+     &  alpha, g_mat, n_class, X_mat, n_dim, &
+     &  beta, grad_W, n_class)
     ! ===============================================
 end subroutine compute_gradients
 end module ann_for
