@@ -16,6 +16,7 @@ class BaseClassifier:
         "wgt_init": {'scheme': 'random', 'std': 0.01},
         # "wgt_init": "xavier",
     }
+    has_validation = False
 
 
     # ------------------------------------------------
@@ -132,7 +133,7 @@ class BaseClassifier:
             if self.has_validation:
                 valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
             else:
-                valid_cost = None
+                valid_cost = 0.0
 
             # print out
             if self.verbose:
