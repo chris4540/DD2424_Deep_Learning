@@ -166,15 +166,15 @@ class BaseClassifier:
             # update the learning rate
             self.lrate *= self.decay
 
-            if iter_ > 2 and (self.valid_costs[-1] > self.valid_costs[-2]):
+            if iter_ > 2 and self._is_valid_cost_going_up():
                 if valid_up_cnt == 0:
                     print("Warning: the validation cost increase. Saving the weighting")
                     W_mat_best = self.W_mat.copy()
                     b_vec_best = self.b_vec.copy()
-                    valid_up_cnt += 1
-                elif valid_up_cnt > 10:
+                elif valid_up_cnt > 5:
                     print("Overfitting, will stop the training")
                     break
+                valid_up_cnt += 1
             else:
                 # reset the counter due to it goes down again
                 valid_up_cnt = 0
@@ -183,8 +183,16 @@ class BaseClassifier:
 
         #
         if valid_up_cnt > 0:
+            print("Update back the best weighting")
             self.W_mat = W_mat_best
             self.b_vec = b_vec_best
+
+    def _is_valid_cost_going_up(self):
+        if self.shuffle_per_epoch:
+            ret = self.valid_costs[-1] > np.mean(self.valid_costs[-10:-2])
+        else:
+            ret = self.valid_costs[-1] > self.valid_costs[-2]
+        return ret
 
     def _mini_batch_train(self, X_train, Y_train):
         """
