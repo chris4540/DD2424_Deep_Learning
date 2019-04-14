@@ -14,7 +14,8 @@ if __name__ == '__main__':
         'eta': [0.005, 0.01, 0.02, 0.05, 0.1],
         'n_batch': [10, 20, 50, 100, 150, 200],
         'verbose': [False],
-        'decay': [1.0],
+        'decay': list(np.linspace(0.9, 1.0, 5)),
+        # 'decay': [1.0],
     }
 
     # load data
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     test_data = load_batch("cifar-10-batches-py/test_batch")
 
     ann = OneLayerNetwork()
-    clf = GridSearchCV(ann, parameters, cv=2, n_jobs=8)
+    clf = GridSearchCV(ann, parameters, cv=2, n_jobs=-1)
     clf.fit(train_data["pixel_data"].T, train_data["labels"])
 
     print(clf.best_params_)
