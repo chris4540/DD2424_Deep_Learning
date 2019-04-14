@@ -13,7 +13,7 @@ if __name__ == '__main__':
     test_data = load_batch("cifar-10-batches-py/test_batch")
 
 
-    ann = OneLayerNetwork(decay=1, n_epochs=100)
+    ann = OneLayerNetwork(decay=1, shuffle_per_epoch=True)
     ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
     # training time
     st = time()
@@ -24,5 +24,5 @@ if __name__ == '__main__':
     score = ann.score(test_data["pixel_data"].T, test_data["labels"])
     print("Accuracy: {}".format(score))
     plt = visual.plot_loss(ann)
-    plt.savefig("long_train.png")
+    plt.savefig("shuffle_per_epoch.png")
     plt.close()

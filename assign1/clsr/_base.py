@@ -15,8 +15,9 @@ class BaseClassifier:
         "verbose": True,
         "wgt_init": {'scheme': 'random', 'std': 0.01},
         # "wgt_init": "xavier",
+        "shuffle_per_epoch": False,
     }
-    has_validation = False
+    _has_valid_data = False
 
 
     # ------------------------------------------------
@@ -45,7 +46,7 @@ class BaseClassifier:
 
     def set_valid_data(self, X, y):
         self.X_valid, self.Y_valid = self._transfrom_data(X, y, self.dtype)
-        self.has_validation = True
+        self._has_valid_data = True
 
     @staticmethod
     def _transfrom_data(X, y, dtype=np.float32):
@@ -124,13 +125,28 @@ class BaseClassifier:
         Y_train = self.Y_train
 
         n_data = X_train.shape[1]
+
+        # initialize shuffle idx array
+        if self.shuffle_per_epoch:
+            shuffle_idx = np.arange(n_data)
+
+        #
+        W_mat_best = None
+        b_vec_best = None
+        valid_up_cnt = 0
+
         for iter_ in range(self.n_epochs):
+            if self.shuffle_per_epoch:
+                np.random.shuffle(shuffle_idx)
+                X_train = np.take(self.X_train, shuffle_idx, axis=1)
+                Y_train = np.take(self.Y_train, shuffle_idx, axis=1)
+
             # mini-batch training
             self._mini_batch_train(X_train, Y_train)
 
             # calcualte the cost function
             train_cost = self._compute_cost(X_train, Y_train)
-            if self.has_validation:
+            if self._has_valid_data:
                 valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
             else:
                 valid_cost = 0.0
@@ -142,7 +158,7 @@ class BaseClassifier:
 
             # append the cost
             self.train_costs.append(train_cost)
-            if self.has_validation:
+            if self._has_valid_data:
                 self.valid_costs.append(valid_cost)
             # append learning rate
             self.lrates.append(self.lrate)
@@ -150,9 +166,25 @@ class BaseClassifier:
             # update the learning rate
             self.lrate *= self.decay
 
-            if len(self.valid_costs) > 2 and self.valid_costs[-1] > self.valid_costs[-2]:
-                print("Being overfit, going to stop the training")
-                break
+            if iter_ > 2 and (self.valid_costs[-1] > self.valid_costs[-2]):
+                if valid_up_cnt == 0:
+                    print("Warning: the validation cost increase. Saving the weighting")
+                    W_mat_best = self.W_mat.copy()
+                    b_vec_best = self.b_vec.copy()
+                    valid_up_cnt += 1
+                elif valid_up_cnt > 10:
+                    print("Overfitting, will stop the training")
+                    break
+            else:
+                # reset the counter due to it goes down again
+                valid_up_cnt = 0
+                W_mat_best = None
+                b_vec_best = None
+
+        #
+        if valid_up_cnt > 0:
+            self.W_mat = W_mat_best
+            self.b_vec = b_vec_best
 
     def _mini_batch_train(self, X_train, Y_train):
         """
