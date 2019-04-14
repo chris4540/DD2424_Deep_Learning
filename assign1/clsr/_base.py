@@ -149,6 +149,10 @@ class BaseClassifier:
             # update the learning rate
             self.lrate *= self.decay
 
+            if len(self.valid_costs) > 2 and self.valid_costs[-1] > self.valid_costs[-2]:
+                print("Being overfit, going to stop the training")
+                break
+
     def _mini_batch_train(self, X_train, Y_train):
         """
         Perform Mini batch gradient descent for one epoch
