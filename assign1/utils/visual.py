@@ -8,7 +8,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 # from matplotlib.ticker import MaxNLocator
 import matplotlib.ticker as plticker
-from load_batch import unpickle
+from .load_batch import unpickle
 
 def plot_sample_img(file):
     data = unpickle(file)

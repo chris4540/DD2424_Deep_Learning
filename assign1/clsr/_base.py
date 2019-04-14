@@ -5,6 +5,18 @@ import lib_clsr.init
 from scipy.special import softmax
 
 class BaseClassifier:
+    DEFAULT_PARAMS = {
+        "lambda_": 0.0,
+        "n_epochs": 40,
+        "n_batch": 100,
+        "eta": 0.01,
+        "decay": 0.95,
+        "dtype": "float32",
+        "verbose": True,
+        "wgt_init": {'scheme': 'random', 'std': 0.01},
+        # "wgt_init": "xavier",
+    }
+
 
     # ------------------------------------------------
     # Basic utils section
@@ -81,8 +93,16 @@ class BaseClassifier:
         self._set_train_data(X, y)
 
         # initialize the parameters
-        self.W_mat, self.b_vec = lib_clsr.init.get_xavier_init(
-            self.ndim, self.nclass, dtype=self.dtype)
+        if self.wgt_init == "xavier" or self.wgt_init['scheme'] == "xavier":
+            self.W_mat, self.b_vec = lib_clsr.init.get_xavier_init(
+                self.ndim, self.nclass, dtype=self.dtype)
+        elif self.wgt_init['scheme'] == "random":
+            self.W_mat, self.b_vec = lib_clsr.init.get_random_init(
+                self.ndim, self.nclass,
+                self.wgt_init['std'],
+                dtype=self.dtype)
+        else:
+            ValueError("Wrong specification of the initialization scheme")
 
         #
         self.train_costs = list()
