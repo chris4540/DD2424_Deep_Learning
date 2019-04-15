@@ -17,6 +17,7 @@ class BaseClassifier:
         "wgt_init": {'scheme': 'random', 'std': 0.01},
         # "wgt_init": "xavier",
         "shuffle_per_epoch": False,
+        "stop_overfit": True
     }
     _has_valid_data = False
 
@@ -167,7 +168,7 @@ class BaseClassifier:
             # update the learning rate
             self.lrate *= self.decay
 
-            if iter_ > 2 and self._is_valid_cost_going_up():
+            if self.stop_overfit and iter_ > 2 and self._is_valid_cost_going_up():
                 if valid_up_cnt == 0:
                     print("Warning: the validation cost increase. Saving the weighting")
                     W_mat_best = self.W_mat.copy()

@@ -17,7 +17,9 @@ test_data = load_batch("cifar-10-batches-py/test_batch")
 def perform_testing(case_tag, lambda_, n_epochs, n_batch, eta):
 
     # default case
-    ann = OneLayerNetwork(decay=1.0, eta=eta, n_epochs=n_epochs, lambda_=lambda_, n_batch=n_batch)
+    ann = OneLayerNetwork(
+        decay=1.0, eta=eta, n_epochs=n_epochs, lambda_=lambda_, n_batch=n_batch,
+        stop_overfit=False)
     ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
 
     # training time
