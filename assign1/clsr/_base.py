@@ -188,6 +188,9 @@ class BaseClassifier:
             self.b_vec = b_vec_best
 
     def _is_valid_cost_going_up(self):
+        if len(self.valid_costs) < 2:
+            return False
+
         if self.shuffle_per_epoch:
             ret = self.valid_costs[-1] > np.mean(self.valid_costs[-10:-2])
         else:
