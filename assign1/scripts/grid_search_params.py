@@ -1,5 +1,13 @@
-from one_layer_ann import OneLayerNetwork
-from load_batch import load_batch
+"""
+Grid search parameters
+
+How to run this code?
+-----------------------
+python -m scripts.grid_search_params
+"""
+from utils.load_batch import load_batch
+from clsr.one_layer_network import OneLayerNetwork
+from time import time
 from sklearn.model_selection import ParameterGrid
 import json
 from time import time
@@ -13,12 +21,8 @@ if __name__ == '__main__':
     valid_data = load_batch("cifar-10-batches-py/data_batch_2")
     test_data = load_batch("cifar-10-batches-py/test_batch")
 
-    nclass = train_data["onehot_labels"].shape[0]
-    ndim = train_data["pixel_data"].shape[0]
-
-    ann = OneLayerNetwork(verbose=False)
-    ann.set_train_data(train_data["pixel_data"], train_data["onehot_labels"])
-    ann.set_valid_data(valid_data["pixel_data"], valid_data["onehot_labels"])
+    ann = OneLayerNetwork(verbose=True)
+    ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
 
     param_grid = {
         'lambda_': [0.0, 0.01, 0.05, 0.1],
@@ -38,14 +42,13 @@ if __name__ == '__main__':
         eval_times = list()
         for _ in range(5):
             start_time = time()
-            ann.train()
+            ann.fit(train_data["pixel_data"].T, train_data["labels"])
             train_times.append(time()-start_time)
 
             start_time = time()
-            acc = ann.compute_accuracy(test_data["pixel_data"], test_data["labels"])
+            acc = ann.score(test_data["pixel_data"].T, test_data["labels"])
             eval_times.append(time()-start_time)
 
-            print(acc)
             accs.append(acc)
 
         res['accs'] = accs

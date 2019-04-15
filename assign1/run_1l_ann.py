@@ -34,7 +34,8 @@ if __name__ == '__main__':
     test_data = load_batch("cifar-10-batches-py/test_batch")
 
 
-    ann = OneLayerNetwork(decay=1, shuffle_per_epoch=False, n_epochs=200)
+    # ann = OneLayerNetwork(decay=0.95, shuffle_per_epoch=False, n_epochs=200)
+    ann = OneLayerNetwork(decay=1.0, eta=0.005, n_epochs=200)
     ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
     # training time
     st = time()

@@ -24,4 +24,4 @@ pip install --upgrade pip
 pip install numpy
 pip install matplotlib
 pip install scipy
-
+pip install sklearn
