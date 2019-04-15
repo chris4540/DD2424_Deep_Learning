@@ -10,7 +10,7 @@ from clsr.one_layer_network import OneLayerNetwork
 from time import time
 from sklearn.model_selection import ParameterGrid
 import json
-from time import time
+
 
 def save_result(results):
     with open("result.json", 'w') as f:
