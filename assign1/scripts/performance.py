@@ -8,16 +8,16 @@
 
 
 import numpy as np
-import lib_ann
-import lib_ann.ann
-import lib_ann.ann_f
+import lib_clsr
+import lib_clsr.ann
+import lib_clsr.ann_f
 
 
 # In[2]:
 
 
-ann_py = lib_ann.ann
-ann_f  = lib_ann.ann_f.ann_for  # ann_f compiled with gfortran -O3 -fexternal-blas --link-openblas
+ann_py = lib_clsr.ann
+ann_f  = lib_clsr.ann_f.ann_for  # ann_f compiled with gfortran -O3 -fexternal-blas --link-openblas
 
 
 # In[3]:
