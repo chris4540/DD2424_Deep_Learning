@@ -1,0 +1,7 @@
+improvements,test_accuracy
+Control,36.93%
+Shuffle sample per epoch (5 runs on avg.),37.72%
+Train for a longer time,37.15%
+Grid search,38.79%
+Decay factor (0.95),38.48%
+Xavier initialization,36.63%

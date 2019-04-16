@@ -147,7 +147,7 @@ values and as the result the contrast of the elements in the weighting matrix is
 
 \subsection{Exercise 2.1}
 
-The best test accuracy is ....
+The best test accuracy is 41.70\%.
 The fllowing avenues have been explored and implemented.
 \begin{enumerate}
     \item Use all the available training data for training. Retain only 1000 samples
@@ -157,9 +157,33 @@ The fllowing avenues have been explored and implemented.
         cost keep increasing for 5 epochs.
     \item Grid search of the hyper parameters.
     \item Add the linear decay factor. The learing rate will decay with a factor of $\sim 0.9$.
-    \item Implement Xavier initialization.
+    \item Implement the Xavier initialization.
 \end{enumerate}
 
-For the Xavier initialization, it did not have a great impact since our setting
-is $x = 0.9$
+For the Xavier initialization, it did not have an impact since our original
+setting is $\sigma = 0.01$ which is close to the setting in the Xavier initilaization
+scheme. The standard deviation used in the Xavier initilaization is:
+\begin{equation*}
+    \sigma = \frac{1}{\sqrt{n_{in}}} = \frac{1}{\sqrt{3072}} \approx 0.018
+\end{equation*}
+And therefore it explained why the Xavier initialization did not have an observable
+improvement.
+
+To consider which method brought the largest gains, I set the control set as using
+the parameter
+\texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.01} and using data\_batch\_1
+for training, data\_batch\_2 for validation and test\_batch for testing.
+And then I compared it with different tricks.
+
+\begin{table}
+    \centering
+    \csvreader[tabular=|l|c|,respect percent=true,
+        table head=\hline Parameter set & Accuracy \\\hline,
+        late after line = \\\hline]
+    {improvement.csv}
+    {improvements=\improve,test_accuracy=\testAcc}
+    {\improve & \testAcc}
+    \caption{TODO}
+\end{table}
+
 \end{document}
