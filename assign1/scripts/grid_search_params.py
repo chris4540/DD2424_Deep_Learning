@@ -1,5 +1,5 @@
 """
-Grid search parameters
+Grid search parameters without library
 
 How to run this code?
 -----------------------
