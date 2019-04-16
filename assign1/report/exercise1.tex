@@ -134,7 +134,7 @@ values and as the result the contrast of the elements in the weighting matrix is
 \begin{table}
     \centering
     \csvreader[tabular=|c|c|,respect percent=true,
-        table head=\hline Parameter set & Accuracy \\\hline,
+        table head=\hline Parameter set & Test Accuracy \\\hline,
         late after line = \\\hline]
     {test_accuracy.csv}
     {param_set=\paramset,accuracy=\accuracy}
@@ -162,7 +162,7 @@ The fllowing avenues have been explored and implemented.
 
 For the Xavier initialization, it did not have an impact since our original
 setting is $\sigma = 0.01$ which is close to the setting in the Xavier initilaization
-scheme. The standard deviation used in the Xavier initilaization is:
+scheme. The standard deviation used in the Xavier initilaization was:
 \begin{equation*}
     \sigma = \frac{1}{\sqrt{n_{in}}} = \frac{1}{\sqrt{3072}} \approx 0.018
 \end{equation*}
@@ -175,15 +175,19 @@ the parameter
 for training, data\_batch\_2 for validation and test\_batch for testing.
 And then I compared it with different tricks.
 
+From the table \ref{table:improve_acc}, we can see that using all training data gave
+the largest gain of the test accuracy.
 \begin{table}
     \centering
     \csvreader[tabular=|l|c|,respect percent=true,
-        table head=\hline Parameter set & Accuracy \\\hline,
+        table head=\hline Improvement & Test Accuracy \\\hline,
         late after line = \\\hline]
     {improvement.csv}
     {improvements=\improve,test_accuracy=\testAcc}
     {\improve & \testAcc}
-    \caption{TODO}
+    \caption{The test accuracies of different improvement strategies}
+    \label{table:improve_acc}
 \end{table}
 
+\subsection{Exercise 2.2}
 \end{document}
