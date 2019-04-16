@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 from .load_batch import unpickle
 
-def plot_sample_img(file):
-    data = unpickle(file)
+def plot_sample_img(file_):
+    data = unpickle(file_)
     A = data['data']
     Y = data['labels']
 
@@ -30,6 +30,9 @@ def plot_sample_img(file):
 
 def plot_weight_mat(network):
     W_mat = network.W_mat
+    return plot_W_mat(W_mat)
+
+def plot_W_mat(W_mat):
     nclass = W_mat.shape[0]
 
     W_mat = W_mat.reshape(nclass, 3, 32, 32).transpose(0,2,3,1)
