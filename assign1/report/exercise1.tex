@@ -10,11 +10,12 @@
 
 \begin{document}
 
-\title{DD2424 Deep Learning in Data Science Assignment 1 Ex. 1}
+\title{DD2424 Deep Learning in Data Science Assignment 1}
 \author{Lin Chun Hung, chlin3@kth.se}
 
 \maketitle
 
+\section{Basic Part (Part 1)}
 In this exercise, a python version of multi-linear classifier was implemented.
 The function for computing the gradients with analytical method was sucessfully implemented.
 
@@ -31,7 +32,7 @@ where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
 
 Since the forward difference method is less accurate than the central difference method,
 the tolerance parameters are different when comparing them to analytical method.
-In the test setting, comparing the analytical method with 
+In the test setting, comparing the analytical method with
 the forward difference method is loose while
 comparing with the central difference method is tight.
 I set \texttt{atol} as \num{1e-7} and \texttt{rtol} as \num{1e-06} for the
@@ -48,11 +49,11 @@ Here is the four parameter sets:
 These four parameter sets are called as parameter set 1, parameter set 2,
 and so on in the figures and the table.
 
-The cost functions, the learnt weight matrices and the accuracies of these four
+The cost functions, the learnt weight matrices and the test accuracies of these four
 sets of parameters are persented in figure \ref{fig:cost_fun}, figure \ref{fig:wgt_mat},
 and table \ref{table:accuracy} respectively.
 
-We can see that parameter set 1 has a high learning rate when refering to parameter set 2. 
+We can see that parameter set 1 has a high learning rate when refering to parameter set 2.
 The minimization is kind of overshoot and therefore the cost function
 value is oscillating and fail to converge.
 
@@ -138,8 +139,27 @@ values and as the result the contrast of the elements in the weighting matrix is
     {test_accuracy.csv}
     {param_set=\paramset,accuracy=\accuracy}
     {\paramset & \accuracy}
-    \caption{The accuracies of different parameter set}
+    \caption{The test accuracies of different parameter set}
     \label{table:accuracy}
 \end{table}
 
+\section{Bonus Points Part (part 2)}
+
+\subsection{Exercise 2.1}
+
+The best test accuracy is ....
+The fllowing avenues have been explored and implemented.
+\begin{enumerate}
+    \item Use all the available training data for training. Retain only 1000 samples
+        for validation.
+    \item Train for a longer time (\texttt{n\_epoch} $\sim$ 500). Keep the best record
+        when the validation cost starts increasing. Stop the iteration when the validation
+        cost keep increasing for 5 epochs.
+    \item Grid search of the hyper parameters.
+    \item Add the linear decay factor. The learing rate will decay with a factor of $\sim 0.9$.
+    \item Implement Xavier initialization.
+\end{enumerate}
+
+For the Xavier initialization, it did not have a great impact since our setting
+is $x = 0.9$
 \end{document}
