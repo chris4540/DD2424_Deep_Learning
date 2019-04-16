@@ -174,7 +174,7 @@ class BaseClassifier:
                     W_mat_best = self.W_mat.copy()
                     b_vec_best = self.b_vec.copy()
                 elif valid_up_cnt > 5:
-                    print("Overfitting, will stop the training")
+                    print("Warning: Overfitting, will stop the training")
                     break
                 valid_up_cnt += 1
             else:
@@ -185,7 +185,7 @@ class BaseClassifier:
 
         #
         if valid_up_cnt > 0:
-            print("Update back the best weighting")
+            print("Notice: Updating back the best weighting")
             self.W_mat = W_mat_best
             self.b_vec = b_vec_best
 
