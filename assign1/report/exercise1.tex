@@ -148,7 +148,7 @@ values and as the result the contrast of the elements in the weighting matrix is
 \subsection{Exercise 2.1}
 
 The best test accuracy is 41.70\%.
-The fllowing avenues have been explored and implemented.
+The following avenues have been explored and implemented.
 \begin{enumerate}
     \item Use all the available training data for training. Retain only 1000 samples
         for validation.
@@ -190,7 +190,12 @@ the largest gain of the test accuracy.
 \end{table}
 
 \subsection{Exercise 2.2}
-Here is the four parameter sets:
+
+The SVM multi-class loss function and its gradient was implemented in the file
+\texttt{lib\_clsr/svm.py}.
+
+Five parameter sets were chosen for comparing the SVM loss with the cross-entropy loss.
+The parameter sets are:
 \begin{enumerate}
     \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
     \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=50, eta=0.005. decay=1.0}
@@ -198,14 +203,19 @@ Here is the four parameter sets:
     \item  \texttt{lambda=0.05, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
     \item  \texttt{lambda=0.1, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
 \end{enumerate}
+
+The test accuracies of the parameter sets are shown in the table \ref{table:cmp_ann_svm}.
+We can see that cross-entropy loss performed better than SVM loss over all parameter sets.
+
 \begin{table}
     \centering
-    \csvreader[tabular=|l|c|c|,respect all=true,
-        table head=\hline Parameters & SVM Lost test accuracy & Coss-entropy loss test accuracy\\\hline,
+    \csvreader[tabular=|c|c|c|,respect all=true,
+        table head=\hline Parameter set & SVM Lost test accuracy & Cross-entropy loss test accuracy\\\hline,
         late after line = \\\hline]
     {cmp_ann_svm.csv}
     {params=\params,svm_test_acc=\svm,ann_test_acc=\ann}
     {\params & \svm & \ann}
-    \caption{TODO}
+    \caption{Compare the test accuracies between SVM loss and cross-entropy loss}
+    \label{table:cmp_ann_svm}
 \end{table}
 \end{document}
