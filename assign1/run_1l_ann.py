@@ -1,5 +1,5 @@
 """
-Example to run SupportVectorMachine
+A script to run OneLayerNetwork
 """
 from utils.load_batch import load_batch
 from utils.load_batch import merge_batch
@@ -35,7 +35,10 @@ if __name__ == '__main__':
 
 
     # ann = OneLayerNetwork(decay=0.95, shuffle_per_epoch=False, n_epochs=200)
-    ann = OneLayerNetwork(decay=1.0, eta=0.005, n_epochs=200)
+    # ann = OneLayerNetwork(decay=1.0, eta=0.005, n_epochs=200)
+    params = {'eta': 0.02, 'verbose': True, 'lambda_': 0.0, 'decay': 0.9, 'n_batch': 20, "n_epochs": 500, "shuffle_per_epoch": True}
+    #params = {'lambda_': 0.0, 'eta': 0.005, 'decay': 1.0, 'n_batch': 50}
+    ann = OneLayerNetwork(**params)
     ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
     # training time
     st = time()
