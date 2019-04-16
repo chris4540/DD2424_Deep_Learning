@@ -1,4 +1,4 @@
-# DD2424 Deep_ earning
+# DD2424 Deep Learning
 Repository for holding Deep Learning assignment code
 
 ## References:
