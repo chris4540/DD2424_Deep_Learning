@@ -12,7 +12,10 @@ default: ann_f$(EXT_SUFFIX)
 #	f2py -c $*.pyf --opt="-O3 -fexternal-blas" --link-atlas $<
 
 clean:
-	rm *.so
+	rm -f *.pyf
+	rm -f *.so
+	rm -f *.o
+	rm -f *.mod
 
 test:
 	${RUNTEST} ${TESTCASES}
