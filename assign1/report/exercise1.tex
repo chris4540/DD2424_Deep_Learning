@@ -190,4 +190,22 @@ the largest gain of the test accuracy.
 \end{table}
 
 \subsection{Exercise 2.2}
+Here is the four parameter sets:
+\begin{enumerate}
+    \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
+    \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=50, eta=0.005. decay=1.0}
+    \item  \texttt{lambda=0.0, n\_epochs=40, n\_batch=100, eta=0.01, decay=1.0}
+    \item  \texttt{lambda=0.05, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
+    \item  \texttt{lambda=0.1, n\_epochs=40, n\_batch=20, eta=0.02, decay=0.9}
+\end{enumerate}
+\begin{table}
+    \centering
+    \csvreader[tabular=|l|c|c|,respect all=true,
+        table head=\hline Parameters & SVM Lost test accuracy & Coss-entropy loss test accuracy\\\hline,
+        late after line = \\\hline]
+    {cmp_ann_svm.csv}
+    {params=\params,svm_test_acc=\svm,ann_test_acc=\ann}
+    {\params & \svm & \ann}
+    \caption{TODO}
+\end{table}
 \end{document}
