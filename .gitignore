@@ -123,6 +123,8 @@ ref.txt
 # fortran module
 *.mod
 
+*.pyf
+
 # ===========================================================
 cifar-10-batches-py/
 submission_code.py
