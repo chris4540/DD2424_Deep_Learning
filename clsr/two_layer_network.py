@@ -4,6 +4,8 @@ import lib_clsr.ann
 import lib_clsr.init
 from lib_clsr.init import get_xavier_init
 from scipy.special import softmax
+import numpy as np
+import copy
 
 class TwoLayerNetwork(BaseClassifier):
 
@@ -41,7 +43,7 @@ class TwoLayerNetwork(BaseClassifier):
     def predict_log_proba(self, X):
         p_mat, _ = lib_clsr.ann.eval_clsr_klayers(
             np.transpose(X), self.W_mats, self.b_vecs)
-        s_mat = softmax(s_mat, axis=0)
+        s_mat = softmax(p_mat, axis=0)
         return s_mat
 
 
@@ -128,11 +130,15 @@ class TwoLayerNetwork(BaseClassifier):
             # update the learning rate
             self.lrate *= self.decay
 
+            # check if training cost
+            if train_cost < 1e-6:
+                break
+
             if self.stop_overfit and iter_ > 2 and self._is_valid_cost_going_up():
                 if valid_up_cnt == 0:
                     print("Warning: the validation cost increase. Saving the weighting")
-                    W_mat_best = self.W_mat.copy()
-                    b_vec_best = self.b_vec.copy()
+                    W_mats_best = copy.deepcopy(self.W_mats)
+                    b_vecs_best = copy.deepcopy(self.b_vecs)
                 elif valid_up_cnt > 5:
                     print("Warning: Overfitting, will stop the training")
                     break
@@ -140,14 +146,14 @@ class TwoLayerNetwork(BaseClassifier):
             else:
                 # reset the counter due to it goes down again
                 valid_up_cnt = 0
-                W_mat_best = None
-                b_vec_best = None
+                W_mats_best = None
+                b_vecs_best = None
 
         #
         if valid_up_cnt > 0:
             print("Notice: Updating back the best weighting")
-            self.W_mat = W_mat_best
-            self.b_vec = b_vec_best
+            self.W_mats = W_mats_best
+            self.b_vecs = b_vecs_best
 
     def _is_valid_cost_going_up(self):
         if len(self.valid_costs) < 2:
