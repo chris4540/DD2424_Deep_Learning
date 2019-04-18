@@ -1,103 +1,59 @@
-import numpy as np
+from ._base import BaseClassifier
 import lib_clsr
-import lib_clsr.utils
+import lib_clsr.ann
 import lib_clsr.init
+from lib_clsr.init import get_xavier_init
 from scipy.special import softmax
 
-class BaseClassifier:
+class TwoLayerNetwork(BaseClassifier):
+
+    size_hidden = 50
     DEFAULT_PARAMS = {
         "lambda_": 0.0,
         "n_epochs": 40,
         "n_batch": 100,
         "eta": 0.01,
-        # "decay": 0.95,
         "decay": 1.0,
         "dtype": "float32",
         "verbose": True,
-        "wgt_init": {'scheme': 'random', 'std': 0.01},
-        # "wgt_init": "xavier",
+        "wgt_init": "xavier",
         "shuffle_per_epoch": False,
         "stop_overfit": True
     }
     _has_valid_data = False
 
+    def __init__(self, **params):
+        self.set_params(**params)
 
-    # ------------------------------------------------
-    # Basic utils section
-    def get_params(self, deep=False):
-        ret = dict()
-        for k in self.DEFAULT_PARAMS.keys():
-            ret[k] = getattr(self, k)
+    # =========================================================================
+    def _compute_cost(self, X_mat, Y_mat):
+        ret = lib_clsr.ann.compute_cost_klayers(
+            X_mat, Y_mat, self.W_mats, self.b_vecs, self.lambda_)
         return ret
 
-    def set_params(self, **params):
-        for k in self.DEFAULT_PARAMS.keys():
-            val = params.get(k, self.DEFAULT_PARAMS[k])
-            setattr(self, k, val)
-        return self
-    # End basic utils section
-    # ------------------------------------------------
-    # ------------------------------------------------
-    # data handling section
-    def _set_train_data(self, X, y):
-        # set data
-        self.X_train, self.Y_train = self._transfrom_data(X, y, self.dtype)
-        # set dim
-        self.nclass = self.Y_train.shape[0]
-        self.ndim = self.X_train.shape[0]
-
-    def set_valid_data(self, X, y):
-        self.X_valid, self.Y_valid = self._transfrom_data(X, y, self.dtype)
-        self._has_valid_data = True
-
-    @staticmethod
-    def _transfrom_data(X, y, dtype=np.float32):
+    def _compute_grad(self, X_mat, Y_mat):
         """
-        X (N, d):
-        y (N,)
         """
-        # X_mat.shape is (d, N)
-        X_mat = np.transpose(X).astype(dtype)
-
-        # Y_mat.shape is (k, N)
-        Y_mat = lib_clsr.utils.conv_y_to_onehot_mat(y).astype(dtype)
-        return X_mat, Y_mat
-    # End data handling section
-    # ------------------------------------------------
-    def score(self, X, y):
-        y_pred = self.predict(X)
-        ret = (y_pred == y).mean()
-        return ret
-
-    def predict(self, X):
-        """
-        X (N, d):
-        """
-        s_mat = self.predict_proba(X)
-        ret = np.argmax(s_mat, axis=0)
-        return ret
-
-    def predict_proba(self, X):
-        # s_mat: unnormalized log probability
-        s_mat = self.predict_log_proba(X)
-        prob = softmax(s_mat, axis=0)
-        return prob
+        grad_Ws, grad_bs = lib_clsr.ann.compute_grads_klayers(
+            X_mat, Y_mat, self.W_mats, self.b_vecs, self.lambda_)
+        return grad_Ws, grad_bs
 
     def predict_log_proba(self, X):
-        s_mat = self.W_mat.dot(np.transpose(X).astype(self.dtype)) + self.b_vec
+        p_mat, _ = lib_clsr.ann.eval_clsr_klayers(
+            np.transpose(X), self.W_mats, self.b_vecs)
+        s_mat = softmax(s_mat, axis=0)
         return s_mat
+
 
     # initialize
     def _initalize_wgts(self):
+        print("In _initalize_wgts")
         # initialize the parameters
         if self.wgt_init == "xavier" or self.wgt_init['scheme'] == "xavier":
-            self.W_mat, self.b_vec = lib_clsr.init.get_xavier_init(
-                self.ndim, self.nclass, dtype=self.dtype)
-        elif self.wgt_init['scheme'] == "random":
-            self.W_mat, self.b_vec = lib_clsr.init.get_random_init(
-                self.ndim, self.nclass,
-                self.wgt_init['std'],
-                dtype=self.dtype)
+            W_mat1, b_vec1 = get_xavier_init(self.ndim, self.size_hidden, dtype=self.dtype)
+            W_mat2, b_vec2 = get_xavier_init(self.size_hidden, self.nclass, dtype=self.dtype)
+            self.W_mats = [W_mat1, W_mat2]
+            self.b_vecs = [b_vec1, b_vec2]
         else:
             raise ValueError("Wrong specification of the initialization scheme")
 
@@ -216,8 +172,11 @@ class BaseClassifier:
             Y_batch = Y_train[:, j_s:j_e]
 
             # get the gradient of W_mat and b_vec
-            grad_W, grad_b = self._compute_grad(X_batch, Y_batch)
+            grad_Ws, grad_bs = self._compute_grad(X_batch, Y_batch)
 
             # update the params
-            self.W_mat = self.W_mat - self.lrate * grad_W
-            self.b_vec = self.b_vec - self.lrate * grad_b
+            for l in range(len(self.W_mats)):
+                self.W_mats[l] = self.W_mats[l] - self.lrate * grad_Ws[l]
+                self.b_vecs[l] = self.b_vecs[l] - self.lrate * grad_bs[l]
+            # self.W_mat = self.W_mat - self.lrate * grad_W
+            # self.b_vec = self.b_vec - self.lrate * grad_b

@@ -44,7 +44,7 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
 
     return (grad_W, grad_b)
 
-def eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs):
+def eval_clsr_klayers(X_mat, W_mats, b_vecs):
     """
     Args:
         W_mats (list(numpy.ndarray))
@@ -68,7 +68,7 @@ def eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs):
 
 def compute_cost_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
     n_data = X_mat.shape[1]
-    p_mat, _ = eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs)
+    p_mat, _ = eval_clsr_klayers(X_mat, W_mats, b_vecs)
     cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
     cost = (np.sum(cross_entro) / n_data)
     for W_mat in W_mats:
@@ -85,7 +85,7 @@ def compute_grads_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
     n_layer = len(W_mats)
 
     # forward pass
-    p_mat, h_mats = eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs)
+    p_mat, h_mats = eval_clsr_klayers(X_mat, W_mats, b_vecs)
 
     grad_Ws = [None] * len(W_mats)
     grad_bs = [None] * len(b_vecs)
@@ -95,7 +95,7 @@ def compute_grads_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
 
     for l in range(n_layer, 0, -1):
         h_mat = h_mats[l-1]
-        W_mat = W_mats[l-1]
+        W_mat = W_mats[l-1] # W_mats = [W_1, W_2]; W_i = W_mats[i-1]
         #
         grad_b = np.mean(g_mat, axis=1)[:, np.newaxis]
         grad_W = g_mat.dot(h_mat.T) / n_data
