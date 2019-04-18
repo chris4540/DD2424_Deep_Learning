@@ -10,7 +10,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         train_data = load_batch("cifar-10-batches-py/data_batch_1")
         valid_data = load_batch("cifar-10-batches-py/data_batch_2")
         test_data = load_batch("cifar-10-batches-py/test_batch")
-        ann = TwoLayerNetwork(stop_overfit=False, n_epochs=200, eta=0.05, verbose=True)
+        ann = TwoLayerNetwork(stop_overfit=False, n_epochs=500, eta=0.02, verbose=False)
 
         ann.fit(train_data["pixel_data"][:, :100].T, train_data["labels"][:100])
         train_cost = ann.train_costs[-1]
