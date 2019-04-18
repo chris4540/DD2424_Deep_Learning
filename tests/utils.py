@@ -72,10 +72,10 @@ def compute_grad_central_diff(X_mat, Y_mat, W_mat, b_vec, lambda_, cost_fun):
 
     return (grad_W, grad_b)
 
-def compute_grad_klayers_fwd_diff(X_mat, Y_mat, W_mats, b_vecs, lambda_, cost_fun):
+def compute_grad_klayers_fwd_diff(X_mat, Y_mat, W_mats, b_vecs, lambda_, step_size, cost_fun):
     """
     """
-    h = 1e-6
+    h = step_size
     h_inv = 1.0 / h
 
     cost = cost_fun(X_mat, Y_mat, W_mats, b_vecs, lambda_)

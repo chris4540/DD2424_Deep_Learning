@@ -2,6 +2,7 @@ import lib_clsr
 import lib_clsr.ann
 import unittest
 import numpy as np
+from tests.utils import compute_grad_klayers_fwd_diff
 from numpy.testing import assert_allclose
 from numpy.testing import assert_array_equal
 from scipy.special import softmax
@@ -41,10 +42,10 @@ def grad_2l(X_mat, Y_mat, W_mat1, W_mat2, b_vec1, b_vec2, lambda_):
 class TestANNTwoLayersFunction(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        d = 300
-        m = 50
+        d = 20
+        m = 10
         k = 12
-        n = 10
+        n = 5
 
         cls.W_mat1 = np.random.randn(m ,d).astype(np.float32) * np.sqrt(1.0/d)
         cls.W_mat2 = np.random.randn(k ,m).astype(np.float32) * np.sqrt(1.0/m)
@@ -83,3 +84,19 @@ class TestANNTwoLayersFunction(unittest.TestCase):
             assert_array_equal(grad2_W2, grad_Ws[1])
             assert_array_equal(grad2_b1, grad_bs[0])
             assert_array_equal(grad2_b2, grad_bs[1])
+
+    def test_grad_central_diff(self):
+        lambda_ = 0.0
+        step = 1e-3
+        W_mats = [self.W_mat1, self.W_mat2]
+        b_vecs = [self.b_vec1, self.b_vec2]
+        [W1n, W2n], [b1n, b2n] = compute_grad_klayers_fwd_diff(
+                self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_, step,
+                lib_clsr.ann.compute_cost_klayers)
+        [W1a, W2a], [b1a, b2a] = lib_clsr.ann.compute_grads_klayers(
+                self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
+
+        assert_allclose(W1n, W1a, atol=1e-3, rtol=1e-4)
+        assert_allclose(W2n, W2a, atol=1e-3, rtol=1e-4)
+        assert_allclose(b1n, b1a, atol=1e-3, rtol=1e-4)
+        assert_allclose(b2n, b2a, atol=1e-3, rtol=1e-4)
