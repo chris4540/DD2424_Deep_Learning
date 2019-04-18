@@ -69,7 +69,7 @@ def compute_cost_klayer(X_mat, Y_mat, W_mats, b_vecs, lambda_):
     cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
     cost = (np.sum(cross_entro) / n_data)
     for W_mat in W_mats:
-        cost += lambda_*np.sum(W_mat)
+        cost += lambda_*np.sum(W_mat**2)
     return cost
 
 def compute_gradients_klayer(X_mat, Y_mat, W_mats, b_vecs, lambda_):
