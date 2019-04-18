@@ -49,7 +49,6 @@ class TwoLayerNetwork(BaseClassifier):
 
     # initialize
     def _initalize_wgts(self):
-        print("In _initalize_wgts")
         # initialize the parameters
         if self.wgt_init == "xavier" or self.wgt_init['scheme'] == "xavier":
             W_mat1, b_vec1 = get_xavier_init(self.ndim, self.size_hidden, dtype=self.dtype)
