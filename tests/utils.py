@@ -114,10 +114,10 @@ def compute_grad_klayers_fwd_diff(X_mat, Y_mat, W_mats, b_vecs, lambda_, step_si
 
     return (grad_Ws, grad_bs)
 
-def compute_grad_klayers_cent_diff(X_mat, Y_mat, W_mats, b_vecs, lambda_, cost_fun):
+def compute_grad_klayers_cent_diff(X_mat, Y_mat, W_mats, b_vecs, lambda_, step_size, cost_fun):
     """
     """
-    h = 1e-6
+    h = step_size
     h_inv = 1.0 / h
 
     grad_Ws = list()

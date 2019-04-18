@@ -3,9 +3,12 @@ import lib_clsr.ann
 import unittest
 import numpy as np
 from tests.utils import compute_grad_klayers_fwd_diff
+from tests.utils import compute_grad_klayers_cent_diff
 from numpy.testing import assert_allclose
 from numpy.testing import assert_array_equal
 from scipy.special import softmax
+from utils.load_batch import load_batch
+from utils.preprocess import normalize_data
 
 def cost_2l(X_mat, Y_mat, W_mat1, W_mat2, b_vec1, b_vec2, lambda_):
     n_data = X_mat.shape[1]
@@ -43,8 +46,8 @@ class TestANNTwoLayersFunction(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         d = 20
-        m = 10
-        k = 12
+        m = 15
+        k = 10
         n = 5
 
         cls.W_mat1 = np.random.randn(m ,d).astype(np.float32) * np.sqrt(1.0/d)
@@ -52,8 +55,10 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         cls.b_vec1 = np.random.randn(m ,1).astype(np.float32)
         cls.b_vec2 = np.random.randn(k ,1).astype(np.float32)
         # b2 = np.zeros((k, 1), dtype=np.float32)
-        cls.X_mat = np.random.randn(d ,n).astype(np.float32)
-        cls.Y_mat = np.eye(k)[np.random.choice(k, n)].T.astype(np.float32)
+        train_data = load_batch("cifar-10-batches-py/data_batch_1")
+        X_mat = train_data["pixel_data"][:d, :n]
+        cls.X_mat = normalize_data(X_mat)['normalized'].astype(np.float32)
+        cls.Y_mat = train_data['onehot_labels'][:k, :n]
 
     def test_2d_layer_cost_func(self):
         W_mats = [self.W_mat1, self.W_mat2]
@@ -87,7 +92,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
 
     def test_grad_central_diff(self):
         lambda_ = 0.0
-        step = 1e-3
+        step = 1e-5
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
         [W1n, W2n], [b1n, b2n] = compute_grad_klayers_fwd_diff(
@@ -96,7 +101,25 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         [W1a, W2a], [b1a, b2a] = lib_clsr.ann.compute_grads_klayers(
                 self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
 
-        assert_allclose(W1n, W1a, atol=1e-3, rtol=1e-4)
-        assert_allclose(W2n, W2a, atol=1e-3, rtol=1e-4)
-        assert_allclose(b1n, b1a, atol=1e-3, rtol=1e-4)
-        assert_allclose(b2n, b2a, atol=1e-3, rtol=1e-4)
+        assert_allclose(W1n, W1a)
+        assert_allclose(W2n, W2a)
+        assert_allclose(b1n, b1a)
+        assert_allclose(b2n, b2a)
+
+    def test_grad_central_diff(self):
+        lambda_ = 0.0
+        step = 5e-3
+        atol = 1e-3
+        rtol = 1e-3
+        W_mats = [self.W_mat1, self.W_mat2]
+        b_vecs = [self.b_vec1, self.b_vec2]
+        [W1n, W2n], [b1n, b2n] = compute_grad_klayers_cent_diff(
+                self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_, step,
+                lib_clsr.ann.compute_cost_klayers)
+        [W1a, W2a], [b1a, b2a] = lib_clsr.ann.compute_grads_klayers(
+                self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
+
+        assert_allclose(W1n, W1a, atol=atol, rtol=rtol)
+        assert_allclose(W2n, W2a, atol=atol, rtol=rtol)
+        assert_allclose(b1n, b1a, atol=atol, rtol=rtol)
+        assert_allclose(b2n, b2a, atol=atol, rtol=rtol)
