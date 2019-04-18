@@ -44,10 +44,15 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
 
     return (grad_W, grad_b)
 
-def evaluate_classifier_klayer(X_mat, Y_mat, W_mats, b_vecs):
+def eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs):
     """
     Args:
         W_mats (list(numpy.ndarray))
+
+    Returns:
+        cost (float): the loss or the cost of the network
+        h_mats (list(np.ndarray)): the list of hidden layer values.
+            Notes that the h[0] is the input layer
     """
     h_mat = X_mat
     h_mats = [h_mat]
@@ -61,21 +66,26 @@ def evaluate_classifier_klayer(X_mat, Y_mat, W_mats, b_vecs):
     p_mat = softmax(s_mat, axis=0)
     return p_mat, h_mats
 
-def compute_cost_klayer(X_mat, Y_mat, W_mats, b_vecs, lambda_):
+def compute_cost_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
     n_data = X_mat.shape[1]
-    p_mat, _ = evaluate_classifier_klayer(X_mat, Y_mat, W_mats, b_vecs)
+    p_mat, _ = eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs)
     cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
     cost = (np.sum(cross_entro) / n_data)
     for W_mat in W_mats:
         cost += lambda_*np.sum(W_mat**2)
     return cost
 
-def compute_gradients_klayer(X_mat, Y_mat, W_mats, b_vecs, lambda_):
+def compute_grads_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
+    """
+    Notes:
+    The computational graph and the naming convention is:
+    x(h[0]) -> s[1] -> h[1] -> s[2] -> h[2] -> ... -> h[l-1] -> s[l] -> p -> loss
+    """
     n_data = X_mat.shape[1]
     n_layer = len(W_mats)
 
     # forward pass
-    p_mat, h_mats = evaluate_classifier_klayer(X_mat, Y_mat, W_mats, b_vecs)
+    p_mat, h_mats = eval_clsr_klayers(X_mat, Y_mat, W_mats, b_vecs)
 
     grad_Ws = [None] * len(W_mats)
     grad_bs = [None] * len(b_vecs)

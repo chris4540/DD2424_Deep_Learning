@@ -58,7 +58,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
         for lambda_ in [0.0, 0.1, 0.5, 0.7, 1.0]:
-            cost1 = lib_clsr.ann.compute_cost_klayer(
+            cost1 = lib_clsr.ann.compute_cost_klayers(
                 self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
             cost2 = cost_2l(
                 self.X_mat, self.Y_mat, self.W_mat1, self.W_mat2,
@@ -75,7 +75,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
                 self.X_mat, self.Y_mat, self.W_mat1, self.W_mat2,
                 self.b_vec1, self.b_vec2, lambda_)
 
-            grad_Ws, grad_bs = lib_clsr.ann.compute_gradients_klayer(
+            grad_Ws, grad_bs = lib_clsr.ann.compute_grads_klayers(
                 self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
 
             # compare
