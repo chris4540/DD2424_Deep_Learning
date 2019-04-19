@@ -2,6 +2,7 @@ import numpy as np
 import lib_clsr
 import lib_clsr.utils
 import lib_clsr.init
+from utils.preprocess import normalize_data
 from scipy.special import softmax
 
 class BaseClassifier:
@@ -42,9 +43,19 @@ class BaseClassifier:
     def _set_train_data(self, X, y):
         # set data
         self.X_train, self.Y_train = self._transfrom_data(X, y, self.dtype)
+
         # set dim
         self.nclass = self.Y_train.shape[0]
         self.ndim = self.X_train.shape[0]
+
+        # normalize the data
+        data = normalize_data(self.X_train)
+        self.X_mean = data['mean']
+        self.X_std = data['std']
+        self.X_train = data['normalized']
+
+        if self._has_valid_data:
+            self.X_valid = (self.X_valid - self.X_mean) / self.X_std
 
     def set_valid_data(self, X, y):
         self.X_valid, self.Y_valid = self._transfrom_data(X, y, self.dtype)
@@ -84,7 +95,8 @@ class BaseClassifier:
         return prob
 
     def predict_log_proba(self, X):
-        s_mat = self.W_mat.dot(np.transpose(X).astype(self.dtype)) + self.b_vec
+        X_mat = (np.transpose(X).astype(self.dtype) - self.X_mean) / self.X_std
+        s_mat = self.W_mat.dot(X_mat) + self.b_vec
         return s_mat
 
     # initialize
