@@ -25,11 +25,12 @@ ann_f  = lib_clsr.ann_f.ann_for  # ann_f compiled with gfortran -O3 -fexternal-b
 
 k = 12
 d = 4000
-n = 100
-W_mat = np.random.randn(k ,d)
-X_mat = np.random.randn(d ,n) * np.random.randint(2)
-b_vec = np.random.randn(k ,1)
-Y_mat = np.eye(k)[np.random.choice(k, n)].T
+n = 50
+dtype = np.float32
+W_mat = np.random.randn(k ,d).astype(dtype) * np.sqrt(1.0/d)
+X_mat = np.random.randn(d ,n).astype(dtype) * np.random.randint(2)
+b_vec = np.random.randn(k ,1).astype(dtype)
+Y_mat = np.eye(k)[np.random.choice(k, n)].T.astype(dtype)
 lambda_ = 0.01
 s_mat = W_mat.dot(X_mat) + b_vec
 

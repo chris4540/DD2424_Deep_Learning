@@ -41,11 +41,11 @@ module ann_for
 contains
 function softmax(x, axis) result(ret)
     implicit none
-    real(kind=8), dimension(:, :), intent(in) :: x
+    real(kind=4), dimension(:, :), intent(in) :: x
     integer(kind=4), intent(in), optional :: axis
-    real(kind=8), dimension(size(x,1), size(x,2)) :: ret
+    real(kind=4), dimension(size(x,1), size(x,2)) :: ret
     ! local variable
-    real(kind=8), dimension(size(x,1), size(x,2)) :: exp_prob
+    real(kind=4), dimension(size(x,1), size(x,2)) :: exp_prob
     integer(kind=4) :: axis_
     integer(kind=4) :: i  ! an index iterator
 
@@ -71,10 +71,10 @@ end function softmax
 
 function evaluate_classifier(X_mat, W_mat, b_vec) result(ret)
     implicit none
-    real(kind=8), dimension(:, :), intent(in) :: X_mat
-    real(kind=8), dimension(:, :), intent(in) :: W_mat
-    real(kind=8), dimension(:, :), intent(in) :: b_vec
-    real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: ret
+    real(kind=4), dimension(:, :), intent(in) :: X_mat
+    real(kind=4), dimension(:, :), intent(in) :: W_mat
+    real(kind=4), dimension(:, :), intent(in) :: b_vec
+    real(kind=4), dimension(size(W_mat,1), size(X_mat,2)) :: ret
     ! ===============================================================
     ret = matmul(W_mat, X_mat) + SPREAD(reshape(b_vec, [size(W_mat,1)]), 2, size(X_mat,2))
     ret = softmax(ret, 0)
@@ -82,16 +82,16 @@ end function evaluate_classifier
 
 function compute_cost(X_mat, Y_mat, W_mat, b_vec, lambda_) result(ret)
     implicit none
-    real(kind=8), dimension(:, :), intent(in) :: X_mat
-    real(kind=8), dimension(:, :), intent(in) :: W_mat
-    real(kind=8), dimension(:, :), intent(in) :: Y_mat
-    real(kind=8), dimension(:, :), intent(in) :: b_vec
-    real(kind=8)                 , intent(in) :: lambda_
-    real(kind=8)                              :: ret
+    real(kind=4), dimension(:, :), intent(in) :: X_mat
+    real(kind=4), dimension(:, :), intent(in) :: W_mat
+    real(kind=4), dimension(:, :), intent(in) :: Y_mat
+    real(kind=4), dimension(:, :), intent(in) :: b_vec
+    real(kind=4)                 , intent(in) :: lambda_
+    real(kind=4)                              :: ret
     ! ===================================================
     ! local vars
-    real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: p_mat
-    real(kind=8), dimension(size(X_mat,2)) :: cross_entro
+    real(kind=4), dimension(size(W_mat,1), size(X_mat,2)) :: p_mat
+    real(kind=4), dimension(size(X_mat,2)) :: cross_entro
 
     p_mat = evaluate_classifier(X_mat, W_mat, b_vec)
     cross_entro = sum(Y_mat * p_mat, dim=1)
@@ -102,21 +102,21 @@ end function compute_cost
 
 subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b)
     implicit none
-    real(kind=8), dimension(:, :), intent(in) :: X_mat
-    real(kind=8), dimension(:, :), intent(in) :: W_mat
-    real(kind=8), dimension(:, :), intent(in) :: Y_mat
-    real(kind=8), dimension(:, :), intent(in) :: b_vec
-    real(kind=8)                 , intent(in) :: lambda_
-    real(kind=8), dimension(size(W_mat,1), size(W_mat,2)), intent(out) :: grad_W
-    real(kind=8), dimension(size(b_vec,1), size(b_vec,2)), intent(out) :: grad_b
+    real(kind=4), dimension(:, :), intent(in) :: X_mat
+    real(kind=4), dimension(:, :), intent(in) :: W_mat
+    real(kind=4), dimension(:, :), intent(in) :: Y_mat
+    real(kind=4), dimension(:, :), intent(in) :: b_vec
+    real(kind=4)                 , intent(in) :: lambda_
+    real(kind=4), dimension(size(W_mat,1), size(W_mat,2)), intent(out) :: grad_W
+    real(kind=4), dimension(size(b_vec,1), size(b_vec,2)), intent(out) :: grad_b
     ! ======================================================
-    real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: p_mat
-    real(kind=8), dimension(size(W_mat,1), size(X_mat,2)) :: g_mat
+    real(kind=4), dimension(size(W_mat,1), size(X_mat,2)) :: p_mat
+    real(kind=4), dimension(size(W_mat,1), size(X_mat,2)) :: g_mat
     integer(kind=4) :: n_data
     integer(kind=4) :: n_class
     integer(kind=4) :: n_dim
-    real(kind=8) :: alpha
-    real(kind=8) :: beta
+    real(kind=4) :: alpha
+    real(kind=4) :: beta
     ! ======================================================
     n_dim = size(X_mat,1)
     n_data = size(X_mat,2)
@@ -132,10 +132,10 @@ subroutine compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_, grad_W, grad_b
     ! call blas to compute g*X'/n + 2*lambda_*W_mat
     ! grad_W = matmul(g_mat, TRANSPOSE(X_mat)) / n_data
     ! grad_W = grad_W + 2 *lambda_ * W_mat
-    alpha = 1.D0 / n_data
-    beta = 2.D0 * lambda_
+    alpha = 1.0 / n_data
+    beta = 2.0 * lambda_
     grad_W = W_mat
-    call DGEMM(  &
+    call SGEMM(  &
      &  'N', 'T', n_class, n_dim, n_data, &
      &  alpha, g_mat, n_class, X_mat, n_dim, &
      &  beta, grad_W, n_class)
