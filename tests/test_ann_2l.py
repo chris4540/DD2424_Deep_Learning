@@ -58,7 +58,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         train_data = load_batch("cifar-10-batches-py/data_batch_1")
         X_mat = train_data["pixel_data"][:d, :n]
         cls.X_mat = normalize_data(X_mat)['normalized'].astype(np.float32)
-        cls.Y_mat = train_data['onehot_labels'][:k, :n]
+        cls.Y_mat = train_data['onehot_labels'][:k, :n].astype(np.float32)
 
     def test_2d_layer_cost_func(self):
         W_mats = [self.W_mat1, self.W_mat2]

@@ -1,4 +1,4 @@
-RUNTEST=nosetests --processes=-1 --process-timeout=30 -v
+RUNTEST=nosetests --processes=-1 --process-timeout=100 -v
 # RUNTEST=python -m unittest -v
 
 TESTCASES=tests/*.py
