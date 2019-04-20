@@ -1,4 +1,5 @@
-from ._base import BaseClassifier
+# from ._base import BaseClassifier
+import numpy as np
 import lib_clsr
 import lib_clsr.ann
 import lib_clsr.init
@@ -6,8 +7,13 @@ from lib_clsr.init import get_xavier_init
 from scipy.special import softmax
 import numpy as np
 import copy
+from utils.lrate import cyc_lrate
+import lib_clsr.utils
+from utils.preprocess import normalize_data
+from scipy.special import softmax
 
-class TwoLayerNetwork(BaseClassifier):
+
+class TwoLayerNetwork:
 
     size_hidden = 50
     DEFAULT_PARAMS = {
@@ -27,6 +33,76 @@ class TwoLayerNetwork(BaseClassifier):
     def __init__(self, **params):
         self.set_params(**params)
 
+    # ------------------------------------------------
+    # Basic utils section
+    def get_params(self, deep=False):
+        ret = dict()
+        for k in self.DEFAULT_PARAMS.keys():
+            ret[k] = getattr(self, k)
+        return ret
+
+    def set_params(self, **params):
+        for k in self.DEFAULT_PARAMS.keys():
+            val = params.get(k, self.DEFAULT_PARAMS[k])
+            setattr(self, k, val)
+        return self
+    # End basic utils section
+    # ------------------------------------------------
+   # ------------------------------------------------
+    # data handling section
+    def _set_train_data(self, X, y):
+        # set data
+        self.X_train, self.Y_train = self._transfrom_data(X, y, self.dtype)
+
+        # set dim
+        self.nclass = self.Y_train.shape[0]
+        self.ndim = self.X_train.shape[0]
+
+        # normalize the data
+        data = normalize_data(self.X_train)
+        self.X_mean = data['mean']
+        self.X_std = data['std']
+        self.X_train = data['normalized']
+
+        if self._has_valid_data:
+            self.X_valid = (self.X_valid - self.X_mean) / self.X_std
+
+    def set_valid_data(self, X, y):
+        self.X_valid, self.Y_valid = self._transfrom_data(X, y, self.dtype)
+        self._has_valid_data = True
+
+    @staticmethod
+    def _transfrom_data(X, y, dtype=np.float32):
+        """
+        X (N, d):
+        y (N,)
+        """
+        # X_mat.shape is (d, N)
+        X_mat = np.transpose(X).astype(dtype)
+
+        # Y_mat.shape is (k, N)
+        Y_mat = lib_clsr.utils.conv_y_to_onehot_mat(y).astype(dtype)
+        return X_mat, Y_mat
+    # End data handling section
+    # ------------------------------------------------
+    def score(self, X, y):
+        y_pred = self.predict(X)
+        ret = (y_pred == y).mean()
+        return ret
+
+    def predict(self, X):
+        """
+        X (N, d):
+        """
+        s_mat = self.predict_proba(X)
+        ret = np.argmax(s_mat, axis=0)
+        return ret
+
+    def predict_proba(self, X):
+        # s_mat: unnormalized log probability
+        s_mat = self.predict_log_proba(X)
+        prob = softmax(s_mat, axis=0)
+        return prob
     # =========================================================================
     def _compute_cost(self, X_mat, Y_mat):
         ret = lib_clsr.ann.compute_cost_klayers(
@@ -82,6 +158,7 @@ class TwoLayerNetwork(BaseClassifier):
             print("-------- TRAINING PARAMS --------")
 
         # initialize the learning rate
+        lrates = cyc_lrate(np.arange(self.n_epochs), eta_min=1e-5, eta_max=1e-1, step_size=500)
         self.lrate = self.eta
 
         X_train = self.X_train
@@ -99,6 +176,7 @@ class TwoLayerNetwork(BaseClassifier):
         valid_up_cnt = 0
 
         for iter_ in range(self.n_epochs):
+            self.lrate = lrates[iter_]
             if self.shuffle_per_epoch:
                 np.random.shuffle(shuffle_idx)
                 X_train = np.take(self.X_train, shuffle_idx, axis=1)
@@ -127,7 +205,8 @@ class TwoLayerNetwork(BaseClassifier):
             self.lrates.append(self.lrate)
 
             # update the learning rate
-            self.lrate *= self.decay
+            # self.lrate *= self.decay
+            # self.lrate =
 
             # check if training cost
             if train_cost < 1e-6:
