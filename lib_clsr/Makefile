@@ -1,6 +1,4 @@
 EXT_SUFFIX := $(shell python-config --extension-suffix)
-RUNTEST=python -m unittest -v
-TESTCASES=tests/*.py
 
 default: ann_f$(EXT_SUFFIX)
 
@@ -16,6 +14,4 @@ clean:
 	rm -f *.so
 	rm -f *.o
 	rm -f *.mod
-
-test:
-	${RUNTEST} ${TESTCASES}
+	rm -rf *.pyd
