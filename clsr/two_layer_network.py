@@ -108,6 +108,14 @@ class TwoLayerNetwork:
         s_mat = self.predict_log_proba(X)
         prob = softmax(s_mat, axis=0)
         return prob
+
+    def predict_log_proba(self, X):
+        X_mat = (np.transpose(X).astype(self.dtype) - self.X_mean) / self.X_std
+        p_mat, _ = lib_clsr.ann.eval_clsr_klayers(
+            X_mat, self.W_mats, self.b_vecs)
+        s_mat = softmax(p_mat, axis=0)
+        return s_mat
+
     # =========================================================================
     def _compute_cost(self, X_mat, Y_mat):
         ret = lib_clsr.ann.compute_cost_klayers(
@@ -126,12 +134,13 @@ class TwoLayerNetwork:
             X_mat, Y_mat, self.W_mats, self.b_vecs, self.lambda_)
         return grad_Ws, grad_bs
 
-    def predict_log_proba(self, X):
-        X_mat = (np.transpose(X).astype(self.dtype) - self.X_mean) / self.X_std
+    def _compute_acc(self, X_mat, Y_mat):
         p_mat, _ = lib_clsr.ann.eval_clsr_klayers(
             X_mat, self.W_mats, self.b_vecs)
-        s_mat = softmax(p_mat, axis=0)
-        return s_mat
+        y_pred = np.argmax(p_mat, axis=0)
+        y_true = np.argmax(Y_mat, axis=0)
+        ret = (y_pred == y_true).mean()
+        return ret
 
 
     # initialize
@@ -159,8 +168,10 @@ class TwoLayerNetwork:
         # initialize containers for plotting
         self.train_costs = list()
         self.train_losses = list()
+        self.train_accuracies = list()
         self.valid_costs = list()
         self.valid_losses = list()
+        self.valid_accuracies = list()
         self.lrates = list()
 
         if self.verbose:
@@ -183,15 +194,18 @@ class TwoLayerNetwork:
         # calucalte the cost at the begining
         train_cost = self._compute_cost(X_train, Y_train)
         train_loss = self._compute_loss(X_train, Y_train)
-
+        train_acc = self._compute_acc(X_train, Y_train)
 
         valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
         valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
+        valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
 
         self.train_costs.append(train_cost)
         self.train_losses.append(train_loss)
+        self.train_accuracies.append(train_acc)
         self.valid_costs.append(valid_cost)
         self.valid_losses.append(valid_loss)
+        self.valid_accuracies.append(valid_acc)
         # ====================================================================
         for epoch_cnt in range(self.n_epochs):
 
@@ -217,18 +231,19 @@ class TwoLayerNetwork:
             # calcualte
             train_cost = self._compute_cost(X_train, Y_train)
             train_loss = self._compute_loss(X_train, Y_train)
-            if self._has_valid_data:
-                valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
-                valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
-                # valid_acc = self.score(self.X_valid, )
-            else:
-                valid_cost = 0.0
+            train_acc = self._compute_acc(X_train, Y_train)
+
+            valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+            valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
+            valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
 
             # append the cost
             self.train_costs.append(train_cost)
             self.train_losses.append(train_loss)
+            self.train_accuracies.append(train_acc)
             self.valid_costs.append(valid_cost)
             self.valid_losses.append(valid_loss)
+            self.valid_accuracies.append(valid_acc)
 
             # print out
             if self.verbose:

@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
     # =====================================================================
     iters = range(0, 1001, 100)
-    plt.plot(iters, ann.valid_costs, label='validation cost')
-    plt.plot(iters, ann.train_costs, label='training cost')
+    plt.plot(iters, ann.valid_costs, label='validation')
+    plt.plot(iters, ann.train_costs, label='training')
     plt.legend(loc='upper right')
     plt.title("Plot training and validation cost at each epoch")
     plt.ylabel("Cost")
@@ -34,8 +34,8 @@ if __name__ == '__main__':
     plt.savefig('assign2/cost_plt.png', bbox_inches='tight')
     # =================================================================
     plt.figure()
-    plt.plot(iters, ann.train_losses, label='training loss')
-    plt.plot(iters, ann.valid_losses, label='validation loss')
+    plt.plot(iters, ann.train_losses, label='training')
+    plt.plot(iters, ann.valid_losses, label='validation')
     plt.legend(loc='upper right')
     plt.title("Plot training and validation loss at each epoch")
     plt.ylabel("Loss")
@@ -43,3 +43,15 @@ if __name__ == '__main__':
     plt.ylim(0.0, 3)
     plt.xlim(left=0)
     plt.savefig('assign2/loss_plt.png', bbox_inches='tight')
+
+    # =================================================================
+    plt.figure()
+    plt.plot(iters, ann.train_accuracies, label='training')
+    plt.plot(iters, ann.valid_accuracies, label='validation')
+    plt.legend(loc='upper right')
+    plt.title("Plot training and validation accuracy at each epoch")
+    plt.ylabel("accuracy")
+    plt.xlabel("Update step")
+    plt.ylim(0.0, 1)
+    plt.xlim(left=0)
+    plt.savefig('assign2/acc_plt.png', bbox_inches='tight')
