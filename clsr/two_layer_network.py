@@ -1,3 +1,6 @@
+"""
+TODO: code refactoring and tidy up
+"""
 # from ._base import BaseClassifier
 import numpy as np
 import lib_clsr
@@ -111,6 +114,11 @@ class TwoLayerNetwork:
             X_mat, Y_mat, self.W_mats, self.b_vecs, self.lambda_)
         return ret
 
+    def _compute_loss(self, X_mat, Y_mat):
+        ret = lib_clsr.ann.compute_loss_klayers(
+            X_mat, Y_mat, self.W_mats, self.b_vecs)
+        return ret
+
     def _compute_grad(self, X_mat, Y_mat):
         """
         """
@@ -148,9 +156,11 @@ class TwoLayerNetwork:
 
         self._initalize_wgts()
 
-        #
+        # initialize containers for plotting
         self.train_costs = list()
+        self.train_losses = list()
         self.valid_costs = list()
+        self.valid_losses = list()
         self.lrates = list()
 
         if self.verbose:
@@ -162,17 +172,27 @@ class TwoLayerNetwork:
 
         # initialize the learning rate
         n_data = self.X_train.shape[1]
-        lrates = cyc_lrate(np.arange(self.n_epochs*n_data // self.n_batch), eta_min=1e-5, eta_max=1e-1, step_size=500)
-        # self.lrate = self.eta
+        lrates = cyc_lrate(np.arange(self.n_epochs*n_data // self.n_batch),
+                    eta_min=1e-5, eta_max=1e-1, step_size=500)
 
         X_train = self.X_train
         Y_train = self.Y_train
 
         iter_ = 0
+        # ====================================================================
+        # calucalte the cost at the begining
         train_cost = self._compute_cost(X_train, Y_train)
+        train_loss = self._compute_loss(X_train, Y_train)
+
+
         valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+        valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
+
         self.train_costs.append(train_cost)
+        self.train_losses.append(train_loss)
         self.valid_costs.append(valid_cost)
+        self.valid_losses.append(valid_loss)
+        # ====================================================================
         for epoch_cnt in range(self.n_epochs):
 
             # mini-batch training
@@ -196,26 +216,25 @@ class TwoLayerNetwork:
 
             # calcualte
             train_cost = self._compute_cost(X_train, Y_train)
-            # train_acc = self.score(X_train, self.y_lbl_train)
+            train_loss = self._compute_loss(X_train, Y_train)
             if self._has_valid_data:
                 valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+                valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
                 # valid_acc = self.score(self.X_valid, )
             else:
                 valid_cost = 0.0
 
-
-
             # append the cost
             self.train_costs.append(train_cost)
-            if self._has_valid_data:
-                self.valid_costs.append(valid_cost)
+            self.train_losses.append(train_loss)
+            self.valid_costs.append(valid_cost)
+            self.valid_losses.append(valid_loss)
 
             # print out
             if self.verbose:
                 print("Epoch {:d}: Iteration {:d}: train_loss = {:f};"
                         " valid_loss = {:f}; lrate = {:f}".format(
                         epoch_cnt, iter_, train_cost, valid_cost, lrate))
-
 
             # check if training cost
             if train_cost < 1e-6:
@@ -230,25 +249,3 @@ class TwoLayerNetwork:
         else:
             ret = self.valid_costs[-1] > self.valid_costs[-2]
         return ret
-
-    def _mini_batch_train(self, X_train, Y_train):
-        """
-        Perform Mini batch gradient descent for one epoch
-        """
-        # train with mini-batch
-        n_data = X_train.shape[1]
-        for j in range(n_data // self.n_batch):
-            j_s = j*self.n_batch
-            j_e = (j+1)*self.n_batch
-            X_batch = X_train[:, j_s:j_e]
-            Y_batch = Y_train[:, j_s:j_e]
-
-            # get the gradient of W_mat and b_vec
-            grad_Ws, grad_bs = self._compute_grad(X_batch, Y_batch)
-
-            # update the params
-            for l in range(len(self.W_mats)):
-                self.W_mats[l] = self.W_mats[l] - self.lrate * grad_Ws[l]
-                self.b_vecs[l] = self.b_vecs[l] - self.lrate * grad_bs[l]
-            # self.W_mat = self.W_mat - self.lrate * grad_W
-            # self.b_vec = self.b_vec - self.lrate * grad_b

@@ -43,7 +43,7 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
     grad_W += 2 * lambda_ * W_mat
 
     return (grad_W, grad_b)
-
+# =============================================================================
 def eval_clsr_klayers(X_mat, W_mats, b_vecs):
     """
     Args:
@@ -66,14 +66,22 @@ def eval_clsr_klayers(X_mat, W_mats, b_vecs):
     p_mat = softmax(s_mat, axis=0)
     return p_mat, h_mats
 
-def compute_cost_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
+def compute_loss_klayers(X_mat, Y_mat, W_mats, b_vecs):
     n_data = X_mat.shape[1]
     p_mat, _ = eval_clsr_klayers(X_mat, W_mats, b_vecs)
     cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
-    cost = (np.sum(cross_entro) / n_data)
+    ret = (np.sum(cross_entro) / n_data)
+    return ret
+
+def compute_cost_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
+    # n_data = X_mat.shape[1]
+    # p_mat, _ = eval_clsr_klayers(X_mat, W_mats, b_vecs)
+    # cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
+    # cost = (np.sum(cross_entro) / n_data)
+    ret = compute_loss_klayers(X_mat, Y_mat, W_mats, b_vecs)
     for W_mat in W_mats:
-        cost += lambda_*np.sum(W_mat**2)
-    return cost
+        ret += lambda_*np.sum(W_mat**2)
+    return ret
 
 def compute_grads_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
     """
