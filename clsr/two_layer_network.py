@@ -24,12 +24,15 @@ class TwoLayerNetwork:
         "n_epochs": 40,
         "n_batch": 100,
         "eta": 0.01,
-        "decay": 1.0,
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
-        "shuffle_per_epoch": False,
-        "stop_overfit": True
+        "stop_overfit": False,
+        "lrate_scheme": {
+            "scheme": "cyclic",
+            "eta_lim": [1e-5, 1e-1],
+            "step_size": 500
+        }
     }
     _has_valid_data = False
 
@@ -183,8 +186,10 @@ class TwoLayerNetwork:
 
         # initialize the learning rate
         n_data = self.X_train.shape[1]
-        lrates = cyc_lrate(np.arange(self.n_epochs*n_data // self.n_batch),
-                    eta_min=1e-5, eta_max=1e-1, step_size=500)
+        n_iters = self.n_epochs*n_data // self.n_batch
+        eta_min, eta_max = self.lrate_scheme['eta_lim']
+        step_size = self.lrate_scheme['step_size']
+        lrates = cyc_lrate(n_iters, eta_min=eta_min, eta_max=eta_max, step_size=step_size)
 
         X_train = self.X_train
         Y_train = self.Y_train
