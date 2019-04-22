@@ -5,6 +5,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 from time import time
+import platform
 # alias
 ann_f = ann_f.ann_for
 
@@ -30,6 +31,10 @@ class TestANNFortran(unittest.TestCase):
         assert_allclose(ann_py.softmax(arr, 1), ann_f.softmax(arr, 1), atol=self.atol)
 
     def test_softmax_performance(self):
+        if platform.system() == "Windows":
+            # skip this test
+            return
+
         N = 100
         arr = self.W_mat.dot(self.X_mat) + self.b_vec
         st = time()
