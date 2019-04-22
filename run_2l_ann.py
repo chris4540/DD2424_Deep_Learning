@@ -8,7 +8,7 @@ if __name__ == '__main__':
     train_data = load_batch("cifar-10-batches-py/data_batch_1")
     valid_data = load_batch("cifar-10-batches-py/data_batch_2")
     test_data = load_batch("cifar-10-batches-py/test_batch")
-    ann = TwoLayerNetwork(stop_overfit=True, n_epochs=10)
+    ann = TwoLayerNetwork(stop_overfit=False, n_epochs=10, lambda_=0.01, verbose=True)
 
     ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
     # training time

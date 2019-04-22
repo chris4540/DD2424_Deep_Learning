@@ -53,6 +53,7 @@ class TwoLayerNetwork:
     def _set_train_data(self, X, y):
         # set data
         self.X_train, self.Y_train = self._transfrom_data(X, y, self.dtype)
+        self.y_lbl_train = y
 
         # set dim
         self.nclass = self.Y_train.shape[0]
@@ -70,6 +71,7 @@ class TwoLayerNetwork:
     def set_valid_data(self, X, y):
         self.X_valid, self.Y_valid = self._transfrom_data(X, y, self.dtype)
         self._has_valid_data = True
+        self.y_lbl_valid = y
 
     @staticmethod
     def _transfrom_data(X, y, dtype=np.float32):
@@ -117,8 +119,9 @@ class TwoLayerNetwork:
         return grad_Ws, grad_bs
 
     def predict_log_proba(self, X):
+        X_mat = (np.transpose(X).astype(self.dtype) - self.X_mean) / self.X_std
         p_mat, _ = lib_clsr.ann.eval_clsr_klayers(
-            np.transpose(X), self.W_mats, self.b_vecs)
+            X_mat, self.W_mats, self.b_vecs)
         s_mat = softmax(p_mat, axis=0)
         return s_mat
 
@@ -158,80 +161,65 @@ class TwoLayerNetwork:
             print("-------- TRAINING PARAMS --------")
 
         # initialize the learning rate
-        lrates = cyc_lrate(np.arange(self.n_epochs), eta_min=1e-5, eta_max=1e-1, step_size=500)
-        self.lrate = self.eta
+        n_data = self.X_train.shape[1]
+        lrates = cyc_lrate(np.arange(self.n_epochs*n_data // self.n_batch), eta_min=1e-5, eta_max=1e-1, step_size=500)
+        # self.lrate = self.eta
 
         X_train = self.X_train
         Y_train = self.Y_train
 
-        n_data = X_train.shape[1]
-
-        # initialize shuffle idx array
-        if self.shuffle_per_epoch:
-            shuffle_idx = np.arange(n_data)
-
-        #
-        W_mat_best = None
-        b_vec_best = None
-        valid_up_cnt = 0
-
-        for iter_ in range(self.n_epochs):
-            self.lrate = lrates[iter_]
-            if self.shuffle_per_epoch:
-                np.random.shuffle(shuffle_idx)
-                X_train = np.take(self.X_train, shuffle_idx, axis=1)
-                Y_train = np.take(self.Y_train, shuffle_idx, axis=1)
+        iter_ = 0
+        train_cost = self._compute_cost(X_train, Y_train)
+        valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+        self.train_costs.append(train_cost)
+        self.valid_costs.append(valid_cost)
+        for epoch_cnt in range(self.n_epochs):
 
             # mini-batch training
-            self._mini_batch_train(X_train, Y_train)
+            for j in range(n_data // self.n_batch):
+                lrate = lrates[iter_]
+                j_s = j*self.n_batch
+                j_e = (j+1)*self.n_batch
+                X_batch = X_train[:, j_s:j_e]
+                Y_batch = Y_train[:, j_s:j_e]
 
-            # calcualte the cost function
+                # get the gradient of W_mat and b_vec
+                grad_Ws, grad_bs = self._compute_grad(X_batch, Y_batch)
+
+                # update the params
+                for l in range(len(self.W_mats)):
+                    self.W_mats[l] = self.W_mats[l] - lrate * grad_Ws[l]
+                    self.b_vecs[l] = self.b_vecs[l] - lrate * grad_bs[l]
+
+                iter_ += 1
+            # =============================================================
+
+            # calcualte
             train_cost = self._compute_cost(X_train, Y_train)
+            # train_acc = self.score(X_train, self.y_lbl_train)
             if self._has_valid_data:
                 valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+                # valid_acc = self.score(self.X_valid, )
             else:
                 valid_cost = 0.0
 
-            # print out
-            if self.verbose:
-                print("Iteration {:d}: train_loss = {:f}; valid_loss = {:f}; lrate = {:f}".format(
-                    iter_, train_cost, valid_cost, self.lrate))
+
 
             # append the cost
             self.train_costs.append(train_cost)
             if self._has_valid_data:
                 self.valid_costs.append(valid_cost)
-            # append learning rate
-            self.lrates.append(self.lrate)
 
-            # update the learning rate
-            # self.lrate *= self.decay
-            # self.lrate =
+            # print out
+            if self.verbose:
+                print("Epoch {:d}: Iteration {:d}: train_loss = {:f};"
+                        " valid_loss = {:f}; lrate = {:f}".format(
+                        epoch_cnt, iter_, train_cost, valid_cost, lrate))
+
 
             # check if training cost
             if train_cost < 1e-6:
                 break
-
-            if self.stop_overfit and iter_ > 2 and self._is_valid_cost_going_up():
-                if valid_up_cnt == 0:
-                    print("Warning: the validation cost increase. Saving the weighting")
-                    W_mats_best = copy.deepcopy(self.W_mats)
-                    b_vecs_best = copy.deepcopy(self.b_vecs)
-                elif valid_up_cnt > 5:
-                    print("Warning: Overfitting, will stop the training")
-                    break
-                valid_up_cnt += 1
-            else:
-                # reset the counter due to it goes down again
-                valid_up_cnt = 0
-                W_mats_best = None
-                b_vecs_best = None
-
-        #
-        if valid_up_cnt > 0:
-            print("Notice: Updating back the best weighting")
-            self.W_mats = W_mats_best
-            self.b_vecs = b_vecs_best
 
     def _is_valid_cost_going_up(self):
         if len(self.valid_costs) < 2:
