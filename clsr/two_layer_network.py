@@ -227,9 +227,12 @@ class TwoLayerNetwork:
 
             # print out
             if self.verbose:
-                valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
-                print("Epoch {:d}: Iter {:d}: t_cost = {:f};"
-                        " v_cost = {:f}; lrate = {:f}".format(
+                if self._has_valid_data:
+                    valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+                else:
+                    valid_cost = np.nan
+                print("Epoch {}: Iter {}: t_cost = {:f};"
+                        " v_cost = {}; lrate = {:f}".format(
                         epoch_cnt, iter_, train_cost, valid_cost, lrate))
 
             # check if training cost
