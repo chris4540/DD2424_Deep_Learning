@@ -252,8 +252,8 @@ class TwoLayerNetwork:
 
             # print out
             if self.verbose:
-                print("Epoch {:d}: Iteration {:d}: train_loss = {:f};"
-                        " valid_loss = {:f}; lrate = {:f}".format(
+                print("Epoch {:d}: Iter {:d}: t_cost = {:f};"
+                        " v_cost = {:f}; lrate = {:f}".format(
                         epoch_cnt, iter_, train_cost, valid_cost, lrate))
 
             # check if training cost
