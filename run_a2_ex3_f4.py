@@ -4,6 +4,8 @@ For reproduce the figure 4 in the assignment
 from utils.load_batch import load_batch
 from clsr.two_layer_network import TwoLayerNetwork
 from time import time
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
