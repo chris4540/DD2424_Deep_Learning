@@ -25,7 +25,7 @@ def data_split(merged_data, n_valid=1000):
     valid_data = dict()
 
     # 2d data
-    for k in ["pixel_data", "onehot_labels"]:
+    for k in ["pixel_data"]:
         train_data[k] = merged_data[k][:, n_valid:]
         valid_data[k] = merged_data[k][:, :n_valid]
     # 1d data

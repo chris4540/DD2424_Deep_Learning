@@ -11,24 +11,24 @@ def unpickle(file):
         ret[k.decode("utf-8")] = data[k]
     return ret
 
-def get_label_to_one_hot(labels):
-    """
-    Create a one hot encoding matrix from labels
+# def get_label_to_one_hot(labels):
+#     """
+#     Create a one hot encoding matrix from labels
 
-    Args:
-        labels (list[int])
+#     Args:
+#         labels (list[int])
 
-    Return:
-        one hot encoding matrix of the labels
-    """
-    one_idx = np.array(labels)
-    nkind = len(np.unique(one_idx))
-    nlabels = len(one_idx)
+#     Return:
+#         one hot encoding matrix of the labels
+#     """
+#     one_idx = np.array(labels)
+#     nkind = len(np.unique(one_idx))
+#     nlabels = len(one_idx)
 
-    ret = np.zeros((nkind, nlabels))
-    ret[one_idx, np.arange(nlabels)] = 1
+#     ret = np.zeros((nkind, nlabels))
+#     ret[one_idx, np.arange(nlabels)] = 1
 
-    return ret
+#     return ret
 
 def load_batch(filename):
     """
@@ -43,11 +43,11 @@ def load_batch(filename):
     data = unpickle(filename)
 
     float_pixel = data["data"].T / 255
-    onehot_labels = get_label_to_one_hot(data["labels"])
+    # onehot_labels = get_label_to_one_hot(data["labels"])
     # build the return
     ret = {
         "pixel_data": float_pixel,
-        "onehot_labels": onehot_labels,
+        # "onehot_labels": onehot_labels,
         "labels": np.array(data["labels"])
     }
 
