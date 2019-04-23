@@ -32,7 +32,7 @@ class TwoLayerNetwork:
             "scheme": "cyclic",
             "eta_lim": [1e-5, 1e-1],
             "step_size": 500
-        }
+        },
     }
     _has_valid_data = False
 
@@ -175,7 +175,6 @@ class TwoLayerNetwork:
         self.valid_costs = list()
         self.valid_losses = list()
         self.valid_accuracies = list()
-        self.lrates = list()
 
         if self.verbose:
             # print training params
@@ -197,23 +196,9 @@ class TwoLayerNetwork:
         iter_ = 0
         # ====================================================================
         # calucalte the cost at the begining
-        train_cost = self._compute_cost(X_train, Y_train)
-        train_loss = self._compute_loss(X_train, Y_train)
-        train_acc = self._compute_acc(X_train, Y_train)
-
-        valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
-        valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
-        valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
-
-        self.train_costs.append(train_cost)
-        self.train_losses.append(train_loss)
-        self.train_accuracies.append(train_acc)
-        self.valid_costs.append(valid_cost)
-        self.valid_losses.append(valid_loss)
-        self.valid_accuracies.append(valid_acc)
+        self._record_performace()
         # ====================================================================
         for epoch_cnt in range(self.n_epochs):
-
             # mini-batch training
             for j in range(n_data // self.n_batch):
                 lrate = lrates[iter_]
@@ -232,26 +217,14 @@ class TwoLayerNetwork:
 
                 iter_ += 1
             # =============================================================
+            train_cost = self._compute_cost(self.X_train, self.Y_train)
 
             # calcualte
-            train_cost = self._compute_cost(X_train, Y_train)
-            train_loss = self._compute_loss(X_train, Y_train)
-            train_acc = self._compute_acc(X_train, Y_train)
-
-            valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
-            valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
-            valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
-
-            # append the cost
-            self.train_costs.append(train_cost)
-            self.train_losses.append(train_loss)
-            self.train_accuracies.append(train_acc)
-            self.valid_costs.append(valid_cost)
-            self.valid_losses.append(valid_loss)
-            self.valid_accuracies.append(valid_acc)
+            self._record_performace()
 
             # print out
             if self.verbose:
+                valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
                 print("Epoch {:d}: Iter {:d}: t_cost = {:f};"
                         " v_cost = {:f}; lrate = {:f}".format(
                         epoch_cnt, iter_, train_cost, valid_cost, lrate))
@@ -269,3 +242,19 @@ class TwoLayerNetwork:
         else:
             ret = self.valid_costs[-1] > self.valid_costs[-2]
         return ret
+
+    def _record_performace(self):
+        train_cost = self._compute_cost(self.X_train, self.Y_train)
+        train_loss = self._compute_loss(self.X_train, self.Y_train)
+        train_acc = self._compute_acc(self.X_train, self.Y_train)
+
+        valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+        valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
+        valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
+
+        self.train_costs.append(train_cost)
+        self.train_losses.append(train_loss)
+        self.train_accuracies.append(train_acc)
+        self.valid_costs.append(valid_cost)
+        self.valid_losses.append(valid_loss)
+        self.valid_accuracies.append(valid_acc)
