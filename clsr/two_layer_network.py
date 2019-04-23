@@ -33,6 +33,7 @@ class TwoLayerNetwork:
             "eta_lim": [1e-5, 1e-1],
             "step_size": 500
         },
+        "record_training": True,
     }
     _has_valid_data = False
 
@@ -169,12 +170,13 @@ class TwoLayerNetwork:
         self._initalize_wgts()
 
         # initialize containers for plotting
-        self.train_costs = list()
-        self.train_losses = list()
-        self.train_accuracies = list()
-        self.valid_costs = list()
-        self.valid_losses = list()
-        self.valid_accuracies = list()
+        if self.record_training:
+            self.train_costs = list()
+            self.train_losses = list()
+            self.train_accuracies = list()
+            self.valid_costs = list()
+            self.valid_losses = list()
+            self.valid_accuracies = list()
 
         if self.verbose:
             # print training params
@@ -196,7 +198,8 @@ class TwoLayerNetwork:
         iter_ = 0
         # ====================================================================
         # calucalte the cost at the begining
-        self._record_performace()
+        if self.record_training:
+            self._record_performace()
         # ====================================================================
         for epoch_cnt in range(self.n_epochs):
             # mini-batch training
@@ -219,8 +222,8 @@ class TwoLayerNetwork:
             # =============================================================
             train_cost = self._compute_cost(self.X_train, self.Y_train)
 
-            # calcualte
-            self._record_performace()
+            if self.record_training:
+                self._record_performace()
 
             # print out
             if self.verbose:
