@@ -12,7 +12,6 @@ def get_all_data():
     for i in range(1, 6):
         fname = 'cifar-10-batches-py/data_batch_%d' % i
         datafiles.append(fname)
-
     merged = merge_batch(datafiles)
 
     train_data = dict()
