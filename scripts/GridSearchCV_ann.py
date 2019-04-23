@@ -26,7 +26,6 @@ if __name__ == '__main__':
         ["cifar-10-batches-py/data_batch_1",
          "cifar-10-batches-py/data_batch_2"
         ])
-    test_data = load_batch("cifar-10-batches-py/test_batch")
 
     ann = OneLayerNetwork()
     clf = GridSearchCV(ann, parameters, cv=2, n_jobs=-1)
