@@ -56,18 +56,17 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         m = 15
         k = 10
         n = 5
-
-        cls.W_mat1 = np.random.randn(m ,d).astype(np.float32) * np.sqrt(1.0/d)
-        cls.W_mat2 = np.random.randn(k ,m).astype(np.float32) * np.sqrt(1.0/m)
-        cls.b_vec1 = np.random.randn(m ,1).astype(np.float32)
-        cls.b_vec2 = np.random.randn(k ,1).astype(np.float32)
-        # b2 = np.zeros((k, 1), dtype=np.float32)
+        dtype = 'float64'
+        cls.W_mat1 = np.random.randn(m ,d).astype(dtype) * np.sqrt(1.0/d)
+        cls.W_mat2 = np.random.randn(k ,m).astype(dtype) * np.sqrt(1.0/m)
+        cls.b_vec1 = np.random.randn(m ,1).astype(dtype)
+        cls.b_vec2 = np.random.randn(k ,1).astype(dtype)
         train_data = load_batch("cifar-10-batches-py/data_batch_1")
         X_mat = train_data["pixel_data"][:d, :n]
-        cls.X_mat = normalize_data(X_mat)['normalized'].astype(np.float32)
+        cls.X_mat = normalize_data(X_mat)['normalized'].astype(dtype)
 
         one_hot_mat = get_label_to_one_hot(train_data["labels"])
-        cls.Y_mat = one_hot_mat[:k, :n].astype(np.float32)
+        cls.Y_mat = one_hot_mat[:k, :n].astype(dtype)
 
     def test_2d_layer_cost_func(self):
         W_mats = [self.W_mat1, self.W_mat2]
@@ -101,9 +100,9 @@ class TestANNTwoLayersFunction(unittest.TestCase):
 
     def test_grad_fwd_diff(self):
         lambda_ = 0.0
-        step = 1e-3
-        atol = 1e-2
-        rtol = 1e-5
+        step = 1e-5
+        atol = 1e-05
+        rtol = 1e-07
 
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
@@ -120,9 +119,9 @@ class TestANNTwoLayersFunction(unittest.TestCase):
 
     def test_grad_central_diff(self):
         lambda_ = 0.0
-        step = 1e-3
-        atol = 1e-2
-        rtol = 1e-5
+        step = 1e-5
+        atol = 1e-05
+        rtol = 1e-07
 
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
