@@ -21,17 +21,26 @@
 
 \section{Basic Part (Part 1)}
 \begin{question}{2.i}
-Two methods were used to ensure that the analytical gradient computations is bug
-free. The first one is the sanity check and the second one is the numerical gradient method.
+Two methods were used to ensure that the analytical gradient computations were bug
+free.
+They were the sanity check and checking against the numerical gradient methods.
 
-The implementation of these two methods are written in ...
+The implementations of these two methods were written in
+\texttt{test/test\_2l\_clsr.py} and \texttt{test/test\_ann\_2l.py} respectively.
 
+For the sanity check, the cost function obtained a very low training cost (\texttt{lambda} = 0)
+and loss (i.e. $\leq 0.05$).
+For the numerical gradient, the step size to \texttt{1e-5} was set and
+double precision matrices were used as the cost function in the problem is non-linear.
+The numerical results was consistent with the analytical results.
 
-
-% \begin{align*}
-%   x = 1
-% \end{align*}
+Therefore, it is safe to say that the implementation of the
+analytic gradient computations were bug free.
 \end{question}
+
+\begin{question}{2.ii}
+\end{question}
+
 
 
 \end{document}
