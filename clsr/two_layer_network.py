@@ -23,7 +23,6 @@ class TwoLayerNetwork:
         "lambda_": 0.0,
         "n_epochs": 40,
         "n_batch": 100,
-        "eta": 0.01,
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
@@ -176,6 +175,7 @@ class TwoLayerNetwork:
             self.valid_costs = list()
             self.valid_losses = list()
             self.valid_accuracies = list()
+            self.iters = list()
 
         if self.verbose:
             # print training params
@@ -198,7 +198,7 @@ class TwoLayerNetwork:
         # ====================================================================
         # calucalte the cost at the begining
         if self.record_training:
-            self._record_performace()
+            self._record_performace(iter_)
         # ====================================================================
         for epoch_cnt in range(self.n_epochs):
             # mini-batch training
@@ -222,7 +222,7 @@ class TwoLayerNetwork:
             train_cost = self._compute_cost(self.X_train, self.Y_train)
 
             if self.record_training:
-                self._record_performace()
+                self._record_performace(iter_)
 
             # print out
             if self.verbose:
@@ -248,7 +248,8 @@ class TwoLayerNetwork:
             ret = self.valid_costs[-1] > self.valid_costs[-2]
         return ret
 
-    def _record_performace(self):
+    def _record_performace(self, iter_):
+        self.iters.append(iter_)
         # Training data
         train_cost = self._compute_cost(self.X_train, self.Y_train)
         train_loss = self._compute_loss(self.X_train, self.Y_train)

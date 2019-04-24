@@ -38,7 +38,7 @@ if __name__ == '__main__':
     print("Accuracy: {}".format(score))
 
     # =====================================================================
-    iters = range(0, 1001, 100)
+    iters = ann.iters
     plt.plot(iters, ann.valid_costs, label='validation')
     plt.plot(iters, ann.train_costs, label='training')
     plt.legend(loc='upper right')

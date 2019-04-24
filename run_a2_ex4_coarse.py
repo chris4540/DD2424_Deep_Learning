@@ -40,8 +40,16 @@ def save_result(results, json_name):
 if __name__ == "__main__":
     # settings
     n_search = 20
-    search_type = "fine1"
-    n_cycle = 3
+    search_type = "fine" # or "coarse"
+
+    if search_type == "coarse":
+        l_min, l_max = -5, -1
+        n_cycle = 2
+        k = 2
+    elif search_type == "fine":
+        l_min, l_max = -5, -3.5
+        n_cycle = 3
+        k = 3
     # ===============================================================
     # READ DATA
     merged_data = get_all_train_data("cifar-10-batches-py")
@@ -49,8 +57,7 @@ if __name__ == "__main__":
     # ===============================================================
     n_train_data = len(train_data['labels'])
     n_batch = 100
-    n_s = int(2*np.floor(n_train_data/n_batch))
-    n_cycle = 3
+    n_s = int(k*np.floor(n_train_data/n_batch))
     n_iters = 2*n_s*n_cycle
     n_epochs = int(n_iters*n_batch/n_train_data)
     # ======================================================
@@ -58,7 +65,7 @@ if __name__ == "__main__":
         "stop_overfit": False,
         "n_epochs": n_epochs,
         "n_batch": n_batch,
-        "verbose": False,
+        "verbose": True,
         "record_training": False,
         "lrate_scheme": {
             "scheme": "cyclic",
@@ -67,12 +74,7 @@ if __name__ == "__main__":
         }
     }
 
-    if search_type == "coarse":
-        l_min, l_max = -5, -1
-    elif search_type == "fine1":
-        l_min, l_max = -4.5, -3.5
-    elif search_type == "fine2":
-        l_min, l_max = -3, -2
+
     result_json = "a2_ex4_%s_search.json" % search_type
 
     results = list()
@@ -82,3 +84,4 @@ if __name__ == "__main__":
         results.append(ret)
         # dump a json whenever one search finish, for resuming the search process
         save_result(results, result_json)
+
