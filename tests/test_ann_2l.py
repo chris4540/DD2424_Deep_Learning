@@ -1,14 +1,20 @@
+"""
+Test the following items:
+    1. implementation from direct translation of 2 layer and test k-layer implementation
+    2. analytical gradient against numerical gradient.
+"""
 import lib_clsr
 import lib_clsr.ann
 import unittest
 import numpy as np
+from utils.handle_data import get_label_to_one_hot
+from scipy.special import softmax
+from utils.load_batch import load_batch
+from utils.preprocess import normalize_data
 from tests.utils import compute_grad_klayers_fwd_diff
 from tests.utils import compute_grad_klayers_cent_diff
 from numpy.testing import assert_allclose
 from numpy.testing import assert_array_equal
-from scipy.special import softmax
-from utils.load_batch import load_batch
-from utils.preprocess import normalize_data
 
 def cost_2l(X_mat, Y_mat, W_mat1, W_mat2, b_vec1, b_vec2, lambda_):
     n_data = X_mat.shape[1]
@@ -42,6 +48,7 @@ def grad_2l(X_mat, Y_mat, W_mat1, W_mat2, b_vec1, b_vec2, lambda_):
 
     return (grad_W1, grad_W2, grad_b1, grad_b2)
 
+
 class TestANNTwoLayersFunction(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -58,7 +65,9 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         train_data = load_batch("cifar-10-batches-py/data_batch_1")
         X_mat = train_data["pixel_data"][:d, :n]
         cls.X_mat = normalize_data(X_mat)['normalized'].astype(np.float32)
-        cls.Y_mat = train_data['onehot_labels'][:k, :n].astype(np.float32)
+
+        one_hot_mat = get_label_to_one_hot(train_data["labels"])
+        cls.Y_mat = one_hot_mat[:k, :n].astype(np.float32)
 
     def test_2d_layer_cost_func(self):
         W_mats = [self.W_mat1, self.W_mat2]
@@ -110,7 +119,7 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         lambda_ = 0.0
         step = 5e-3
         atol = 1e-3
-        rtol = 1e-3
+        rtol = 1e-2
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
         [W1n, W2n], [b1n, b2n] = compute_grad_klayers_cent_diff(

@@ -1,3 +1,6 @@
+"""
+Perform the sanity check mentioned in the question
+"""
 from utils.load_batch import load_batch
 from clsr.two_layer_network import TwoLayerNetwork
 from time import time

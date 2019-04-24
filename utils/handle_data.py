@@ -1,6 +1,7 @@
 """
 Module for obtaining and handling data. It is refactored from old code
 """
+import numpy as np
 from os.path import join
 from .load_batch import merge_batch
 
@@ -34,3 +35,20 @@ def data_split(merged_data, n_valid=1000):
         valid_data[k] = merged_data[k][:n_valid]
 
     return train_data, valid_data
+
+def get_label_to_one_hot(labels):
+    """
+    Create a one hot encoding matrix from labels
+
+    Args:
+        labels (list[int])
+
+    Return:
+        one hot encoding matrix of the labels
+    """
+    one_idx = np.array(labels)
+    nkind = len(np.unique(one_idx))
+    nlabels = len(one_idx)
+    ret = np.zeros((nkind, nlabels))
+    ret[one_idx, np.arange(nlabels)] = 1
+    return ret
