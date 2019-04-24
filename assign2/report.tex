@@ -3,6 +3,8 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 \setlength{\parskip}{1em}
 
@@ -39,6 +41,56 @@ analytic gradient computations were bug free.
 \end{question}
 
 \begin{question}{2.ii}
+
+The replications of the figure 3 and 4 are plotted in \ref{fig:replicate_f3} and
+\ref{fig:replicate_f4}.
+
+In the figure \ref{fig:replicate_f4}, we can see that at update step 1600, 3200,
+and 4800 there are local minima. Therefore the model weightings at these minima
+can be considered as a ensemble and it is of a cheap cost. On the other hand, it means we have to
+train the network with complete cycle or integer cycles otherwise it will not go to any local
+minimum point.
+
+\begin{figure}[!htb]
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{f3_cost_plt.png}
+        \caption{Cost plot}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{f3_loss_plt.png}
+        \caption{Loss plot}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.32\textwidth}%
+        \includegraphics[width=\linewidth]{f3_acc_plt.png}
+        \caption{Accuracy plot}
+    \end{subfigure}
+    \caption{
+        Training with default parameters for one cycle:
+        \texttt{eta\_min = 1e-5, eta\_max = 1e-1,  lambda = .01 and n\_s = 500}
+    }
+    \label{fig:replicate_f3}
+\end{figure}
+\begin{figure}[!htb]
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{f4_cost_plt.png}
+        \caption{Cost plot}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=\linewidth]{f4_loss_plt.png}
+        \caption{Loss plot}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.32\textwidth}%
+        \includegraphics[width=\linewidth]{f4_acc_plt.png}
+        \caption{Accuracy plot}
+    \end{subfigure}
+    \caption{
+        Training with default parameters for three cycle:
+        \texttt{eta\_min = 1e-5, eta\_max = 1e-1,  lambda = .01 and n\_s = 800}
+    }
+    \label{fig:replicate_f4}
+\end{figure}
 \end{question}
 
 

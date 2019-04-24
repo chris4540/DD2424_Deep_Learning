@@ -47,7 +47,7 @@ if __name__ == '__main__':
     plt.xlabel("Update step")
     plt.ylim(0.0, 4.0)
     plt.xlim(left=0)
-    plt.savefig('assign2/cost_plt.png', bbox_inches='tight')
+    plt.savefig('assign2/f3_cost_plt.png', bbox_inches='tight')
     # =================================================================
     plt.figure()
     plt.plot(iters, ann.train_losses, label='training')
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     plt.xlabel("Update step")
     plt.ylim(0.0, 3)
     plt.xlim(left=0)
-    plt.savefig('assign2/loss_plt.png', bbox_inches='tight')
+    plt.savefig('assign2/f3_loss_plt.png', bbox_inches='tight')
 
     # =================================================================
     plt.figure()
@@ -70,4 +70,4 @@ if __name__ == '__main__':
     plt.xlabel("Update step")
     plt.ylim(0.0, 1)
     plt.xlim(left=0)
-    plt.savefig('assign2/acc_plt.png', bbox_inches='tight')
+    plt.savefig('assign2/f3_acc_plt.png', bbox_inches='tight')
