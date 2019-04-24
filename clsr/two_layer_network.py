@@ -27,7 +27,6 @@ class TwoLayerNetwork:
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
-        "stop_overfit": False,
         "lrate_scheme": {
             "scheme": "cyclic",
             "eta_lim": [1e-5, 1e-1],
