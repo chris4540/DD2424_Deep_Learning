@@ -15,7 +15,11 @@ if __name__ == "__main__":
         print(json_file)
         df = pd.read_json(json_file)
         df = df.drop("scores", axis="columns")
+        df['log_lambda'] = np.log10(df['lambda_'])
+
+        # sort the dataframe
         df = df.sort_values(by=['mean_score'], ascending=False)
+        # print the best 3
         print(df.iloc[:3])
         if show_plots:
             df.plot(x="lambda_", y="mean_score", kind="scatter", logx=True)
