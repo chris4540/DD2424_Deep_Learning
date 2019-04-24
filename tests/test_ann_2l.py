@@ -99,9 +99,12 @@ class TestANNTwoLayersFunction(unittest.TestCase):
             assert_array_equal(grad2_b1, grad_bs[0])
             assert_array_equal(grad2_b2, grad_bs[1])
 
-    def test_grad_central_diff(self):
+    def test_grad_fwd_diff(self):
         lambda_ = 0.0
-        step = 1e-5
+        step = 1e-3
+        atol = 1e-2
+        rtol = 1e-5
+
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
         [W1n, W2n], [b1n, b2n] = compute_grad_klayers_fwd_diff(
@@ -110,16 +113,17 @@ class TestANNTwoLayersFunction(unittest.TestCase):
         [W1a, W2a], [b1a, b2a] = lib_clsr.ann.compute_grads_klayers(
                 self.X_mat, self.Y_mat, W_mats, b_vecs, lambda_)
 
-        assert_allclose(W1n, W1a)
-        assert_allclose(W2n, W2a)
-        assert_allclose(b1n, b1a)
-        assert_allclose(b2n, b2a)
+        assert_allclose(W1n, W1a, atol=atol, rtol=rtol)
+        assert_allclose(W2n, W2a, atol=atol, rtol=rtol)
+        assert_allclose(b1n, b1a, atol=atol, rtol=rtol)
+        assert_allclose(b2n, b2a, atol=atol, rtol=rtol)
 
     def test_grad_central_diff(self):
         lambda_ = 0.0
-        step = 5e-3
-        atol = 1e-3
-        rtol = 1e-2
+        step = 1e-3
+        atol = 1e-2
+        rtol = 1e-5
+
         W_mats = [self.W_mat1, self.W_mat2]
         b_vecs = [self.b_vec1, self.b_vec2]
         [W1n, W2n], [b1n, b2n] = compute_grad_klayers_cent_diff(

@@ -249,17 +249,19 @@ class TwoLayerNetwork:
         return ret
 
     def _record_performace(self):
+        # Training data
         train_cost = self._compute_cost(self.X_train, self.Y_train)
         train_loss = self._compute_loss(self.X_train, self.Y_train)
         train_acc = self._compute_acc(self.X_train, self.Y_train)
-
-        valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
-        valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
-        valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
-
         self.train_costs.append(train_cost)
         self.train_losses.append(train_loss)
         self.train_accuracies.append(train_acc)
-        self.valid_costs.append(valid_cost)
-        self.valid_losses.append(valid_loss)
-        self.valid_accuracies.append(valid_acc)
+
+        # validaton data
+        if self._has_valid_data:
+            valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
+            valid_loss = self._compute_loss(self.X_valid, self.Y_valid)
+            valid_acc = self._compute_acc(self.X_valid, self.Y_valid)
+            self.valid_costs.append(valid_cost)
+            self.valid_losses.append(valid_loss)
+            self.valid_accuracies.append(valid_acc)
