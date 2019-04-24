@@ -34,7 +34,7 @@ For the sanity check, the cost function obtained a very low training cost (\text
 and loss (i.e. $\leq 0.05$).
 For the numerical gradient, the step size to \texttt{1e-5} was set and
 double precision matrices were used as the cost function in the problem is non-linear.
-The numerical results was consistent with the analytical results.
+The numerical results were consistent with the analytical results.
 
 Therefore, it is safe to say that the implementation of the
 analytic gradient computations were bug free.
@@ -42,8 +42,13 @@ analytic gradient computations were bug free.
 
 \begin{question}{ii}
 
-The replications of the figure 3 and 4 are plotted in \ref{fig:replicate_f3} and
-\ref{fig:replicate_f4}.
+The replications of the figure 3 and 4 are plotted in the figure \ref{fig:replicate_f3}
+and the figure \ref{fig:replicate_f4}.
+
+In the figure \ref{fig:replicate_f3}, we can see that there is a shape drop at
+the beginning. The learning rate at that stage was increasing.
+It can be understood as the pseudo-acceceration as what the momentum learning rate
+scheme would do in the same situation.
 
 In the figure \ref{fig:replicate_f4}, we can see that at update step 1600, 3200,
 and 4800 there are local minima. Therefore the model weightings at these minima
