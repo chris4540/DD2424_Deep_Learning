@@ -38,8 +38,10 @@ def save_result(results, json_name):
 
 
 if __name__ == "__main__":
+    # settings
     n_search = 20
     search_type = "fine1"
+    n_cycle = 3
     # ===============================================================
     # READ DATA
     merged_data = get_all_train_data("cifar-10-batches-py")
@@ -48,8 +50,7 @@ if __name__ == "__main__":
     n_train_data = len(train_data['labels'])
     n_batch = 100
     n_s = int(2*np.floor(n_train_data/n_batch))
-
-    n_cycle = 2
+    n_cycle = 3
     n_iters = 2*n_s*n_cycle
     n_epochs = int(n_iters*n_batch/n_train_data)
     # ======================================================
