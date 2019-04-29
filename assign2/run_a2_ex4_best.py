@@ -20,7 +20,7 @@ if __name__ == "__main__":
     train_data, valid_data = data_split(merged_data, n_valid=1000)
     test_data = load_batch("cifar-10-batches-py/test_batch")
     # ===============================================================
-    n_train_data = len(merged_data['labels'])
+    n_train_data = len(train_data['labels'])
     n_batch = 100
     n_s = int(k*np.floor(n_train_data/n_batch))
     n_iters = 2*n_s*n_cycle
