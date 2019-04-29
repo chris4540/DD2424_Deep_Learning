@@ -36,11 +36,11 @@ class KLayerNetwork:
     }
     _has_valid_data = False
 
-    def __init__(self, n_layers, n_hidden_nodes, **params):
-        assert len(n_hidden_nodes) == n_layers - 1
+    def __init__(self, n_hidden_nodes, **params):
+        # assert len(n_hidden_nodes) == n_layers - 1
         assert isinstance(n_hidden_nodes, list)
 
-        self.n_layers = n_layers
+        self.n_layers = len(n_hidden_nodes) + 1
         self.n_hidden_nodes = n_hidden_nodes
         self.set_params(**params)
 

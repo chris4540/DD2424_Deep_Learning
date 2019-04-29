@@ -28,19 +28,19 @@ class TestKLayersSanity(unittest.TestCase):
         }
 
     def test_2_layer_sanity_check(self):
-        ann = KLayerNetwork(n_layers=2, n_hidden_nodes=[50], **self.params)
+        ann = KLayerNetwork(n_hidden_nodes=[50], **self.params)
         ann.fit(self.train_img, self.train_labels)
         train_cost = ann.train_costs[-1]
         self.assertLess(train_cost, 0.05)
 
     def test_3_layer_sanity_check(self):
-        ann = KLayerNetwork(n_layers=3, n_hidden_nodes=[50, 50], **self.params)
+        ann = KLayerNetwork(n_hidden_nodes=[50, 50], **self.params)
         ann.fit(self.train_img, self.train_labels)
         train_cost = ann.train_costs[-1]
         self.assertLess(train_cost, 0.05)
 
     def test_4_layer_sanity_check(self):
-        ann = KLayerNetwork(n_layers=4, n_hidden_nodes=[50, 50, 50], **self.params)
+        ann = KLayerNetwork(n_hidden_nodes=[50, 50, 50], **self.params)
         ann.fit(self.train_img, self.train_labels)
         train_cost = ann.train_costs[-1]
         self.assertLess(train_cost, 0.05)
