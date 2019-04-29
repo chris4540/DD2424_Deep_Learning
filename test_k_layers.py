@@ -11,7 +11,7 @@ if __name__ == '__main__':
     test_data = load_batch("cifar-10-batches-py/test_batch")
     params = {
         "stop_overfit": False,
-        "n_epochs": 10,
+        "n_epochs": 500,
         "lambda_": 0,
         "verbose": True,
         "lrate_scheme": {
@@ -20,12 +20,12 @@ if __name__ == '__main__':
             "step_size": 500
         }
     }
-    ann = KLayerNetwork(n_layers=3, n_hidden_nodes=[50, 50], **params)
+    ann = KLayerNetwork(n_layers=4, n_hidden_nodes=[50, 50, 50], **params)
 
-    ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
+    # ann.set_valid_data(valid_data["pixel_data"].T, valid_data["labels"])
     # training time
     st = time()
-    ann.fit(train_data["pixel_data"].T, train_data["labels"])
+    ann.fit(train_data["pixel_data"][:, :100].T, train_data["labels"][:100])
     ts = time() - st
 
     print("Total used time = ", ts)
