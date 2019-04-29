@@ -14,6 +14,7 @@ if __name__ == "__main__":
     n_cycle = 3 # will overshot when too much cycles
     k = 3
     lambda_ = 0.000142
+    # lambda_ = 0.005
     # ===============================================================
     # READ DATA
     merged_data = get_all_train_data("cifar-10-batches-py")

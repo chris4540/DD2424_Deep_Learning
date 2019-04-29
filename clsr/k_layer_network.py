@@ -191,6 +191,8 @@ class KLayerNetwork:
             print("-------- TRAINING PARAMS --------")
             for k in self.DEFAULT_PARAMS.keys():
                 print("{}: {}".format(k, getattr(self, k)))
+            for k in ["n_hidden_nodes", "n_layers"]:
+                print("{}: {}".format(k, getattr(self, k)))
             print("-------- TRAINING PARAMS --------")
 
         # initialize the learning rate
