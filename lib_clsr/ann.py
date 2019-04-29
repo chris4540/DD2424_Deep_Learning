@@ -74,10 +74,6 @@ def compute_loss_klayers(X_mat, Y_mat, W_mats, b_vecs):
     return ret
 
 def compute_cost_klayers(X_mat, Y_mat, W_mats, b_vecs, lambda_):
-    # n_data = X_mat.shape[1]
-    # p_mat, _ = eval_clsr_klayers(X_mat, W_mats, b_vecs)
-    # cross_entro = -np.log(np.sum(Y_mat*p_mat, axis=0))
-    # cost = (np.sum(cross_entro) / n_data)
     ret = compute_loss_klayers(X_mat, Y_mat, W_mats, b_vecs)
     for W_mat in W_mats:
         ret += lambda_*np.sum(W_mat**2)
