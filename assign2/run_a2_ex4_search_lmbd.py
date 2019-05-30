@@ -47,7 +47,7 @@ if __name__ == "__main__":
         n_cycle = 2
         k = 2
     elif search_type == "fine":
-        l_min, l_max = -5, -3.5
+        l_min, l_max = -3, -2
         n_cycle = 3
         k = 3
     # ===============================================================
