@@ -230,9 +230,10 @@ class TwoLayerNetwork:
                     valid_cost = self._compute_cost(self.X_valid, self.Y_valid)
                 else:
                     valid_cost = np.nan
+                # becareful on zero-numbering in python
                 print("Epoch {}: Iter {}: t_cost = {:f};"
-                        " v_cost = {}; lrate = {:f}".format(
-                        epoch_cnt, iter_, train_cost, valid_cost, lrate))
+                      " v_cost = {}; lrate = {:f}".format(
+                      epoch_cnt, iter_, train_cost, valid_cost, lrate))
 
             # check if training cost
             if train_cost < 1e-6:
