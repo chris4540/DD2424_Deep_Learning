@@ -1,3 +1,6 @@
+"""
+For Assignment 1:
+"""
 from utils.load_batch import load_batch
 from clsr.one_layer_network import OneLayerNetwork
 from time import time

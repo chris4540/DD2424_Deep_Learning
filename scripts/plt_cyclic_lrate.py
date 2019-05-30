@@ -1,4 +1,5 @@
 """
+Assignment 1
 Plot the learning rate defined in assignment 2 exercise 3.
 """
 import numpy as np

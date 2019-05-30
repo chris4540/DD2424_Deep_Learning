@@ -1,4 +1,5 @@
 """
+Assignment 1
 Best params for searching only lambda_, eta and n_batch:
     {'lambda_': 0.0, 'eta': 0.005, 'decay': 1.0, 'n_batch': 50}
 Best params for searching only lambda_, eta, n_batch and decay:

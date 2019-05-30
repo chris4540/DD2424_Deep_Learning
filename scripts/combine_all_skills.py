@@ -1,4 +1,5 @@
 """
+Assignment 1:
 This script is for run to compile all skills to improve the ANN model
 """
 from utils.load_batch import load_batch
