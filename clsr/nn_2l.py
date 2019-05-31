@@ -21,7 +21,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         "verbose": True,
         "wgt_init": "xavier",
         "dropout": False,
-        "n_features": 100,
+        "n_features": 3072,
         "n_classes": 10,
         "n_hidden_nodes": [50]
     }
@@ -41,19 +41,6 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         # init params
         self.initalize_wgts()
 
-    def print_instance_config(self):
-        # print training params
-        print("-------- TRAINING PARAMS --------")
-        for k in self.DEFAULT_PARAMS.keys():
-            print("{}: {}".format(k, getattr(self, k)))
-        print("-------- TRAINING PARAMS --------")
-
-    def train(self):
-        self.save_hidden_output = True
-
-    def eval(self):
-        self.save_hidden_output = False
-
     def forward(self, X_mat):
         """
         Return the logits (unnormalized log probability)
@@ -63,7 +50,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
 
         """
 
-        h_mat = X_mat.T
+        h_mat = X_mat
         # hidden_output: the list saved the hidden layer output
         if self.save_hidden_output:
             self.hidden_output = [h_mat]
@@ -77,4 +64,4 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             if self.save_hidden_output:
                 self.hidden_output.append(h_mat)
 
-        return z_mat.T
+        return z_mat

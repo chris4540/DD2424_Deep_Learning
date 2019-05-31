@@ -27,6 +27,13 @@ class BaseNetwork:
             val = params.get(k, self.DEFAULT_PARAMS[k])
             setattr(self, k, val)
         return self
+
+    def print_instance_config(self):
+        # print training params
+        print("-------- TRAINING PARAMS --------")
+        for k in self.DEFAULT_PARAMS.keys():
+            print("{}: {}".format(k, getattr(self, k)))
+        print("-------- TRAINING PARAMS --------")
     # End basic utils section
     # ------------------------------------------------
     # initialize
@@ -56,7 +63,7 @@ class BaseNetwork:
         # get the logits from the network
         logits = self.forward(X)
 
-        # the shape of logits is (nclasses, N)
+        # the shape of logits is (d, N)
         assert logits.shape[1] == X.shape[1]
         # apply softmax
         s_mat = softmax(logits, axis=0)
@@ -64,3 +71,9 @@ class BaseNetwork:
         # obtain the top one
         ret = np.argmax(s_mat, axis=0)
         return ret
+
+    def train(self):
+        self.save_hidden_output = True
+
+    def eval(self):
+        self.save_hidden_output = False

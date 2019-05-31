@@ -26,6 +26,7 @@ if __name__ == "__main__":
     for inputs, labels in cifar10_dataloader(train_data, batch_size=100):
         net.eval()
         out = net(inputs)
+        pred = net.predict(inputs)
         print(inputs.shape)
         print(out.shape)
         cnt += labels.shape[0]
