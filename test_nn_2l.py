@@ -24,6 +24,7 @@ if __name__ == "__main__":
     net = TwoLayerNeuralNetwork(n_hidden_nodes=[50])
     cnt = 0
     for inputs, labels in cifar10_dataloader(train_data, batch_size=100):
+        net.eval()
         out = net(inputs)
         print(inputs.shape)
         print(out.shape)

@@ -29,7 +29,10 @@ class TwoLayerNeuralNetwork(BaseNetwork):
     _has_valid_data = False
 
     def __init__(self, **params):
-        assert len(params['n_hidden_nodes']) == 1
+
+        if len(params['n_hidden_nodes']) != 1:
+            raise ValueError("The length of the list of hidden nodes must be 1")
+
         self.set_params(**params)
         if self.verbose:
             self.print_instance_config()
@@ -71,6 +74,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             # ReLU activation function / rectifier
             h_mat = np.maximum(z_mat, 0)
             # save down the hidden layer output
-            self.hidden_output.append(h_mat)
+            if self.save_hidden_output:
+                self.hidden_output.append(h_mat)
 
         return z_mat.T
