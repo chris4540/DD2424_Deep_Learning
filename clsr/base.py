@@ -77,3 +77,25 @@ class BaseNetwork:
 
     def eval(self):
         self.save_hidden_output = False
+
+    @staticmethod
+    def cross_entropy(logits, labels):
+        n_data = labels.shape[0]
+        p = softmax(logits, axis=0)
+        p_true = p[labels, range(n_data)]
+        log_likelihood = -np.log(p_true)
+        loss = np.sum(log_likelihood) / n_data
+        return loss
+
+    # @staticmethod
+    # def cross_entropy2(logits, labels):
+    #     """
+    #     calculate cross entropy with onehot
+    #     """
+    #     n_data = labels.shape[0]
+    #     onehot_labels = utils.one_hot(labels)
+    #     p_mat = softmax(logits, axis=0)
+    #     p_true = np.sum(onehot_labels * p_mat, axis=0)
+    #     loss = -np.log(p_true)
+    #     ret = np.sum(loss) / n_data
+    #     return ret
