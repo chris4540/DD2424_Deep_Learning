@@ -122,7 +122,6 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         ret = (grad_Ws, grad_bs)
         return ret
 
-
     def update(self, grads, lrate):
         """
         Update the weight given the gradient
