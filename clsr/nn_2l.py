@@ -41,17 +41,22 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         # init params
         self.initalize_wgts()
 
+    def train(self):
+        self.save_hidden_output = True
+
+    def eval(self):
+        self.save_hidden_output = False
+
     def forward(self, X_mat):
         """
         Return the logits (unnormalized log probability)
 
         Notes:
             refactored from lib_clsr.ann
-
         """
 
         h_mat = X_mat
-        # hidden_output: the list saved the hidden layer output
+        # hidden_output: the list for saved the hidden layer outputs
         if self.save_hidden_output:
             self.hidden_output = [h_mat]
 
@@ -65,3 +70,33 @@ class TwoLayerNeuralNetwork(BaseNetwork):
                 self.hidden_output.append(h_mat)
 
         return z_mat
+
+    def backward(self, logits, labels):
+        """
+        Calculate the gradients with backward propagation
+
+        Notes:
+        The computational graph and the naming convention is:
+        x(h[0]) -> s[1] -> h[1] -> s[2] -> h[2] -> ... -> h[l-1] -> s[l] -> p -> loss
+        And the hidden states are saved when training
+
+        Usage:
+        >>> model.train()
+        >>> out = model.forward(inputs)
+        >>> grads = model.backward(out, labels)
+        >>> model.update(grads, lrate)
+        """
+        pass
+
+    def update(self, grads, lrate, weight_decay=0.0):
+        """
+        Update the weight given the gradient
+        Args:
+            grads
+            lrate (float): the learning rate
+
+        Notes:
+            The update eqn is:
+
+        """
+        pass

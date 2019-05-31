@@ -73,19 +73,35 @@ class BaseNetwork:
         return ret
 
     def train(self):
-        self.save_hidden_output = True
+        raise NotImplementedError()
 
     def eval(self):
-        self.save_hidden_output = False
+        raise NotImplementedError()
 
     @staticmethod
     def cross_entropy(logits, labels):
+        """
+        Return the cross entropy loss
+        """
         n_data = labels.shape[0]
         p = softmax(logits, axis=0)
         p_true = p[labels, range(n_data)]
         log_likelihood = -np.log(p_true)
-        loss = np.sum(log_likelihood) / n_data
+        loss = np.sum(log_likelihood)
         return loss
+
+    def L2_penalty(self):
+        """
+        Return the L2 penalty term
+
+        Usage:
+        >>> loss = cross_entropy(...)
+        >>> loss += weight_decay * model.L2_penalty()
+        >>> print(loss)
+        """
+        ret = 0.0
+        for W_mat in self.W_mats:
+            ret += np.sum(W_mat**2)
 
     # @staticmethod
     # def cross_entropy2(logits, labels):
