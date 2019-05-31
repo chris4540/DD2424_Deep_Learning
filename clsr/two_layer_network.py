@@ -68,7 +68,7 @@ class TwoLayerNetwork:
         data = normalize_data(self.X_train)
         self.X_mean = data['mean']
         self.X_std = data['std']
-        self.X_train = data['normalized']
+        self.X_train = (self.X_train - self.X_mean) / self.X_std
 
         if self._has_valid_data:
             self.X_valid = (self.X_valid - self.X_mean) / self.X_std

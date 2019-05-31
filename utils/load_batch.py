@@ -11,20 +11,21 @@ def unpickle(file):
         ret[k.decode("utf-8")] = data[k]
     return ret
 
-def load_batch(filename):
+def load_batch(filename, dtype='float32'):
     """
     Read the batch file and transform the data to double
 
     Args:
         the file
-
+        dtype (str): the type of the converted data
     Return:
         return a dictionary
     """
     data = unpickle(filename)
 
     float_pixel = data["data"].T / 255
-    # onehot_labels = get_label_to_one_hot(data["labels"])
+    float_pixel = float_pixel.astype(dtype)
+
     # build the return
     ret = {
         "pixel_data": float_pixel,

@@ -10,7 +10,6 @@ def normalize_data(X_mat):
     return {
         "mean": mean_X,
         "std": std_X,
-        "normalized": normalized_X_mat
     }
 
 class StandardScaler:
@@ -25,6 +24,7 @@ class StandardScaler:
         normalization_params = normalize_data(X_mat)
         self.mean = normalization_params['mean']
         self.std = normalization_params['std']
+
 
     def transform(self, X_mat):
         ret = (X_mat - self.mean) / self.std
