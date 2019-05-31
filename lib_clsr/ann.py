@@ -46,12 +46,15 @@ def compute_gradients(X_mat, Y_mat, W_mat, b_vec, lambda_):
 # =============================================================================
 def eval_clsr_klayers(X_mat, W_mats, b_vecs):
     """
+    Forward pass of the k-layer neural network
     Args:
-        W_mats (list(numpy.ndarray))
+        X_mat: input
+        W_mats (list[ndarray]): k weigthing matrices
+        b_vecs (list[ndarray]): k bias vectors
 
     Returns:
         cost (float): the loss or the cost of the network
-        h_mats (list(np.ndarray)): the list of hidden layer values.
+        h_mats (list[ndarray]): the list of hidden layer values.
             Notes that the h[0] is the input layer
     """
     h_mat = X_mat
