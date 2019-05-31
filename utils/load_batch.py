@@ -47,32 +47,39 @@ def merge_batch(list_of_filenames):
 
     return ret
 
-def cifar10_dataloader(data, batch_size=100, shuffle=False):
-    """
-    Generator of batched data
-    Args:
-        data (dict):
-            data['pixel_data'] is all input data and
-            data['labels'] is all labels for the data
-        batch_size (int): batch size
+class cifar10_DataLoader:
 
-    Return:
-        tuple of input and labels
+    def __init__(self, data, batch_size=100, shuffle=False):
+        """
+        Generator of batched data
+        Args:
+            data (dict):
+                data['pixel_data'] is all input data and
+                data['labels'] is all labels for the data
+            batch_size (int): batch size
 
-    Example:
-        >>> for inputs, labels in dataloader(data, batch_size=100):
-                # make use of inputs and labels
-                pass
-    TODO:
-        impl. shuffle
-    """
-    all_labels = data['labels']
-    all_inputs = data['pixel_data']
-    n_data = all_labels.shape[0]
+        Return:
+            tuple of input and labels
 
-    for j in range(int(np.ceil(n_data / batch_size))):
-        j_s = j * batch_size
-        j_e = (j+1) * batch_size
-        batch_inputs = all_inputs[:, j_s:j_e]
-        batch_labels = all_labels[j_s:j_e]
-        yield batch_inputs, batch_labels
+        Example:
+            >>> for inputs, labels in dataloader(data, batch_size=100):
+                    # make use of inputs and labels
+                    pass
+        TODO:
+            impl. shuffle
+        """
+        self.all_labels = data['labels']
+        self.all_inputs = data['pixel_data']
+        self.batch_size = batch_size
+
+    def iterator(self):
+        n_data = self.all_labels.shape[0]
+        for j in range(int(np.ceil(n_data / self.batch_size))):
+            j_s = j * self.batch_size
+            j_e = (j+1) * self.batch_size
+            batch_inputs = self.all_inputs[:, j_s:j_e]
+            batch_labels = self.all_labels[j_s:j_e]
+            yield batch_inputs, batch_labels
+
+    def __iter__(self):
+        return self.iterator()
