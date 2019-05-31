@@ -13,3 +13,20 @@ def normalize_data(X_mat):
         "normalized": normalized_X_mat
     }
 
+class StandardScaler:
+    """
+    Minic sklearn.preprocessing.StandardScaler
+    """
+
+    def __init__(self):
+        pass
+
+    def fit(self, X_mat):
+        normalization_params = normalize_data(X_mat)
+        self.mean = normalization_params['mean']
+        self.std = normalization_params['std']
+
+    def transform(self, X_mat):
+        ret = (X_mat - self.mean) / self.std
+        return ret
+
