@@ -10,6 +10,8 @@ The class design is inspired by pyTorch
 
 """
 import numpy as np
+from scipy.special import softmax
+import utils
 from .base import BaseNetwork
 
 
@@ -71,14 +73,16 @@ class TwoLayerNeuralNetwork(BaseNetwork):
 
         return z_mat
 
-    def backward(self, logits, labels):
+    def backward(self, logits, labels, weight_decay=0.0):
         """
-        Calculate the gradients with backward propagation
+        Calculate the gradients using predined backward propagation formulas
 
         Notes:
         The computational graph and the naming convention is:
         x(h[0]) -> s[1] -> h[1] -> s[2] -> h[2] -> ... -> h[l-1] -> s[l] -> p -> loss
         And the hidden states are saved when training
+
+        This routine is refactored from  lib_clsr.ann.compute_grads_klayers
 
         Usage:
         >>> model.train()
@@ -86,9 +90,40 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         >>> grads = model.backward(out, labels)
         >>> model.update(grads, lrate)
         """
-        pass
+        # get the number of layers
+        n_layers = len(self.W_mats)
+        grad_Ws = [None] * n_layers
+        grad_bs = [None] * n_layers
 
-    def update(self, grads, lrate, weight_decay=0.0):
+        # get the number datas
+        n_data = labels.shape[0]
+        assert logits.shape[1] == n_data
+
+        p_mat = softmax(logits, axis=0)
+        Y_mat = utils.one_hot(labels)
+        g_mat = -Y_mat + p_mat
+
+        for l in range(n_layers, 0, -1):
+            h_mat = self.hidden_output[l-1]
+            W_mat = self.W_mats[l-1] # W_mats = [W_1, W_2]; W_i = W_mats[i-1]
+            #
+            grad_b = np.mean(g_mat, axis=1)[:, np.newaxis]
+            grad_W = g_mat.dot(h_mat.T) / n_data
+            grad_W += 2 * weight_decay * W_mat
+
+            grad_Ws[l-1] = grad_W
+            grad_bs[l-1] = grad_b
+
+            # update g_mat
+            if l != 1: # do not need to update at the last loop
+                g_mat = W_mat.T.dot(g_mat)
+                g_mat = g_mat * (h_mat > 0)
+
+        ret = (grad_Ws, grad_bs)
+        return ret
+
+
+    def update(self, grads, lrate):
         """
         Update the weight given the gradient
         Args:
@@ -99,4 +134,9 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             The update eqn is:
 
         """
-        pass
+        grad_Ws, grad_bs = grads
+        n_layers = len(self.W_mats)
+        # update the params
+        for l in range(n_layers):
+            self.W_mats[l] = self.W_mats[l] - lrate * grad_Ws[l]
+            self.b_vecs[l] = self.b_vecs[l] - lrate * grad_bs[l]
