@@ -19,12 +19,17 @@ if __name__ == "__main__":
     train_data['pixel_data'] = scaler.transform(train_data['pixel_data'])
     valid_data['pixel_data'] = scaler.transform(valid_data['pixel_data'])
     test_data['pixel_data'] = scaler.transform(test_data['pixel_data'])
+    print("Done preprocessing!")
+    # ==================================================================
+    net = TwoLayerNeuralNetwork(n_hidden_nodes=[50])
+    cnt = 0
+    for inputs, labels in cifar10_dataloader(train_data, batch_size=100):
+        out = net(inputs)
+        print(inputs.shape)
+        print(out.shape)
+        cnt += labels.shape[0]
+        break
 
-    # cnt = 0
-    # for inputs, labels in cifar10_dataloader(train_data, batch_size=100):
-    #     print(inputs.shape)
-    #     print(labels.shape)
-    #     cnt += labels.shape[0]
     # print(cnt)
     # print(type(train_data['labels']))
     # print(train_data['labels'].shape)
