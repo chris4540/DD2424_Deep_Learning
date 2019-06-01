@@ -25,7 +25,8 @@ class ImageJitter:
         imgs =  self.batch_to_imgs(batchs)
         n_data = imgs.shape[0]
         ret = np.zeros_like(imgs)
-        for i in tqdm(range(n_data), desc="Jitter images"):
+        # for i in tqdm(range(n_data), desc="Jitter images"):
+        for i in range(n_data):
             img = imgs[i, :]
             jittered_img = self.jitter_img(img)
             ret[i, :] = jittered_img
@@ -42,7 +43,7 @@ class ImageJitter:
 
         # random flip
         if np.random.choice([True, False]):
-            rot_angle = np.random.uniform(-5, 5)
+            rot_angle = np.random.uniform(-2, 2)
             ret = self.rotate(ret, rot_angle)
 
         # add noise
@@ -98,7 +99,7 @@ class ImageJitter:
         return rotated
 
     @staticmethod
-    def add_gaussian_noisy(img, mean=0.05, sigma=0.03):
+    def add_gaussian_noisy(img, mean=0.1, sigma=0.3):
         noisy = np.random.normal(mean, sigma, size=img.shape)
         ret = img + noisy
         return ret
@@ -111,13 +112,13 @@ class ImageJitter:
         factor = 0 will go to an extreme case
         """
         image = Image.fromarray(np.uint8(img*255))
-        factor = np.random.uniform(0.3, 1)
+        factor = np.random.uniform(0.8, 1)
         image = ImageEnhance.Color(image).enhance(factor)
         factor = np.random.uniform(0.8, 1)
         image = ImageEnhance.Brightness(image).enhance(factor)
-        factor = np.random.uniform(0.5, 1)
+        factor = np.random.uniform(0.8, 1)
         image = ImageEnhance.Contrast(image).enhance(factor)
-        factor = np.random.uniform(0.5, 1.5)
+        factor = np.random.uniform(0.8, 1.2)
         result_img = ImageEnhance.Sharpness(image).enhance(factor)
         ret = np.asarray(result_img) / 255
         return ret
