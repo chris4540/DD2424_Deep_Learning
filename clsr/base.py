@@ -102,6 +102,7 @@ class BaseNetwork:
         ret = 0.0
         for W_mat in self.W_mats:
             ret += np.sum(W_mat**2)
+        return ret
 
     # @staticmethod
     # def cross_entropy2(logits, labels):
