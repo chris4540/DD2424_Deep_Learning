@@ -1,9 +1,6 @@
 """
 Assignment 2 bonus point quesiton:
 >> Augment your training data by applying a small random geometric and photometric jitter
-
-$ python test_nn_2l.py
-Done preprocessing!
 -------- TRAINING PARAMS --------
 dtype: float32
 verbose: True
@@ -16,37 +13,50 @@ n_hidden_nodes: [50]
 Weightings and bias are initialized with xavier method.
 --------- Train Schedule ---------
 ncycle:  2
-n_epoch:  12
-step_size:  1470
+n_epoch:  8
+step_size:  980
 iter_per_epoch:  490
-n_step_per_cycle:  3
+n_step_per_cycle:  2
 weight_decay:  0.0
 --------- Train Schedule ---------
-Train Time used: 31      Loss: 1.932 | Train Acc: 31.598% (15483/49000)
-[Evaluate] Valid. Acc.: 37.800%          Test Acc.: 41.350%
-Train Time used: 32      Loss: 1.714 | Train Acc: 40.288% (19741/49000)
-[Evaluate] Valid. Acc.: 42.400%          Test Acc.: 44.020%
-Train Time used: 32      Loss: 1.654 | Train Acc: 42.245% (20700/49000)
-[Evaluate] Valid. Acc.: 43.000%          Test Acc.: 44.200%
-Train Time used: 31      Loss: 1.589 | Train Acc: 44.500% (21805/49000)
-[Evaluate] Valid. Acc.: 49.200%          Test Acc.: 47.870%
-Train Time used: 31      Loss: 1.492 | Train Acc: 48.184% (23610/49000)
-[Evaluate] Valid. Acc.: 47.600%          Test Acc.: 50.100%
-Train Time used: 31      Loss: 1.416 | Train Acc: 50.829% (24906/49000)
-[Evaluate] Valid. Acc.: 50.700%          Test Acc.: 51.180%
-Train Time used: 31      Loss: 1.407 | Train Acc: 51.384% (25178/49000)
-[Evaluate] Valid. Acc.: 49.100%          Test Acc.: 50.680%
-Train Time used: 31      Loss: 1.464 | Train Acc: 49.016% (24018/49000)
-[Evaluate] Valid. Acc.: 46.100%          Test Acc.: 48.010%
-Train Time used: 31      Loss: 1.536 | Train Acc: 46.527% (22798/49000)
-[Evaluate] Valid. Acc.: 45.900%          Test Acc.: 46.310%
-Train Time used: 33      Loss: 1.517 | Train Acc: 47.098% (23078/49000)
-[Evaluate] Valid. Acc.: 48.300%          Test Acc.: 49.120%
-Train Time used: 32      Loss: 1.427 | Train Acc: 50.518% (24754/49000)
-[Evaluate] Valid. Acc.: 48.500%          Test Acc.: 51.410%
-Train Time used: 31      Loss: 1.360 | Train Acc: 52.918% (25930/49000)
-[Evaluate] Valid. Acc.: 52.100%          Test Acc.: 52.640%
-[Result] Valid. Acc.: 52.100%    Test Acc.: 52.640%
+
+with jiter:
+Train Time used: 32      Loss: 1.879 | Train Acc: 33.337% (16335/49000)
+[Evaluate] Valid. Acc.: 39.400%          Test Acc.: 41.990%
+Train Time used: 32      Loss: 1.657 | Train Acc: 41.851% (20507/49000)
+[Evaluate] Valid. Acc.: 41.000%          Test Acc.: 42.930%
+Train Time used: 32      Loss: 1.550 | Train Acc: 45.533% (22311/49000)
+[Evaluate] Valid. Acc.: 48.200%          Test Acc.: 48.970%
+Train Time used: 32      Loss: 1.419 | Train Acc: 50.404% (24698/49000)
+[Evaluate] Valid. Acc.: 50.300%          Test Acc.: 51.200%
+Train Time used: 32      Loss: 1.396 | Train Acc: 51.276% (25125/49000)
+[Evaluate] Valid. Acc.: 48.400%          Test Acc.: 49.420%
+Train Time used: 31      Loss: 1.488 | Train Acc: 47.959% (23500/49000)
+[Evaluate] Valid. Acc.: 45.600%          Test Acc.: 45.380%
+Train Time used: 32      Loss: 1.462 | Train Acc: 48.971% (23996/49000)
+[Evaluate] Valid. Acc.: 49.300%          Test Acc.: 50.660%
+Train Time used: 32      Loss: 1.346 | Train Acc: 53.202% (26069/49000)
+[Evaluate] Valid. Acc.: 52.400%          Test Acc.: 52.060%
+[Result] Valid. Acc.: 52.400%    Test Acc.: 52.060%
+================================================================================
+Train Time used: 4       Loss: 1.840 | Train Acc: 34.786% (17045/49000)
+[Evaluate] Valid. Acc.: 41.200%          Test Acc.: 42.190%
+Train Time used: 4       Loss: 1.624 | Train Acc: 42.837% (20990/49000)
+[Evaluate] Valid. Acc.: 44.300%          Test Acc.: 43.790%
+Train Time used: 4       Loss: 1.502 | Train Acc: 47.312% (23183/49000)
+[Evaluate] Valid. Acc.: 48.200%          Test Acc.: 47.810%
+Train Time used: 4       Loss: 1.351 | Train Acc: 52.988% (25964/49000)
+[Evaluate] Valid. Acc.: 49.500%          Test Acc.: 50.780%
+Train Time used: 4       Loss: 1.317 | Train Acc: 53.951% (26436/49000)
+[Evaluate] Valid. Acc.: 48.200%          Test Acc.: 47.970%
+Train Time used: 5       Loss: 1.431 | Train Acc: 49.918% (24460/49000)
+[Evaluate] Valid. Acc.: 43.900%          Test Acc.: 44.960%
+Train Time used: 5       Loss: 1.390 | Train Acc: 51.424% (25198/49000)
+[Evaluate] Valid. Acc.: 49.700%          Test Acc.: 49.460%
+Train Time used: 4       Loss: 1.248 | Train Acc: 56.376% (27624/49000)
+[Evaluate] Valid. Acc.: 51.000%          Test Acc.: 51.410%
+[Result] Valid. Acc.: 51.000%    Test Acc.: 51.410%
+
 """
 import numpy as np
 from utils.load_batch import load_batch
@@ -63,6 +73,10 @@ from scipy.special import softmax
 
 
 if __name__ == "__main__":
+
+    # config:
+    is_jiter = True
+
     merged_data = get_all_train_data("cifar-10-batches-py")
     train_data, valid_data = data_split(merged_data, n_valid=1000)
     test_data = load_batch("cifar-10-batches-py/test_batch")
@@ -82,8 +96,8 @@ if __name__ == "__main__":
     net = TwoLayerNeuralNetwork(n_hidden_nodes=[50], p_dropout=0.0)
     # net = TwoLayerNeuralNetwork(n_hidden_nodes=[768])
     ntrain = train_data['labels'].shape[0]
-    n_step_per_cycle = 3
-    ncycle = 3
+    n_step_per_cycle = 2
+    ncycle = 2
     n_epoch = ncycle*n_step_per_cycle*2
     iter_per_epoch = int(np.ceil(ntrain / batch_size))
     step_size = n_step_per_cycle*iter_per_epoch
@@ -110,7 +124,8 @@ if __name__ == "__main__":
         net.train()
         for inputs, labels in train_loader:
             # jitter the images on-fly
-            inputs = jitr.jitter_batch(inputs)
+            if is_jiter:
+                inputs = jitr.jitter_batch(inputs)
             inputs = scaler.transform(inputs)
             out = net(inputs)
             grads = net.backward(out, labels, weight_decay)
