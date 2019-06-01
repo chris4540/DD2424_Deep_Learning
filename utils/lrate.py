@@ -18,6 +18,8 @@ class CyclicLR:
             cyc_lr.step()
     """
     def __init__(self, eta_min, eta_max, step_size=2000):
+        # force to int
+        step_size = int(step_size)
         # obtain one cyclic learning rate
         self.lrates = cyc_lrate(step_size*2, eta_min, eta_max, step_size)
         self.idx = 0

@@ -22,7 +22,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
-        "dropout": False,
+        "p_dropout": 0.5,
         "n_features": 3072,
         "n_classes": 10,
         "n_hidden_nodes": [50]
@@ -38,16 +38,16 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         self.set_params(**params)
         if self.verbose:
             self.print_instance_config()
-        self.save_hidden_output = True
+        self.training = True
 
         # init params
         self.initalize_wgts()
 
     def train(self):
-        self.save_hidden_output = True
+        self.training = True
 
     def eval(self):
-        self.save_hidden_output = False
+        self.training = False
 
     def forward(self, X_mat):
         """
@@ -57,9 +57,9 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             refactored from lib_clsr.ann
         """
 
-        h_mat = X_mat
+        h_mat = X_mat.astype(self.dtype)
         # hidden_output: the list for saved the hidden layer outputs
-        if self.save_hidden_output:
+        if self.training:
             self.hidden_output = [h_mat]
 
         for W_mat, b_vec in zip(self.W_mats, self.b_vecs):
@@ -67,11 +67,35 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             z_mat = W_mat.dot(h_mat) + b_vec
             # ReLU activation function / rectifier
             h_mat = np.maximum(z_mat, 0)
+
+            # apply dropout
+            if self.training and self.p_dropout > 0.0:
+                mask = self.get_dropout_mask(h_mat, p=self.p_dropout)
+                h_mat *= mask
+
             # save down the hidden layer output
-            if self.save_hidden_output:
+            if self.training:
                 self.hidden_output.append(h_mat)
 
         return z_mat
+
+    def get_dropout_mask(self, hidden_output, p=0.5):
+        """
+        Args:
+            hidden_output (ndarray): the hidden output after activation function
+            p (float): probability of an element to be zeroed. Default: 0.5
+
+        Notes:
+            We scale up during training and therefore we do not need to scale up
+            when testing / evaluting
+            See also: torch.nn.Dropout
+
+        """
+        if p >= 1.0:
+            raise ValueError("Dropout layer cannot drop all values!")
+        p_active = 1.0 - p
+        mask = np.random.binomial(1, p_active, size=hidden_output.shape) / p_active
+        return mask
 
     def backward(self, logits, labels, weight_decay=0.0):
         """
@@ -102,6 +126,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         p_mat = softmax(logits, axis=0)
         Y_mat = utils.one_hot(labels)
         g_mat = -Y_mat + p_mat
+        g_mat.astype(self.dtype)
 
         for l in range(n_layers, 0, -1):
             h_mat = self.hidden_output[l-1]
@@ -111,8 +136,8 @@ class TwoLayerNeuralNetwork(BaseNetwork):
             grad_W = g_mat.dot(h_mat.T) / n_data
             grad_W += 2 * weight_decay * W_mat
 
-            grad_Ws[l-1] = grad_W
-            grad_bs[l-1] = grad_b
+            grad_Ws[l-1] = grad_W.astype(self.dtype)
+            grad_bs[l-1] = grad_b.astype(self.dtype)
 
             # update g_mat
             if l != 1: # do not need to update at the last loop
