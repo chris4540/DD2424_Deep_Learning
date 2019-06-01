@@ -8,6 +8,7 @@ See also:
 https://gombru.github.io/2017/09/14/data_augmentation/
 """
 import numpy as np
+from scipy import ndimage
 
 class ImageArgument:
 
@@ -39,7 +40,22 @@ class ImageArgument:
         batch = imgs.transpose(3, 1, 2, 0).reshape(-1, n_batch)
         return batch
 
+    @staticmethod
+    def horrizonal_flip(imgs):
+        # flip the third axis
+        ret = imgs[:, :, ::-1, :]
+        return ret
 
+    @staticmethod
+    def rotate(img, angle):
+        """
+        Args:
+            img (ndarray): img.shape = (w, h, c)
+            angle (float): the rotation angle, expected to be small
+        """
+        rotated = ndimage.rotate(img, angle, reshape=False, mode='nearest')
+        assert rotated.shape == img.shape
+        return rotated
 
 if __name__ == "__main__":
     pass
