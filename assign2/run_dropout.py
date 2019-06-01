@@ -7,20 +7,27 @@ Basic part: for checking sanity
     k = 3; cycle = 3
 ------------------------------------------------------------------
     p_dropout = 0.0
-    [Result] Valid. Acc.: 51.400%    Test Acc.: 50.840%
+    [Result] Valid. Acc.: 53.500%    Test Acc.: 49.960%
 ------------------------------------------------------------------
     p_dropout = 0.01
-    [Result] Valid. Acc.: 50.800%    Test Acc.: 51.140%
+    [Result] Valid. Acc.: 53.500%    Test Acc.: 51.750%
 ------------------------------------------------------------------
     p_dropout = 0.8
-    Train Time used: 3       Loss: 1.923 | Train Acc: 29.004% (14212/49000)
-    [Evaluate] Valid. Acc.: 39.600%          Test Acc.: 38.790%
+    [Result] Valid. Acc.: 40.500%    Test Acc.: 39.390%
 ================================================================================
 Advacne part:
-    n_hidden = 100
-    p_dropout = 0.0
+    n_hidden = 800
     weight_decay = 0.0
     k = 3; cycle = 3
+------------------------------------------------------------------
+    p_dropout = 0.0
+------------------------------------------------------------------
+    p_dropout = 0.1
+    [Result] Valid. Acc.: 57.800%    Test Acc.: 56.430%
+------------------------------------------------------------------
+    p_dropout = 0.3
+------------------------------------------------------------------
+    p_dropout = 0.5
 """
 import numpy as np
 from utils.load_batch import load_batch
@@ -52,14 +59,14 @@ if __name__ == "__main__":
     valid_loader = cifar10_DataLoader(valid_data, batch_size=batch_size)
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
-    net = TwoLayerNeuralNetwork(n_hidden_nodes=[50], p_dropout=0.08)
+    net = TwoLayerNeuralNetwork(n_hidden_nodes=[800], p_dropout=0.3)
     # net = TwoLayerNeuralNetwork(n_hidden_nodes=[768])
     ntrain = train_data['labels'].shape[0]
-    k = 3
+    n_step_per_cycle = 3
     ncycle = 3
-    n_epoch = ncycle*k*2
+    n_epoch = ncycle*n_step_per_cycle*2
     iter_per_epoch = int(np.ceil(ntrain / batch_size))
-    step_size = k*iter_per_epoch
+    step_size = n_step_per_cycle*iter_per_epoch
     # weight_decay = 0.004454
     # weight_decay = 0.005
     weight_decay = 0.000
@@ -70,6 +77,7 @@ if __name__ == "__main__":
     print("n_epoch: ", n_epoch)
     print("step_size: ", step_size)
     print("iter_per_epoch: ", iter_per_epoch)
+    print("n_step_per_cycle: ", n_step_per_cycle)
     print("weight_decay: ", weight_decay)
     print("--------- Train Schedule ---------")
     best_valid_acc = -np.inf
