@@ -21,13 +21,16 @@ Advacne part:
     k = 3; cycle = 3
 ------------------------------------------------------------------
     p_dropout = 0.0
+    [Result] Valid. Acc.: 58.100%    Test Acc.: 55.800%
 ------------------------------------------------------------------
     p_dropout = 0.1
     [Result] Valid. Acc.: 57.800%    Test Acc.: 56.430%
 ------------------------------------------------------------------
     p_dropout = 0.3
+    [Result] Valid. Acc.: 58.600%    Test Acc.: 56.840%
 ------------------------------------------------------------------
     p_dropout = 0.5
+    [Result] Valid. Acc.: 56.500%    Test Acc.: 56.030%
 """
 import numpy as np
 from utils.load_batch import load_batch
@@ -59,7 +62,7 @@ if __name__ == "__main__":
     valid_loader = cifar10_DataLoader(valid_data, batch_size=batch_size)
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
-    net = TwoLayerNeuralNetwork(n_hidden_nodes=[800], p_dropout=0.3)
+    net = TwoLayerNeuralNetwork(n_hidden_nodes=[800], p_dropout=0.0)
     # net = TwoLayerNeuralNetwork(n_hidden_nodes=[768])
     ntrain = train_data['labels'].shape[0]
     n_step_per_cycle = 3
