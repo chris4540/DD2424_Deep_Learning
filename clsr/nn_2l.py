@@ -22,7 +22,7 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
-        "p_dropout": 0.5,
+        "p_dropout": 0.0,
         "n_features": 3072,
         "n_classes": 10,
         "n_hidden_nodes": [50]
