@@ -7,6 +7,7 @@ Make some a small random geometric and photometric jitter
 See also:
 https://gombru.github.io/2017/09/14/data_augmentation/
 https://blog.csdn.net/tsq292978891/article/details/79107775
+https://www.jianshu.com/p/2078445c3ef7
 """
 
 import numpy as np
@@ -15,7 +16,7 @@ from PIL import ImageEnhance
 from PIL import Image
 from tqdm import tqdm
 
-class ImageArgument:
+class ImageJitter:
 
     def __init__(self):
         pass
