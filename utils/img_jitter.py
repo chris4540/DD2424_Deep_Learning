@@ -99,7 +99,7 @@ class ImageJitter:
         return rotated
 
     @staticmethod
-    def add_gaussian_noisy(img, mean=0.1, sigma=0.3):
+    def add_gaussian_noisy(img, mean=0.01, sigma=0.03):
         noisy = np.random.normal(mean, sigma, size=img.shape)
         ret = img + noisy
         return ret
