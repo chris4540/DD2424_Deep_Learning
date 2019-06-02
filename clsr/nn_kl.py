@@ -37,8 +37,8 @@ class BatchNormalizeLayer:
         return self.batch_normalize(inputs)
 
     def batch_normalize(self, inputs):
-        batch_mean = np.mean(inputs, axis=1)
-        batch_var = np.var(inputs, axis=1)
+        batch_mean = np.mean(inputs, axis=1)[:, np.newaxis]
+        batch_var = np.var(inputs, axis=1)[:, np.newaxis]
 
         ret = (inputs - batch_mean) / np.sqrt(batch_var + self.eps)
 
@@ -124,9 +124,6 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             # Linear layer; z = w^{T} x + b
             z_mat = W_mat.dot(h_mat) + b_vec
 
-
-            # print(z_mat.shape)
-
             # Apply the activation except the last layer(the logist out layer)
             if i >= nlayer-1:
                 continue
@@ -135,8 +132,7 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             if self.batch_norm:
                 bn_layer = self.batch_norm_layer[i]
                 z_cap = bn_layer(z_mat)
-                z_mat = self.bn_scales[i] * z_cap + self.bn_shifts[i]
-
+                z_mat_tmp = self.bn_scales[i] * z_cap + self.bn_shifts[i]
 
             # ReLU activation function / rectifier
             h_mat = np.maximum(z_mat, 0)
@@ -162,9 +158,9 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 # the bn layers
                 self.batch_norm_layer.append(BatchNormalizeLayer(ndim))
                 # the shifts
-                self.bn_shifts.append(np.zeros(ndim))
+                self.bn_shifts.append(np.zeros((ndim, 1)))
                 # the scales
-                self.bn_scales.append(np.ones(ndim))
+                self.bn_scales.append(np.ones((ndim, 1)))
 
 
     def _get_backward_grad(self, logits, labels, weight_decay=0.0):
