@@ -17,7 +17,6 @@ from .base import BaseNetwork
 
 class TwoLayerNeuralNetwork(BaseNetwork):
 
-    size_hidden = 50
     DEFAULT_PARAMS = {
         "dtype": "float32",
         "verbose": True,
@@ -27,8 +26,6 @@ class TwoLayerNeuralNetwork(BaseNetwork):
         "n_classes": 10,
         "n_hidden_nodes": [50]
     }
-
-    _has_valid_data = False
 
     def __init__(self, **params):
 
@@ -42,12 +39,6 @@ class TwoLayerNeuralNetwork(BaseNetwork):
 
         # init params
         self.initalize_wgts()
-
-    def train(self):
-        self.training = True
-
-    def eval(self):
-        self.training = False
 
     def forward(self, X_mat):
         """

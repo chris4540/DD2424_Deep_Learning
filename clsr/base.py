@@ -34,6 +34,12 @@ class BaseNetwork:
         for k in self.DEFAULT_PARAMS.keys():
             print("{}: {}".format(k, getattr(self, k)))
         print("-------- TRAINING PARAMS --------")
+
+    def train(self):
+        self.training = True
+
+    def eval(self):
+        self.training = False
     # End basic utils section
     # ------------------------------------------------
     # initialize
@@ -71,12 +77,6 @@ class BaseNetwork:
         # obtain the top one
         ret = np.argmax(s_mat, axis=0)
         return ret
-
-    def train(self):
-        raise NotImplementedError()
-
-    def eval(self):
-        raise NotImplementedError()
 
     @staticmethod
     def cross_entropy(logits, labels):
