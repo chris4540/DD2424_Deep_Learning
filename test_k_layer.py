@@ -1,6 +1,15 @@
 """
 Assignment 3 Ex1.
 
+Results:
+# 3-layers
+>>> net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0)
+[Result] Valid. Acc.: 53.000%    Test Acc.: 52.710%
+
+# k-layers
+>>> net = KLayerNeuralNetwork(p_dropout=0.0,
+        n_hidden_nodes= [50, 30, 20, 20, 10, 10, 10, 10])
+[Result] Valid. Acc.: 42.600%    Test Acc.: 42.560%
 """
 import numpy as np
 from utils.load_batch import load_batch
@@ -32,7 +41,10 @@ if __name__ == "__main__":
     valid_loader = cifar10_DataLoader(valid_data, batch_size=batch_size)
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
-    net = KLayerNeuralNetwork(n_hidden_nodes=[50], p_dropout=0.0)
+    # net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0)
+    net = KLayerNeuralNetwork(p_dropout=0.0,
+        n_hidden_nodes= [50, 30, 20, 20, 10, 10, 10, 10]
+        )
     ntrain = train_data['labels'].shape[0]
     n_step_per_cycle = 5
     ncycle = 2
