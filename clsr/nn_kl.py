@@ -30,6 +30,8 @@ class BatchNormalizeLayer:
         self.training = True
         self.running_mean = None
         self.running_var = None
+        self.cur_mean = None
+        self.cur_var = None
         self.eps = np.finfo(dtype).eps
         self.momentum = momentum
 
@@ -37,13 +39,18 @@ class BatchNormalizeLayer:
         return self.batch_normalize(inputs)
 
     def batch_normalize(self, inputs):
-        batch_mean = np.mean(inputs, axis=1)[:, np.newaxis]
-        batch_var = np.var(inputs, axis=1)[:, np.newaxis]
-
-        ret = (inputs - batch_mean) / np.sqrt(batch_var + self.eps)
 
         if self.training:
+            batch_mean = np.mean(inputs, axis=1)[:, np.newaxis]
+            batch_var = np.var(inputs, axis=1)[:, np.newaxis]
             self.update_running(batch_mean, batch_var)
+            self.cur_mean = batch_mean
+            self.cur_var = batch_var
+        else:
+            batch_mean = self.running_mean
+            batch_var = self.running_var
+
+        ret = (inputs - batch_mean) / np.sqrt(batch_var + self.eps)
         return ret
 
     def update_running(self, mean, var):
@@ -61,6 +68,37 @@ class BatchNormalizeLayer:
             self.running_var = var
         else:
             self.running_var = alpha*self.running_var + beta*var
+
+    def back_pass(self, g_mat, z_mat):
+        """
+        Implementation of BatchNormBackPass
+        See asignment for details
+        See also:
+        https://kevinzakka.github.io/2016/09/14/batch_normalization/
+        """
+        # print("-----------------")
+        # print(g_mat.shape)
+        # print(z_mat.shape)
+        sigma1 = (self.cur_var + self.eps)**(-0.5)
+        sigma2 = sigma1**3
+
+        #
+        g1 = g_mat * sigma1
+        g2 = g_mat * sigma2
+        d_mat = z_mat - self.cur_mean
+        # print(d_mat.shape)
+        c_mat = np.sum(g2 * d_mat, axis=1)[:, np.newaxis]
+        # print(c_mat.shape)
+
+        # --------------------
+        # eqn 37
+        ret = g1
+        ret -= np.mean(g1, axis=1)[:, np.newaxis]
+        ret -= np.mean(d_mat * c_mat, axis=1)[:, np.newaxis]
+        # print("-----------------")
+        # --------------------
+        return ret
+
 
     def train(self):
         self.training = True
@@ -117,22 +155,34 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         # hidden_output: the list for saved the hidden layer outputs
         if self.training:
             self.hidden_output = [h_mat]
+            if self.batch_norm:
+                self.z_caps = []  # the output of batch norm layer
+                self.z_mats = []  # the output of affine layers / fully-connected layer
 
         nlayer = len(self.W_mats)
 
         for i, (W_mat, b_vec) in enumerate(zip(self.W_mats, self.b_vecs)):
+            # print(i)
+            # print(nlayer-2)
+            # print(W_mat.shape)
+            # print(b_vec.shape)
+            # print(h_mat.shape)
             # Linear layer; z = w^{T} x + b
             z_mat = W_mat.dot(h_mat) + b_vec
 
             # Apply the activation except the last layer(the logist out layer)
             if i >= nlayer-1:
-                continue
+                break
 
             # apply batch norm
             if self.batch_norm:
+                # store the affine layer output
+                self.z_mats.append(z_mat)
                 bn_layer = self.batch_norm_layer[i]
                 z_cap = bn_layer(z_mat)
-                z_mat_tmp = self.bn_scales[i] * z_cap + self.bn_shifts[i]
+                z_mat = self.bn_scales[i] * z_cap + self.bn_shifts[i]
+                # store the batch norm layer output
+                self.z_caps.append(z_cap)
 
             # ReLU activation function / rectifier
             h_mat = np.maximum(z_mat, 0)
@@ -144,6 +194,12 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             # save down the hidden layer output
             if self.training:
                 self.hidden_output.append(h_mat)
+
+        # if self.training:
+        #     print(len(self.W_mats))
+        #     print(len(self.hidden_output))
+        #     print(len(self.z_caps))
+        #     print(len(self.z_mats))
 
         return z_mat
 
@@ -158,14 +214,14 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 # the bn layers
                 self.batch_norm_layer.append(BatchNormalizeLayer(ndim))
                 # the shifts
-                self.bn_shifts.append(np.zeros((ndim, 1)))
+                self.bn_shifts.append(np.zeros((ndim, 1), dtype=self.dtype))
                 # the scales
-                self.bn_scales.append(np.ones((ndim, 1)))
+                self.bn_scales.append(np.ones((ndim, 1), dtype=self.dtype))
 
 
     def _get_backward_grad(self, logits, labels, weight_decay=0.0):
         """
-        Calculate the gradients using predined backward propagation formulas
+        Calculate the gradients using predined backward propagation formulae
 
         Notes:
         The computational graph and the naming convention is:
@@ -184,17 +240,51 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         n_layers = len(self.W_mats)
         grad_Ws = [None] * n_layers
         grad_bs = [None] * n_layers
+        #
+        grad_scales = [None] * (n_layers-1)
+        grad_shifts = [None] * (n_layers-1)
 
         # get the number datas
         n_data = labels.shape[0]
         assert logits.shape[1] == n_data
 
+        # Propagate the gradient through the loss and softmax operations
         p_mat = softmax(logits, axis=0)
         Y_mat = utils.one_hot(labels)
         g_mat = -Y_mat + p_mat
         g_mat.astype(self.dtype)
 
-        for l in range(n_layers, 0, -1):
+        # calculate the last layer
+        h_mat = self.hidden_output[-1]
+        W_mat = self.W_mats[-1]
+        grad_b = np.mean(g_mat, axis=1)[:, np.newaxis]
+        grad_W = g_mat.dot(h_mat.T) / n_data
+        grad_W += 2 * weight_decay * W_mat
+        g_mat = W_mat.T.dot(g_mat)
+        g_mat = g_mat * (h_mat > 0)
+        grad_Ws[-1] = grad_W.astype(self.dtype)
+        grad_bs[-1] = grad_b.astype(self.dtype)
+
+        # ==============================================
+        # calculate from k-1 to the first layer
+        for l in range(n_layers-1, 0, -1):
+            # print(l)
+            # ====================================================
+            # back-propagation
+            # compute the delta scale and delta shift
+            grad_shift = np.mean(g_mat, axis=1)[:, np.newaxis]
+            z_cap = self.z_caps[l-1]
+            grad_scale = np.mean(g_mat * z_cap, axis=1)[:, np.newaxis]
+
+            grad_scales[l-1] = grad_scale
+            grad_shifts[l-1] = grad_shift
+            # Propagate the gradients through the scale and shift
+            g_mat = g_mat * self.bn_scales[l-1]
+            # Propagate through the batch normalization
+            bn_layer = self.batch_norm_layer[l-1]
+            z_mat = self.z_mats[l-1]
+            g_mat = bn_layer.back_pass(g_mat, z_mat)
+            # ====================================================
             h_mat = self.hidden_output[l-1]
             W_mat = self.W_mats[l-1] # W_mats = [W_1, W_2]; W_i = W_mats[i-1]
             #
@@ -202,15 +292,17 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             grad_W = g_mat.dot(h_mat.T) / n_data
             grad_W += 2 * weight_decay * W_mat
 
+            # store the values
             grad_Ws[l-1] = grad_W.astype(self.dtype)
             grad_bs[l-1] = grad_b.astype(self.dtype)
+            # ====================================================
 
             # update g_mat
             if l != 1: # do not need to update at the last loop
                 g_mat = W_mat.T.dot(g_mat)
                 g_mat = g_mat * (h_mat > 0)
 
-        ret = (grad_Ws, grad_bs)
+        ret = (grad_Ws, grad_bs, grad_scales, grad_shifts)
         return ret
 
     def backward(self, logits, labels, weight_decay, lrate):
@@ -224,9 +316,15 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             The update eqn is:
 
         """
-        grad_Ws, grad_bs = self._get_backward_grad(logits, labels, weight_decay)
+        grad_Ws, grad_bs, grad_scales, grad_shifts = \
+            self._get_backward_grad(logits, labels, weight_decay)
         n_layers = len(self.W_mats)
         # update the params
         for l in range(n_layers):
             self.W_mats[l] = self.W_mats[l] - lrate * grad_Ws[l]
             self.b_vecs[l] = self.b_vecs[l] - lrate * grad_bs[l]
+
+        # update the params
+        for l in range(n_layers-1):
+            self.bn_scales[l] = self.bn_scales[l] - lrate * grad_scales[l]
+            self.bn_shifts[l] = self.bn_shifts[l] - lrate * grad_shifts[l]
