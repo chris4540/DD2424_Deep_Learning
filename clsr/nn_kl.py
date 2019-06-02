@@ -112,7 +112,8 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         "n_features": 3072,
         "n_classes": 10,
         "n_hidden_nodes": [50],
-        "batch_norm": True
+        "batch_norm": False,
+        "batch_norm_momentum": 0.7
     }
 
     def __init__(self, **params):
@@ -196,7 +197,9 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             self.bn_scales = list()
             for ndim in self.n_hidden_nodes:
                 # the bn layers
-                self.batch_norm_layer.append(BatchNormalizeLayer(ndim))
+                self.batch_norm_layer.append(
+                    BatchNormalizeLayer(ndim, momentum=self.batch_norm_momentum)
+                )
                 # the shifts
                 self.bn_shifts.append(np.zeros((ndim, 1), dtype=self.dtype))
                 # the scales

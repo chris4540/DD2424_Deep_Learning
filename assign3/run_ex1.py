@@ -41,9 +41,9 @@ if __name__ == "__main__":
     valid_loader = cifar10_DataLoader(valid_data, batch_size=batch_size)
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
-    # net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0)
+    # net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0, batch_norm=False)
     net = KLayerNeuralNetwork(p_dropout=0.0,
-        n_hidden_nodes= [50, 30, 20, 20, 10, 10, 10, 10]
+        n_hidden_nodes= [50, 30, 20, 20, 10, 10, 10, 10], batch_norm=False
         )
     ntrain = train_data['labels'].shape[0]
     n_step_per_cycle = 5
