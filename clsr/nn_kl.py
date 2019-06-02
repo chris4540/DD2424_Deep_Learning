@@ -54,31 +54,30 @@ class BatchNormalizeLayer:
         return ret
 
     def update_running(self, mean, var):
+
+        # when first time
+        if self.running_mean is None and self.running_var is None:
+            self.running_mean = mean
+            self.running_var = var
+            return
+
         alpha = self.momentum
         beta = 1 - alpha
 
         # update running mean
-        if self.running_mean is None:
-            self.running_mean = mean
-        else:
-            self.running_mean = alpha*self.running_mean + beta*mean
+        self.running_mean = alpha*self.running_mean + beta*mean
 
         # update running var
-        if self.running_var is None:
-            self.running_var = var
-        else:
-            self.running_var = alpha*self.running_var + beta*var
+        self.running_var = alpha*self.running_var + beta*var
 
     def back_pass(self, g_mat, z_mat):
         """
         Implementation of BatchNormBackPass
         See asignment for details
-        See also:
+
+        See also to have a clear picture:
         https://kevinzakka.github.io/2016/09/14/batch_normalization/
         """
-        # print("-----------------")
-        # print(g_mat.shape)
-        # print(z_mat.shape)
         sigma1 = (self.cur_var + self.eps)**(-0.5)
         sigma2 = sigma1**3
 
@@ -86,19 +85,15 @@ class BatchNormalizeLayer:
         g1 = g_mat * sigma1
         g2 = g_mat * sigma2
         d_mat = z_mat - self.cur_mean
-        # print(d_mat.shape)
         c_mat = np.sum(g2 * d_mat, axis=1)[:, np.newaxis]
-        # print(c_mat.shape)
 
         # --------------------
         # eqn 37
         ret = g1
         ret -= np.mean(g1, axis=1)[:, np.newaxis]
         ret -= np.mean(d_mat * c_mat, axis=1)[:, np.newaxis]
-        # print("-----------------")
         # --------------------
         return ret
-
 
     def train(self):
         self.training = True
@@ -162,11 +157,6 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         nlayer = len(self.W_mats)
 
         for i, (W_mat, b_vec) in enumerate(zip(self.W_mats, self.b_vecs)):
-            # print(i)
-            # print(nlayer-2)
-            # print(W_mat.shape)
-            # print(b_vec.shape)
-            # print(h_mat.shape)
             # Linear layer; z = w^{T} x + b
             z_mat = W_mat.dot(h_mat) + b_vec
 
@@ -194,12 +184,6 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             # save down the hidden layer output
             if self.training:
                 self.hidden_output.append(h_mat)
-
-        # if self.training:
-        #     print(len(self.W_mats))
-        #     print(len(self.hidden_output))
-        #     print(len(self.z_caps))
-        #     print(len(self.z_mats))
 
         return z_mat
 
@@ -268,22 +252,23 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         # ==============================================
         # calculate from k-1 to the first layer
         for l in range(n_layers-1, 0, -1):
-            # print(l)
             # ====================================================
             # back-propagation
-            # compute the delta scale and delta shift
-            grad_shift = np.mean(g_mat, axis=1)[:, np.newaxis]
-            z_cap = self.z_caps[l-1]
-            grad_scale = np.mean(g_mat * z_cap, axis=1)[:, np.newaxis]
+            if self.batch_norm:
+                # compute the delta scale and delta shift
+                grad_shift = np.mean(g_mat, axis=1)[:, np.newaxis]
+                z_cap = self.z_caps[l-1]
+                grad_scale = np.mean(g_mat * z_cap, axis=1)[:, np.newaxis]
 
-            grad_scales[l-1] = grad_scale
-            grad_shifts[l-1] = grad_shift
-            # Propagate the gradients through the scale and shift
-            g_mat = g_mat * self.bn_scales[l-1]
-            # Propagate through the batch normalization
-            bn_layer = self.batch_norm_layer[l-1]
-            z_mat = self.z_mats[l-1]
-            g_mat = bn_layer.back_pass(g_mat, z_mat)
+                grad_scales[l-1] = grad_scale
+                grad_shifts[l-1] = grad_shift
+                # Propagate the gradients through the scale and shift
+                g_mat = g_mat * self.bn_scales[l-1]
+                # Propagate through the batch normalization
+                bn_layer = self.batch_norm_layer[l-1]
+                z_mat = self.z_mats[l-1]
+                g_mat = bn_layer.back_pass(g_mat, z_mat)
+
             # ====================================================
             h_mat = self.hidden_output[l-1]
             W_mat = self.W_mats[l-1] # W_mats = [W_1, W_2]; W_i = W_mats[i-1]
@@ -302,7 +287,14 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 g_mat = W_mat.T.dot(g_mat)
                 g_mat = g_mat * (h_mat > 0)
 
-        ret = (grad_Ws, grad_bs, grad_scales, grad_shifts)
+        ret = {
+            'grad_Ws': grad_Ws,
+            'grad_bs': grad_bs
+        }
+        if self.batch_norm:
+            ret['grad_scales'] = grad_scales
+            ret['grad_shifts'] = grad_shifts
+
         return ret
 
     def backward(self, logits, labels, weight_decay, lrate):
@@ -316,15 +308,20 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             The update eqn is:
 
         """
-        grad_Ws, grad_bs, grad_scales, grad_shifts = \
-            self._get_backward_grad(logits, labels, weight_decay)
         n_layers = len(self.W_mats)
+
+        grads = self._get_backward_grad(logits, labels, weight_decay)
+        grad_Ws = grads['grad_Ws']
+        grad_bs = grads['grad_bs']
         # update the params
         for l in range(n_layers):
             self.W_mats[l] = self.W_mats[l] - lrate * grad_Ws[l]
             self.b_vecs[l] = self.b_vecs[l] - lrate * grad_bs[l]
 
-        # update the params
-        for l in range(n_layers-1):
-            self.bn_scales[l] = self.bn_scales[l] - lrate * grad_scales[l]
-            self.bn_shifts[l] = self.bn_shifts[l] - lrate * grad_shifts[l]
+        # update the batch norm
+        if self.batch_norm:
+            grad_scales = grads['grad_scales']
+            grad_shifts = grads['grad_shifts']
+            for l in range(n_layers-1):
+                self.bn_scales[l] = self.bn_scales[l] - lrate * grad_scales[l]
+                self.bn_shifts[l] = self.bn_shifts[l] - lrate * grad_shifts[l]
