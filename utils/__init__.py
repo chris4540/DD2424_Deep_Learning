@@ -42,11 +42,12 @@ def train(train_loader, net, weight_decay, scheduler):
     for inputs, labels in train_loader:
         net.train()
         out = net(inputs)
-        grads = net.backward(out, labels, weight_decay)
         loss += net.cross_entropy(out, labels)
         if weight_decay > 0:
             loss += weight_decay * net.L2_penalty()
-        net.update(grads, lrate=scheduler.get_lr())
+        # grads = net.backward(out, labels, weight_decay)
+        # net.backward(grads, lrate=scheduler.get_lr())
+        net.backward(out, labels, weight_decay, lrate=scheduler.get_lr())
         scheduler.step()
         # ============================================
         # make prediction

@@ -70,24 +70,6 @@ class TwoLayerNeuralNetwork(BaseNetwork):
 
         return z_mat
 
-    def get_dropout_mask(self, hidden_output, p=0.5):
-        """
-        Args:
-            hidden_output (ndarray): the hidden output after activation function
-            p (float): probability of an element to be zeroed. Default: 0.5
-
-        Notes:
-            We scale up during training and therefore we do not need to scale up
-            when testing / evaluting
-            See also: torch.nn.Dropout
-
-        """
-        if p >= 1.0:
-            raise ValueError("Dropout layer cannot drop all values!")
-        p_active = 1.0 - p
-        mask = np.random.binomial(1, p_active, size=hidden_output.shape) / p_active
-        return mask
-
     def backward(self, logits, labels, weight_decay=0.0):
         """
         Calculate the gradients using predined backward propagation formulas
