@@ -32,3 +32,9 @@ class CyclicLR:
 
     def get_lr(self):
         return self.lrates[self.idx]
+
+class Optimizer:
+    pass
+
+class AdaGrad:
+    pass
