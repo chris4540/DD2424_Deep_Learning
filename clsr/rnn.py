@@ -72,6 +72,8 @@ class VanillaRNN(BaseNetwork):
         n_steps = inputs.shape[1]
         # make ret
         ret = np.zeros((n_class, n_steps), dtype=self.dtype)
+        # store hidden states
+        self.h_vec_time = np.zeros((m, n_steps), dtype=self.dtype)
 
         if h_0 is None:
             h_0 = np.zeros((m, 1), dtype=self.dtype)
@@ -85,8 +87,34 @@ class VanillaRNN(BaseNetwork):
             o_t = V.dot(h_t) + c
             p_t = softmax(o_t)
             ret[:, [t]] = p_t
+            self.h_vec_time[:, [t]] = h_t
 
         return ret
+
+
+    def _get_backward_grad(self, logits, labels_oh):
+        """
+        Args:
+            logits: shape == (K, T)
+            labels_oh: shape == (K, T)
+        """
+        # calculate the gradient back pro throught softmax and
+        p_mat_T = softmax(logits, axis=0)
+        g_mat_T = -labels_oh + p_mat_T  # over time
+
+        # back to the output layer; similar to nn_kl, but not taking batch mean
+        # print(g_mat_T.shape)
+        # print(self.hidden_nodes_T.shape)
+        grad_V = g_mat_T.dot(self.h_vec_time.T)
+        assert grad_V.shape == self.output_wgt.shape
+        grad_c = np.sum(g_mat_T, axis=1, keepdims=True)
+        assert grad_c.shape == self.output_bias.shape
+
+        # print(self.output_bias.shape)
+        # print(grad_c.shape)
+        # print(self.output_wgt.shape)
+        # print(grad_V.shape)
+
 
 
     def synthesize_seq(self, x_0, h_0=None, length=5):
