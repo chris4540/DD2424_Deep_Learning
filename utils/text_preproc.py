@@ -1,3 +1,4 @@
+import numpy as np
 
 class TextLinesReader:
 
@@ -27,6 +28,14 @@ class TextLinesReader:
 
     def get_seq(self):
         return self.indexized_seq
+
+    def get_one_hot(self, part_seq):
+        one_idx = np.array(part_seq)
+        nkind = self.n_char
+        nlabels = len(part_seq)
+        ret = np.zeros((nkind, nlabels))
+        ret[one_idx, np.arange(nlabels)] = 1
+        return ret
 
     @property
     def n_char(self):
