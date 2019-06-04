@@ -62,14 +62,14 @@ class VanillaRNN(BaseNetwork):
         """
         Return the cross entropy loss
         """
-        n_data = labels.shape[0]
+        n_data = logits.shape[1]
         p = softmax(logits, axis=0)
         p_true = p[labels, range(n_data)]
         log_likelihood = -np.log(p_true)
         loss = np.sum(log_likelihood)
         return loss
 
-    def forward(self, inputs, h_0=None):
+    def forward(self, input_seq, h_0=None):
         """
         """
         # Do translation
@@ -85,6 +85,7 @@ class VanillaRNN(BaseNetwork):
         if h_0 is None:
             h_0 = np.zeros((m, 1), dtype=self.dtype)
 
+        inputs = self._get_one_hot(input_seq)
         inputs = inputs.astype(self.dtype)
         n_steps = inputs.shape[1]
         # make ret
@@ -114,28 +115,31 @@ class VanillaRNN(BaseNetwork):
         return ret
 
 
-    def _get_backward_grad(self, logits, labels_oh, clipping=False):
+    def _get_backward_grad(self, logits, targets, clipping=False):
         """
         Args:
             logits: shape == (K, T)
-            labels_oh: shape == (K, T)
+            targets: shape == (T,)
         """
+        labels_oh = self._get_one_hot(targets)
         nsteps = logits.shape[1]
         # do some translation
         U = self.input_wgts
         W = self.hidden_wgts
+        b = self.cell_bias
         V = self.output_wgt
         c = self.output_bias
-        b = self.cell_bias
 
         # calculate the gradient back pro throught softmax and
         p_mat_T = softmax(logits, axis=0)
         g_mat_T = -labels_oh + p_mat_T  # over time
         g_mat_T = g_mat_T.astype(self.dtype)
+        # print(g_mat_T)
 
         # back to the output layer; similar to nn_kl, but not taking batch mean
         grad_V = g_mat_T.dot(self.h_vec_time.T)
         assert grad_V.shape == V.shape
+        # print(g_mat_T.shape)
         grad_c = np.sum(g_mat_T, axis=1, keepdims=True)
         assert grad_c.shape == c.shape
         # =============================================================
@@ -167,11 +171,11 @@ class VanillaRNN(BaseNetwork):
 
         # make the grad result as a dictionary
         ret = {
-            'grad_W': grad_W,
-            'grad_b': grad_b,
-            'grad_U': grad_U,
-            'grad_V': grad_V,
-            'grad_c': grad_c
+            'grad_hidden_wgts': grad_W,
+            'grad_cell_bias': grad_b,
+            'grad_input_wgts': grad_U,
+            'grad_output_wgt': grad_V,
+            'grad_output_bias': grad_c
         }
 
         if clipping:
@@ -185,6 +189,15 @@ class VanillaRNN(BaseNetwork):
         for k in grads.keys():
             ret[k] = np.clip(grads[k], min_, max_)
         return ret
+
+    def _get_one_hot(self, part_seq):
+        one_idx = np.array(part_seq)
+        nkind = self.n_features
+        nlabels = len(part_seq)
+        ret = np.zeros((nkind, nlabels))
+        ret[one_idx, np.arange(nlabels)] = 1
+        return ret
+
 
 
     def synthesize_seq(self, x_0, h_0=None, length=5):
