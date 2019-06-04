@@ -172,8 +172,8 @@ class VanillaRNN(BaseNetwork):
         # make the grad result as a dictionary
         ret = {
             'grad_hidden_wgts': grad_W,
-            'grad_cell_bias': grad_b,
             'grad_input_wgts': grad_U,
+            'grad_cell_bias': grad_b,
             'grad_output_wgt': grad_V,
             'grad_output_bias': grad_c
         }
@@ -239,3 +239,16 @@ class VanillaRNN(BaseNetwork):
             'output_bias'
         ]
         return ret
+
+    def state_dict(self):
+        params = self.parameters()
+        ret = dict()
+        for attr in params:
+            theta = getattr(self, attr)  # obtain the parameter reference
+            ret[attr] = np.copy(theta)
+
+        return ret
+
+    def load_state_dict(self, state_dict):
+        for k in state_dict.keys():
+            setattr(self, k, state_dict[k])
