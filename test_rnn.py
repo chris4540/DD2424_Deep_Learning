@@ -1,3 +1,6 @@
+"""
+Check numerical grad
+"""
 from utils.text_preproc import TextLinesReader
 from clsr.rnn import VanillaRNN
 from scipy.special import softmax
@@ -46,54 +49,7 @@ if __name__ == "__main__":
     reader.process()
     seq = reader.get_seq()
 
-    # print(len(seq))
-
-    # test_seq = seq[:10]
-    # print(test_seq)
-
-    # seq_oh = reader.get_one_hot(test_seq)
-    # print(seq_oh.shape)
-
     rnn = VanillaRNN(n_hidden_node=5, dtype='float64')
-    # syn_seq = rnn.synthesize_seq(seq_oh[:, 0], length=10)
-    # chars = reader.map_idxs_to_chars(syn_seq)
-    # print(''.join(chars))
-    # =============================================================
-    # inputs
     inputs = seq[:25]
     targets = seq[1:26]
-
-    # # rnn.eval()
-    # out = rnn(inputs)
-    # prob = softmax(out, axis=0)
-    # # print(out)
-    # loss = rnn.cross_entropy(out, np.array(targets))
-    # # print(loss)
-
-    # grads = rnn._get_backward_grad(out, targets, clipping=False)
-    # print(grads['grad_c'].dtype)
-
     check_num_grad(rnn, inputs, targets)
-
-    # =========================================================================
-    # rnn.eval()
-    # h = 1e-3
-    # h_recip = 1.0 / h
-    # grad_c = np.zeros(rnn.output_bias.shape, dtype='float32')
-    # init_hidden = np.zeros((5, 1), dtype='float32')
-
-    # for idx in np.ndindex(rnn.output_bias.shape):
-    #     old_val = rnn.output_bias[idx]
-    #     rnn.output_bias[idx] = old_val - h
-    #     out = rnn(input_oh, init_hidden)
-    #     l1 = rnn.cross_entropy(out, np.array(targets))
-    #     # ==================================================
-    #     rnn.output_bias[idx] = old_val + h
-    #     out = rnn(input_oh, init_hidden)
-    #     l2 = rnn.cross_entropy(out, np.array(targets))
-    #     print(l1, l2)
-    #     # print(l1, l2)
-    #     grad_c[idx] = (l2-l1) / (2*h)
-
-    #     rnn.output_bias[idx] = old_val
-
