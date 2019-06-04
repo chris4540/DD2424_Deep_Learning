@@ -115,7 +115,7 @@ class VanillaRNN(BaseNetwork):
         return ret
 
 
-    def _get_backward_grad(self, logits, targets, clipping=False):
+    def _get_backward_grad(self, logits, targets, clipping=True):
         """
         Args:
             logits: shape == (K, T)
@@ -134,12 +134,10 @@ class VanillaRNN(BaseNetwork):
         p_mat_T = softmax(logits, axis=0)
         g_mat_T = -labels_oh + p_mat_T  # over time
         g_mat_T = g_mat_T.astype(self.dtype)
-        # print(g_mat_T)
 
         # back to the output layer; similar to nn_kl, but not taking batch mean
         grad_V = g_mat_T.dot(self.h_vec_time.T)
         assert grad_V.shape == V.shape
-        # print(g_mat_T.shape)
         grad_c = np.sum(g_mat_T, axis=1, keepdims=True)
         assert grad_c.shape == c.shape
         # =============================================================
