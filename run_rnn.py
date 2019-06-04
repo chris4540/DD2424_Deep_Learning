@@ -63,7 +63,7 @@ if __name__ == "__main__":
     smooth_loss = None
     n_iter = 0
     best_loss = np.inf
-    for epoch in range(7):
+    for epoch in range(3):
         h_prev = np.zeros((n_hidden, 1), dtype='float32')
         for e in range(0, len(seq), seq_length):
             inputs = seq[e:e+seq_length]
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                 inputs = seq[e:len(seq)-2]
                 targets = seq[e+1:len(seq)-1]
 
-            logits, h_prev = rnn(inputs, h_prev)
+            logits, h_next = rnn(inputs, h_prev)
 
             # backward
             optim.backward(logits, targets)
@@ -94,18 +94,20 @@ if __name__ == "__main__":
             # print loss every 100
             if n_iter % 1000 == 0:
                 print("iteration: %d \t  smooth_loss: %f" % (n_iter, smooth_loss))
-            if n_iter % 10000 == 0:
-                syn_seq = rnn.synthesize_seq(inputs[0], h_0=h_prev, length=200)
-                # translate it
-                char_seq = reader.map_idxs_to_chars(syn_seq)
-                print(''.join(char_seq))
+                pred = np.argmax(logits, axis=0)
+                tmp = reader.map_idxs_to_chars(pred)
+                print("Predict:", ''.join(tmp))
+                print("Target: ", ''.join(reader.map_idxs_to_chars(targets)))
 
+
+            if n_iter % 5000 == 0:
+                # syn_seq = rnn.synthesize_seq(inputs[0], h_0=h_prev, length=200)
+                input_char = [inputs[0]]
+                syn_seq = rnn.synthesize_seq(input_char, h_0=h_prev, length=200)
+                # translate it
+                print("Inputs: ", ''.join(reader.map_idxs_to_chars(input_char)))
+                print("Generate: -> ", ''.join(reader.map_idxs_to_chars(syn_seq)))
+
+
+            h_prev = h_next
         # =======================================================================
-        # make a long essay
-        # print("Long essay")
-        # rnn.load_state_dict(best_state)
-        # h0 = np.zeros((n_hidden, 1), dtype='float32')
-        # start_char_idx = reader.map_chars_to_idxs(["H"])
-        # syn_seq = rnn.synthesize_seq(start_char_idx, h_0=h_prev, length=1000)
-        # char_seq = reader.map_idxs_to_chars(syn_seq)
-        # print(''.join(char_seq))

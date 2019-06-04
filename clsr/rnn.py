@@ -101,7 +101,7 @@ class VanillaRNN(BaseNetwork):
             self.h_0 = h_0
 
         # do rnn evaluation one by one
-        h_t = h_0
+        h_t = np.copy(h_0)
         for t in range(n_steps):
             x_t = inputs[:, t][:, np.newaxis]
             a_t = W.dot(h_t) + U.dot(x_t) + b
@@ -198,7 +198,7 @@ class VanillaRNN(BaseNetwork):
         ret[one_idx, np.arange(nlabels)] = 1
         return ret
 
-    def synthesize_seq(self, input_char_idx, h_0=None, length=5):
+    def synthesize_seq(self, input_, h_0, length=5):
         """
         Consider the RNN as a generative model.
         Generate a peice of seq according to the current parameters
@@ -212,21 +212,17 @@ class VanillaRNN(BaseNetwork):
         K = self.n_features
         n_class = self.n_classes
 
-        if h_0 is None:
-            h_0 = np.zeros((m, 1), dtype=self.dtype)
-
-        x_0 = self._get_one_hot([input_char_idx])
-        inputs = np.zeros((K, length))
-        inputs[:, 0] = x_0[:, 0]
-
-        outs, _ = self._forward(inputs, h_0=h_0)
+        # x_0 = self._get_one_hot(inputs)
 
         # draw the result one by one
+        x = input_
+        h = np.copy(h_0)
         ret = list()
         for t in range(length):
-            prob = softmax(outs[:, t])
-            draw = np.random.choice(n_class, p=prob)
-            ret.append(draw)
+            out, h = self.forward([x], h)
+            prob = softmax(out).flatten()
+            x = np.random.choice(n_class, p=prob)
+            ret.append(x)
 
         return ret
 
