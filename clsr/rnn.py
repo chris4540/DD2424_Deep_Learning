@@ -17,7 +17,7 @@ class VanillaRNN(BaseNetwork):
         "n_features": 80,
         "n_classes": 80,
         "seq_length": 25,
-        "n_hidden_node": 200,
+        "n_hidden_node": 100,
         "init_sigma": 0.01,
         # learning rate
         "eta": 0.1,
@@ -196,8 +196,6 @@ class VanillaRNN(BaseNetwork):
         ret[one_idx, np.arange(nlabels)] = 1
         return ret
 
-
-
     def synthesize_seq(self, x_0, h_0=None, length=5):
         """
         Consider the RNN as a generative model.
@@ -228,4 +226,14 @@ class VanillaRNN(BaseNetwork):
             draw = np.random.choice(n_class, p=prob)
             ret.append(draw)
 
+        return ret
+
+    def parameters():
+        ret = [
+            'hidden_wgts',
+            'cell_bias',
+            'input_wgts',
+            'output_wgt',
+            'output_bias'
+        ]
         return ret

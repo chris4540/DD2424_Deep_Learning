@@ -5,7 +5,7 @@ from utils.text_preproc import TextLinesReader
 from clsr.rnn import VanillaRNN
 from scipy.special import softmax
 import numpy as np
-from numpy.testing import assert_allclose
+
 
 def max_relative_err(grad1, grad2):
     eps = np.finfo(grad1.dtype).eps

@@ -16,6 +16,13 @@ def window(seq, n=2):
         result = result[1:] + (elem,)
         yield result
 
+def chunks(l, n):
+    """
+    Yield successive n-sized chunks from l.
+    """
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
 
 def one_hot(labels):
     """
