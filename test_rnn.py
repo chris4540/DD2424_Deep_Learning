@@ -34,12 +34,7 @@ if __name__ == "__main__":
 
     input_oh = reader.get_one_hot(inputs)
     target_oh = reader.get_one_hot(outputs)
-    print(inputs)
-    print(outputs)
-
     out = rnn(input_oh)
-    p_mat = softmax(out, axis=0)
-    print(np.sum(p_mat[:, 0]))
-    print(np.sum(p_mat[:, 1]))
+    # p_mat = softmax(out, axis=0)
     rnn._get_backward_grad(out, target_oh)
 

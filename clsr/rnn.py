@@ -74,10 +74,13 @@ class VanillaRNN(BaseNetwork):
         ret = np.zeros((n_class, n_steps), dtype=self.dtype)
         # store hidden states
         self.h_vec_time = np.zeros((m, n_steps), dtype=self.dtype)
+        self.a_vec_time = np.zeros((m, n_steps), dtype=self.dtype)
+        self.x_vec_time = np.zeros((K, n_steps), dtype=self.dtype)
 
         if h_0 is None:
             h_0 = np.zeros((m, 1), dtype=self.dtype)
 
+        self.h_0 = h_0
         # do rnn evaluation one by one
         h_t = h_0
         for t in range(n_steps):
@@ -87,7 +90,10 @@ class VanillaRNN(BaseNetwork):
             o_t = V.dot(h_t) + c
             p_t = softmax(o_t)
             ret[:, [t]] = p_t
+            # record down
             self.h_vec_time[:, [t]] = h_t
+            self.a_vec_time[:, [t]] = a_t
+            self.x_vec_time[:, [t]] = x_t
 
         return ret
 
@@ -98,23 +104,50 @@ class VanillaRNN(BaseNetwork):
             logits: shape == (K, T)
             labels_oh: shape == (K, T)
         """
+        nsteps = logits.shape[1]
+        # do some translation
+        U = self.input_wgts
+        W = self.hidden_wgts
+        V = self.output_wgt
+        c = self.output_bias
+        b = self.cell_bias
+
         # calculate the gradient back pro throught softmax and
         p_mat_T = softmax(logits, axis=0)
         g_mat_T = -labels_oh + p_mat_T  # over time
 
         # back to the output layer; similar to nn_kl, but not taking batch mean
-        # print(g_mat_T.shape)
-        # print(self.hidden_nodes_T.shape)
         grad_V = g_mat_T.dot(self.h_vec_time.T)
-        assert grad_V.shape == self.output_wgt.shape
+        assert grad_V.shape == V.shape
         grad_c = np.sum(g_mat_T, axis=1, keepdims=True)
-        assert grad_c.shape == self.output_bias.shape
+        assert grad_c.shape == c.shape
+        # =============================================================
+        # back propagate at last time step
+        # calculate dL/dh_{T}
+        dLdh = np.zeros_like(self.h_vec_time)
+        dLdh[:, -1] = g_mat_T[:, -1].dot(V)
+        # calculate dL/da_{T}
+        dLda = np.zeros_like(self.h_vec_time)
+        dLda[:, -1] = dLdh[:, -1].dot(np.diag(1 - np.tanh(self.a_vec_time[:, -1])**2))
 
-        # print(self.output_bias.shape)
-        # print(grad_c.shape)
-        # print(self.output_wgt.shape)
-        # print(grad_V.shape)
+        # loop over time
+        for t in range(nsteps-2, -1, -1):
+            # print(t)
+            dLdh[:, t] = g_mat_T[:, t].dot(V) + dLda[:, t+1].dot(W)
+            dLda[:, t] = dLdh[:, t].dot(np.diag(1 - np.tanh(self.a_vec_time[:, t])**2))
 
+        # calculate grad U
+        grad_U = dLda.dot(self.x_vec_time.T)
+        assert grad_U.shape == U.shape
+
+        # calculate grad W
+        # build a vectors from t=0 to t=T-1
+        h_vecs_shift = np.hstack((self.h_0, self.h_vec_time[:, :-1]))
+        grad_W = dLda.dot(h_vecs_shift.T)
+        assert grad_W.shape == W.shape
+        # calculate grad b
+        grad_b = np.sum(dLda, axis=1, keepdims=True)
+        assert grad_b.shape == b.shape
 
 
     def synthesize_seq(self, x_0, h_0=None, length=5):
