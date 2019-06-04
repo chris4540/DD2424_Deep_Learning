@@ -33,6 +33,9 @@ class VanillaRNN(BaseNetwork):
         self.initalize_wgts()
         self.training = True
 
+    def __call__(self, inputs, init_hidden=None):
+        return self.forward(inputs, init_hidden)
+
     def initalize_wgts(self):
         # make it consistent with the assignment pdf
         sig = self.init_sigma
@@ -54,6 +57,17 @@ class VanillaRNN(BaseNetwork):
         # RNN.c
         self.output_bias = np.zeros((n_class, 1), dtype=self.dtype)
 
+    @staticmethod
+    def cross_entropy(logits, labels):
+        """
+        Return the cross entropy loss
+        """
+        n_data = labels.shape[0]
+        p = softmax(logits, axis=0)
+        p_true = p[labels, range(n_data)]
+        log_likelihood = -np.log(p_true)
+        loss = np.sum(log_likelihood)
+        return loss
 
     def forward(self, inputs, h_0=None):
         """
@@ -90,8 +104,7 @@ class VanillaRNN(BaseNetwork):
             a_t = W.dot(h_t) + U.dot(x_t) + b
             h_t = np.tanh(a_t)
             o_t = V.dot(h_t) + c
-            p_t = softmax(o_t)
-            ret[:, [t]] = p_t
+            ret[:, [t]] = o_t
             # record down
             if self.training:
                 self.h_vec_time[:, [t]] = h_t
@@ -118,6 +131,7 @@ class VanillaRNN(BaseNetwork):
         # calculate the gradient back pro throught softmax and
         p_mat_T = softmax(logits, axis=0)
         g_mat_T = -labels_oh + p_mat_T  # over time
+        g_mat_T = g_mat_T.astype(self.dtype)
 
         # back to the output layer; similar to nn_kl, but not taking batch mean
         grad_V = g_mat_T.dot(self.h_vec_time.T)
@@ -127,10 +141,10 @@ class VanillaRNN(BaseNetwork):
         # =============================================================
         # back propagate at last time step
         # calculate dL/dh_{T}
-        dLdh = np.zeros_like(self.h_vec_time)
+        dLdh = np.zeros(self.h_vec_time.shape, dtype=self.dtype)
         dLdh[:, -1] = g_mat_T[:, -1].dot(V)
         # calculate dL/da_{T}
-        dLda = np.zeros_like(self.h_vec_time)
+        dLda = np.zeros(self.h_vec_time.shape, dtype=self.dtype)
         dLda[:, -1] = dLdh[:, -1].dot(np.diag(1 - np.tanh(self.a_vec_time[:, -1])**2))
 
         # loop over time
@@ -199,7 +213,7 @@ class VanillaRNN(BaseNetwork):
         # draw the result one by one
         ret = list()
         for t in range(length):
-            prob = outs[:, t]
+            prob = softmax(outs[:, t])
             draw = np.random.choice(n_class, p=prob)
             ret.append(draw)
 
