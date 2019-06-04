@@ -114,7 +114,7 @@ class VanillaRNN(BaseNetwork):
                 self.a_vec_time[:, [t]] = a_t
                 self.x_vec_time[:, [t]] = x_t
 
-        return ret
+        return ret, h_t
 
 
     def _get_backward_grad(self, logits, targets, clipping=True):
@@ -219,7 +219,7 @@ class VanillaRNN(BaseNetwork):
         inputs = np.zeros((K, length))
         inputs[:, 0] = x_0[:, 0]
 
-        outs = self._forward(inputs, h_0=h_0)
+        outs, _ = self._forward(inputs, h_0=h_0)
 
         # draw the result one by one
         ret = list()

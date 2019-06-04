@@ -58,12 +58,13 @@ if __name__ == "__main__":
 
     n_hidden = 100
     seq_length = 25
-    rnn = VanillaRNN(n_hidden_node=n_hidden, dtype='float64')
+    rnn = VanillaRNN(n_hidden_node=n_hidden, dtype='float32')
     optim = AdaGradOptim(rnn)
     smooth_loss = None
     n_iter = 0
-    for epoch in range(10):
-        h_prev = np.zeros((n_hidden, 1), dtype='float64')
+    best_loss = np.inf
+    for epoch in range(7):
+        h_prev = np.zeros((n_hidden, 1), dtype='float32')
         for e in range(0, len(seq), seq_length):
             inputs = seq[e:e+seq_length]
             targets = seq[e+1:e+seq_length+1]
@@ -71,7 +72,7 @@ if __name__ == "__main__":
                 inputs = seq[e:len(seq)-2]
                 targets = seq[e+1:len(seq)-1]
 
-            logits = rnn(inputs, h_prev)
+            logits, h_prev = rnn(inputs, h_prev)
 
             # backward
             optim.backward(logits, targets)
@@ -83,6 +84,11 @@ if __name__ == "__main__":
             else:
                 smooth_loss = .999*smooth_loss + .001*loss
 
+            # check if save
+            if smooth_loss < best_loss:
+                best_loss = smooth_loss
+                best_state = rnn.state_dict()
+
             n_iter += 1
 
             # print loss every 100
@@ -93,3 +99,13 @@ if __name__ == "__main__":
                 # translate it
                 char_seq = reader.map_idxs_to_chars(syn_seq)
                 print(''.join(char_seq))
+
+        # =======================================================================
+        # make a long essay
+        # print("Long essay")
+        # rnn.load_state_dict(best_state)
+        # h0 = np.zeros((n_hidden, 1), dtype='float32')
+        # start_char_idx = reader.map_chars_to_idxs(["H"])
+        # syn_seq = rnn.synthesize_seq(start_char_idx, h_0=h_prev, length=1000)
+        # char_seq = reader.map_idxs_to_chars(syn_seq)
+        # print(''.join(char_seq))

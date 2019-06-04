@@ -19,7 +19,7 @@ def check_num_grad(rnn, inputs, targets):
     # =====================================================
     h_inv = 1.0 / h
     # compute analyical grad
-    out = rnn(inputs)
+    out, _ = rnn(inputs)
     grads = rnn._get_backward_grad(out, targets, clipping=False)
 
     rnn.eval()
@@ -30,11 +30,11 @@ def check_num_grad(rnn, inputs, targets):
         for idx in np.ndindex(theta.shape):
             old_val = theta[idx]
             theta[idx] = old_val - h
-            out = rnn(inputs)
+            out, _ = rnn(inputs)
             l1 = rnn.cross_entropy(out,targets)
 
             theta[idx] = old_val + h
-            out = rnn(inputs)
+            out, _ = rnn(inputs)
             l2 = rnn.cross_entropy(out, targets)
             grad = (l2-l1) * 0.5 * h_inv
             grad_theta_num[idx] = grad
