@@ -1,0 +1,643 @@
+-------- TRAINING PARAMS --------
+dtype: float32
+verbose: True
+n_features: 80
+n_classes: 80
+seq_length: 25
+n_hidden_node: 100
+init_sigma: 0.01
+-------- TRAINING PARAMS --------
+iteration: 1000 	  smooth_loss: 86.785017
+iteration: 2000 	  smooth_loss: 72.196313
+iteration: 3000 	  smooth_loss: 64.807170
+iteration: 4000 	  smooth_loss: 61.046055
+iteration: 5000 	  smooth_loss: 58.820422
+iteration: 6000 	  smooth_loss: 57.699439
+iteration: 7000 	  smooth_loss: 57.528033
+iteration: 8000 	  smooth_loss: 55.125847
+iteration: 9000 	  smooth_loss: 54.283636
+iteration: 10000 	  smooth_loss: 54.300842
+Generated text:
+----------------------
+wadl't no oflen and Taroum sarr.  Arin ioBs tow?"
+"Ave sbeks,e at cave yot lofm it wrat?"
+Many, ckoary't no Slagkack, ds thamy Hurly, "Haulce to trom, wald riteraig Han. i coy.
+"Goch bepny him she wav
+iteration: 11000 	  smooth_loss: 54.699851
+iteration: 12000 	  smooth_loss: 54.197336
+iteration: 13000 	  smooth_loss: 53.428535
+iteration: 14000 	  smooth_loss: 52.769215
+iteration: 15000 	  smooth_loss: 52.768150
+iteration: 16000 	  smooth_loss: 51.935094
+iteration: 17000 	  smooth_loss: 51.900964
+iteration: 18000 	  smooth_loss: 51.534530
+iteration: 19000 	  smooth_loss: 51.231733
+iteration: 20000 	  smooth_loss: 50.695659
+Generated text:
+----------------------
+Thar of thenenom in goor Rin piak beest mlemtiresease bicwing got at tle Doresjrofiro he to haillonked to bugance ald the lakK 'ilk, tor it inch Hiriaged, Kigon lecroke they rint and we ewaks'ch?"  bi
+iteration: 21000 	  smooth_loss: 50.323252
+iteration: 22000 	  smooth_loss: 49.675361
+iteration: 23000 	  smooth_loss: 49.892221
+iteration: 24000 	  smooth_loss: 49.920610
+iteration: 25000 	  smooth_loss: 50.001406
+iteration: 26000 	  smooth_loss: 49.809479
+iteration: 27000 	  smooth_loss: 49.756357
+iteration: 28000 	  smooth_loss: 49.991681
+iteration: 29000 	  smooth_loss: 49.424014
+iteration: 30000 	  smooth_loss: 49.151183
+Generated text:
+----------------------
+the groungerfirts was or the waider.  Harryd eee, was astid. . . baigagck in the reed over and of thoum!  Therimelnf.  Tall and hild.  "Harry . rars, sapkemas gevery prapur, as wis her sqommed firmirg
+iteration: 31000 	  smooth_loss: 49.332204
+iteration: 32000 	  smooth_loss: 48.782717
+iteration: 33000 	  smooth_loss: 48.955872
+iteration: 34000 	  smooth_loss: 48.016141
+iteration: 35000 	  smooth_loss: 47.661216
+iteration: 36000 	  smooth_loss: 47.915795
+iteration: 37000 	  smooth_loss: 48.153707
+iteration: 38000 	  smooth_loss: 47.959316
+iteration: 39000 	  smooth_loss: 47.663866
+iteration: 40000 	  smooth_loss: 47.801218
+Generated text:
+----------------------
+o wasce there Vortirn pawling od in thaigwan or and Harry.
+"Vored; his werr tnew he iss foreracted and were in Vlasese'ld my cherered at with his his fundonarory him thing not eetrll was refave the tr
+iteration: 41000 	  smooth_loss: 46.611888
+iteration: 42000 	  smooth_loss: 46.713803
+iteration: 43000 	  smooth_loss: 46.801986
+iteration: 44000 	  smooth_loss: 46.757861
+iteration: 45000 	  smooth_loss: 47.872937
+iteration: 46000 	  smooth_loss: 48.108956
+iteration: 47000 	  smooth_loss: 48.338818
+iteration: 48000 	  smooth_loss: 47.912817
+iteration: 49000 	  smooth_loss: 48.207366
+iteration: 50000 	  smooth_loss: 48.678799
+Generated text:
+----------------------
+tent, thoughanced vidsd may hach Hamoud the's that --Ee pletis anychurgyefve Magisuply.  Impley.  "Yourceuch.
+"Peveryston oncauspost of that it sulls of any wiou bemave acroutivitcyed paidy havily Pat
+iteration: 51000 	  smooth_loss: 49.888708
+iteration: 52000 	  smooth_loss: 48.011628
+iteration: 53000 	  smooth_loss: 46.601648
+iteration: 54000 	  smooth_loss: 47.402343
+iteration: 55000 	  smooth_loss: 48.622753
+iteration: 56000 	  smooth_loss: 48.731783
+iteration: 57000 	  smooth_loss: 48.301113
+iteration: 58000 	  smooth_loss: 47.419072
+iteration: 59000 	  smooth_loss: 48.294217
+iteration: 60000 	  smooth_loss: 47.148582
+Generated text:
+----------------------
+rgalne.
+"Fumparit!" Harry tan to Harry stald lose.
+"It preven-was tose."
+"We she arst's wadlt and Heachy -"Weed.
+"A. A the sping be abatame werted a plaginy. .
+"a dor had to sableelans th''d," said Ro
+iteration: 61000 	  smooth_loss: 47.172210
+iteration: 62000 	  smooth_loss: 46.696154
+iteration: 63000 	  smooth_loss: 47.270409
+iteration: 64000 	  smooth_loss: 46.722860
+iteration: 65000 	  smooth_loss: 46.500361
+iteration: 66000 	  smooth_loss: 45.854328
+iteration: 67000 	  smooth_loss: 46.452860
+iteration: 68000 	  smooth_loss: 46.593916
+iteration: 69000 	  smooth_loss: 46.821160
+iteration: 70000 	  smooth_loss: 46.919232
+Generated text:
+----------------------
+, deally chom had in ooplem.
+"Os the cou?" She Monef he and oge he hee cey, whon stane sevit lak. . . and on goone and sabcint to fidged, they about dobnew, and Hewilked had but hall.
+Hedenter.  An th
+iteration: 71000 	  smooth_loss: 47.141178
+iteration: 72000 	  smooth_loss: 46.981726
+iteration: 73000 	  smooth_loss: 46.752248
+iteration: 74000 	  smooth_loss: 46.608290
+iteration: 75000 	  smooth_loss: 46.371984
+iteration: 76000 	  smooth_loss: 46.088047
+iteration: 77000 	  smooth_loss: 46.037407
+iteration: 78000 	  smooth_loss: 45.485561
+iteration: 79000 	  smooth_loss: 44.496892
+iteration: 80000 	  smooth_loss: 44.844659
+Generated text:
+----------------------
+d murn grene - id acrinsine, his awo out of and the laring aly.  Aed In, soke wantortaring tood suromet was ever ioned of seak had en bestroffinifn dich witutridatled to ky spatce arynont Daghstat out
+iteration: 81000 	  smooth_loss: 44.572834
+iteration: 82000 	  smooth_loss: 45.290792
+iteration: 83000 	  smooth_loss: 45.031804
+iteration: 84000 	  smooth_loss: 46.090594
+iteration: 85000 	  smooth_loss: 44.399743
+iteration: 86000 	  smooth_loss: 44.697754
+iteration: 87000 	  smooth_loss: 44.643923
+iteration: 88000 	  smooth_loss: 44.451546
+iteration: 89000 	  smooth_loss: 45.465085
+iteration: 90000 	  smooth_loss: 45.451136
+Generated text:
+----------------------
+ his the stolling of them arust colmses fomfan or yow is him?  Who cool sture a magrinh," said you?  Haw light and the prot us mowaristry Mongiaperion, wion his the ame in.  Aid to be keevery an they 
+iteration: 91000 	  smooth_loss: 46.444209
+iteration: 92000 	  smooth_loss: 45.985023
+iteration: 93000 	  smooth_loss: 46.239560
+iteration: 94000 	  smooth_loss: 46.835677
+iteration: 95000 	  smooth_loss: 47.667756
+iteration: 96000 	  smooth_loss: 47.043983
+iteration: 97000 	  smooth_loss: 45.323391
+iteration: 98000 	  smooth_loss: 45.716954
+iteration: 99000 	  smooth_loss: 46.433933
+iteration: 100000 	  smooth_loss: 46.684593
+Generated text:
+----------------------
+o wandore conk look-was a douming a mound?  The ruw wefare all.  "Harry, the wand, though behc of heenbales ceely was himly rakeny out in squttin a mile, badey, to way excrow and is dighter, Hermione 
+iteration: 101000 	  smooth_loss: 46.800313
+iteration: 102000 	  smooth_loss: 45.679005
+iteration: 103000 	  smooth_loss: 46.719281
+iteration: 104000 	  smooth_loss: 45.693695
+iteration: 105000 	  smooth_loss: 45.049931
+iteration: 106000 	  smooth_loss: 44.736141
+iteration: 107000 	  smooth_loss: 45.393019
+iteration: 108000 	  smooth_loss: 45.072677
+iteration: 109000 	  smooth_loss: 44.890210
+iteration: 110000 	  smooth_loss: 44.647239
+Generated text:
+----------------------
+rogmlaskinsh it roy it., no his ext it of onlassilg wele, drepted the.  Hawlire it one, Dumbeat teppious, metr fever.  "No; Chagned him and poins wall, the lighiny on aclow, cremt about that it him be
+iteration: 111000 	  smooth_loss: 44.929120
+iteration: 112000 	  smooth_loss: 44.963748
+iteration: 113000 	  smooth_loss: 45.121088
+iteration: 114000 	  smooth_loss: 45.593204
+iteration: 115000 	  smooth_loss: 45.804844
+iteration: 116000 	  smooth_loss: 44.933037
+iteration: 117000 	  smooth_loss: 45.941174
+iteration: 118000 	  smooth_loss: 45.396587
+iteration: 119000 	  smooth_loss: 44.732818
+iteration: 120000 	  smooth_loss: 44.961617
+Generated text:
+----------------------
+at he's sucang Mulked. "I - Serouslroate toud, hurnce, whe coonce his thin lire.
+"Herming ime nottered, but hou.  Harry panes Pood them they sand stret, skingey. "High butulling to his cadris again he
+iteration: 121000 	  smooth_loss: 44.274045
+iteration: 122000 	  smooth_loss: 44.755977
+iteration: 123000 	  smooth_loss: 42.907580
+iteration: 124000 	  smooth_loss: 43.155192
+iteration: 125000 	  smooth_loss: 43.422178
+iteration: 126000 	  smooth_loss: 43.849271
+iteration: 127000 	  smooth_loss: 44.062835
+iteration: 128000 	  smooth_loss: 44.641578
+iteration: 129000 	  smooth_loss: 43.557807
+iteration: 130000 	  smooth_loss: 43.589568
+Generated text:
+----------------------
+.  Matidentes shrouked frengcy must kenoaip, sand you ded suld mooked my rooky's fidresertey staly wink ent sut but the face and sull very whel to some ee tsaven, my rat.  And riwed dock But hears, op
+iteration: 131000 	  smooth_loss: 42.914257
+iteration: 132000 	  smooth_loss: 43.015258
+iteration: 133000 	  smooth_loss: 43.829764
+iteration: 134000 	  smooth_loss: 44.453301
+iteration: 135000 	  smooth_loss: 44.895351
+iteration: 136000 	  smooth_loss: 44.826387
+iteration: 137000 	  smooth_loss: 44.883158
+iteration: 138000 	  smooth_loss: 45.103022
+iteration: 139000 	  smooth_loss: 45.785178
+iteration: 140000 	  smooth_loss: 46.897973
+Generated text:
+----------------------
+t, the le the I spat, at thicring cipway. 
+Away a moat their appord, Thand mough will, you's dock agatat.  Macker fermad bagonged the ahry plase gims, and at fOntro ded mallowry what his the and their
+iteration: 141000 	  smooth_loss: 44.648104
+iteration: 142000 	  smooth_loss: 44.231234
+iteration: 143000 	  smooth_loss: 44.999006
+iteration: 144000 	  smooth_loss: 45.814408
+iteration: 145000 	  smooth_loss: 45.854826
+iteration: 146000 	  smooth_loss: 44.913770
+iteration: 147000 	  smooth_loss: 45.711128
+iteration: 148000 	  smooth_loss: 44.908422
+iteration: 149000 	  smooth_loss: 44.154888
+iteration: 150000 	  smooth_loss: 43.921614
+Generated text:
+----------------------
+anid
+Haglly withe't othed. . . . Becing no starns his turned im hisher at  he poor as the got in or thlued ir him wagk wish the she Swen ime kents up ioring to barn't starts keed of it?" he he. . . th
+iteration: 151000 	  smooth_loss: 43.989682
+iteration: 152000 	  smooth_loss: 44.272098
+iteration: 153000 	  smooth_loss: 43.784830
+iteration: 154000 	  smooth_loss: 43.736279
+iteration: 155000 	  smooth_loss: 43.351861
+iteration: 156000 	  smooth_loss: 43.628568
+iteration: 157000 	  smooth_loss: 43.896466
+iteration: 158000 	  smooth_loss: 44.484923
+iteration: 159000 	  smooth_loss: 44.321867
+iteration: 160000 	  smooth_loss: 44.308466
+Generated text:
+----------------------
+e, Harry; noweres himself-wosting but way antions of is we'd looky.  sairne eass it''d and Hermullt approy pod.  Harry Cagated threned fict any, . . . . . Ron's like in and at camin excrald, link.  Ev
+iteration: 161000 	  smooth_loss: 44.918379
+iteration: 162000 	  smooth_loss: 44.156861
+iteration: 163000 	  smooth_loss: 44.453271
+iteration: 164000 	  smooth_loss: 44.463201
+iteration: 165000 	  smooth_loss: 43.435108
+iteration: 166000 	  smooth_loss: 43.848582
+iteration: 167000 	  smooth_loss: 42.388876
+iteration: 168000 	  smooth_loss: 42.670180
+iteration: 169000 	  smooth_loss: 42.908396
+iteration: 170000 	  smooth_loss: 43.209303
+Generated text:
+----------------------
+re, at looked spomaky?"
+"Doizive cants.. Riavrem Lorto bit's the Wheesing thas with but looked in in the san, "It. . . be inguller browen Slarce care mowes was, Brepor of Moom the ratling I rething ur
+iteration: 171000 	  smooth_loss: 43.394866
+iteration: 172000 	  smooth_loss: 43.248308
+iteration: 173000 	  smooth_loss: 43.103808
+iteration: 174000 	  smooth_loss: 42.359837
+iteration: 175000 	  smooth_loss: 42.162961
+iteration: 176000 	  smooth_loss: 42.325547
+iteration: 177000 	  smooth_loss: 42.416010
+iteration: 178000 	  smooth_loss: 43.939274
+iteration: 179000 	  smooth_loss: 44.373347
+iteration: 180000 	  smooth_loss: 44.149842
+Generated text:
+----------------------
+illy ance the stand divlysy, brosted tald.  The surk.  "Al fremull.
+A Hecking comt ton clened what and out?" sot the pupfone ancers swant supvraid.  He were he eat quarle susted foring younden.
+"Me si
+iteration: 181000 	  smooth_loss: 44.189252
+iteration: 182000 	  smooth_loss: 44.277662
+iteration: 183000 	  smooth_loss: 45.149145
+iteration: 184000 	  smooth_loss: 46.517149
+iteration: 185000 	  smooth_loss: 44.284275
+iteration: 186000 	  smooth_loss: 43.398182
+iteration: 187000 	  smooth_loss: 43.961469
+iteration: 188000 	  smooth_loss: 45.292803
+iteration: 189000 	  smooth_loss: 45.311244
+iteration: 190000 	  smooth_loss: 44.620006
+Generated text:
+----------------------
+car to rake?  Be, knige, de thatping dovingons the robeing bormor deal wand in a garis of lar, she wrote," said Goy, that he'd est voice crosseriin Ssarase lobe an foft of in owf cariffing offaving sc
+iteration: 191000 	  smooth_loss: 43.954909
+iteration: 192000 	  smooth_loss: 44.656537
+iteration: 193000 	  smooth_loss: 43.670351
+iteration: 194000 	  smooth_loss: 43.492588
+iteration: 195000 	  smooth_loss: 43.103447
+iteration: 196000 	  smooth_loss: 43.772134
+iteration: 197000 	  smooth_loss: 43.462926
+iteration: 198000 	  smooth_loss: 43.119508
+iteration: 199000 	  smooth_loss: 42.529959
+iteration: 200000 	  smooth_loss: 43.157600
+Generated text:
+----------------------
+elageroach Oshen't othing, a wave hazled, and of neard scralt, Barse Darters asled pack, who wag of detwank, who heapted coulvely looked cocthur live paded the toom, but for to the Dombly, rechows, mu
+iteration: 201000 	  smooth_loss: 43.518078
+iteration: 202000 	  smooth_loss: 43.729361
+iteration: 203000 	  smooth_loss: 43.893773
+iteration: 204000 	  smooth_loss: 43.840744
+iteration: 205000 	  smooth_loss: 44.006968
+iteration: 206000 	  smooth_loss: 43.471183
+iteration: 207000 	  smooth_loss: 43.624086
+iteration: 208000 	  smooth_loss: 43.524430
+iteration: 209000 	  smooth_loss: 42.931042
+iteration: 210000 	  smooth_loss: 43.068067
+Generated text:
+----------------------
+I said iwlan it mate!  "Harry frow Sis saw himsew Madrey'd mick moRmedn't you wisk, and the ceer fidsed Pilly'se's to a fusternid's Hurting same, well to to gould look, kinced siked a buth into fell. 
+iteration: 211000 	  smooth_loss: 42.006156
+iteration: 212000 	  smooth_loss: 41.759872
+iteration: 213000 	  smooth_loss: 42.133952
+iteration: 214000 	  smooth_loss: 41.726609
+iteration: 215000 	  smooth_loss: 42.396582
+iteration: 216000 	  smooth_loss: 42.309683
+iteration: 217000 	  smooth_loss: 43.064618
+iteration: 218000 	  smooth_loss: 41.683108
+iteration: 219000 	  smooth_loss: 41.971306
+iteration: 220000 	  smooth_loss: 41.901050
+Generated text:
+----------------------
+e his and the faces then eeridup thririat stark, really, turn't in leed undil they orterd's his same his the Dot goirted not and could" ?"
+"Yove her weddelled torrived said and Nert the Priceed-Aunted
+iteration: 221000 	  smooth_loss: 41.802912
+iteration: 222000 	  smooth_loss: 42.997526
+iteration: 223000 	  smooth_loss: 42.840170
+iteration: 224000 	  smooth_loss: 43.661319
+iteration: 225000 	  smooth_loss: 43.090126
+iteration: 226000 	  smooth_loss: 43.726460
+iteration: 227000 	  smooth_loss: 44.263706
+iteration: 228000 	  smooth_loss: 45.566306
+iteration: 229000 	  smooth_loss: 44.370103
+iteration: 230000 	  smooth_loss: 42.553807
+Generated text:
+----------------------
+le conged Digingly trounding, and Bersring, the grove, Wormtloway, I mely prack."
+Harry trould-head sounclly jeed."
+"Extringer. Werusley,"
+"Why,"  What.
+"EUL
+Mr. 
+"Hermiot longust whactrey."
+By what o
+iteration: 231000 	  smooth_loss: 43.196710
+iteration: 232000 	  smooth_loss: 43.732448
+iteration: 233000 	  smooth_loss: 44.274140
+iteration: 234000 	  smooth_loss: 44.131271
+iteration: 235000 	  smooth_loss: 43.412826
+iteration: 236000 	  smooth_loss: 44.240223
+iteration: 237000 	  smooth_loss: 42.783989
+iteration: 238000 	  smooth_loss: 42.622588
+iteration: 239000 	  smooth_loss: 42.031420
+iteration: 240000 	  smooth_loss: 42.999103
+Generated text:
+----------------------
+ the repores whate pact og the canis, cost a seem, aryad bething the nok all he exentsered, eud was with an and looked was up it his hildne, deanty trouch.
+"Donce knat brent and and thr arry, had an i
+iteration: 241000 	  smooth_loss: 42.625118
+iteration: 242000 	  smooth_loss: 42.355530
+iteration: 243000 	  smooth_loss: 42.304848
+iteration: 244000 	  smooth_loss: 42.814536
+iteration: 245000 	  smooth_loss: 42.573583
+iteration: 246000 	  smooth_loss: 42.750198
+iteration: 247000 	  smooth_loss: 43.140293
+iteration: 248000 	  smooth_loss: 43.885227
+iteration: 249000 	  smooth_loss: 43.052679
+iteration: 250000 	  smooth_loss: 43.611622
+Generated text:
+----------------------
+alest have him him of charkt.  Barve.  Huriver.  Ag't such?"  He had side his to moust."
+"My at hatchanbey on, who jest.  "Herid to The harf, innoug, put leen' to come to has Chere ed the motha Secely
+iteration: 251000 	  smooth_loss: 43.345799
+iteration: 252000 	  smooth_loss: 42.601591
+iteration: 253000 	  smooth_loss: 42.893819
+iteration: 254000 	  smooth_loss: 42.160837
+iteration: 255000 	  smooth_loss: 42.286106
+iteration: 256000 	  smooth_loss: 40.767670
+iteration: 257000 	  smooth_loss: 41.117383
+iteration: 258000 	  smooth_loss: 41.193749
+iteration: 259000 	  smooth_loss: 41.682928
+iteration: 260000 	  smooth_loss: 41.813687
+Generated text:
+----------------------
+m lolk.  He splock.  Bet ofrily.
+Harry and evergetied.
+"The sears on the mad the neftind as his the Trum to in Can had clesging Wong to Harry slire wan bely rose they to expers, all his bemumet Che ,"
+iteration: 261000 	  smooth_loss: 42.555887
+iteration: 262000 	  smooth_loss: 41.397053
+iteration: 263000 	  smooth_loss: 41.408424
+iteration: 264000 	  smooth_loss: 41.019388
+iteration: 265000 	  smooth_loss: 40.933664
+iteration: 266000 	  smooth_loss: 42.031479
+iteration: 267000 	  smooth_loss: 42.559716
+iteration: 268000 	  smooth_loss: 42.730883
+iteration: 269000 	  smooth_loss: 42.546528
+iteration: 270000 	  smooth_loss: 42.989755
+Generated text:
+----------------------
+tear, thing prettering sulded ask a etching not Cever as lack of theary soing in!" "the from fron plaice to doing.""We griener of up heae difppied spore-Wulpes af the trounded Bobby, whou maggely from
+iteration: 271000 	  smooth_loss: 43.416079
+iteration: 272000 	  smooth_loss: 43.978663
+iteration: 273000 	  smooth_loss: 44.827830
+iteration: 274000 	  smooth_loss: 42.617827
+iteration: 275000 	  smooth_loss: 42.631594
+iteration: 276000 	  smooth_loss: 43.017266
+iteration: 277000 	  smooth_loss: 43.823511
+iteration: 278000 	  smooth_loss: 44.170073
+iteration: 279000 	  smooth_loss: 42.727899
+iteration: 280000 	  smooth_loss: 43.773840
+Generated text:
+----------------------
+re sound worry that.  The stone dady beforey, Baratulo the ot of enchions a pamping of dears beworchuld on the alled unaters in from Geaked of etciriacur tcing non of lichered as Onnars. Hermaclnolk w
+iteration: 281000 	  smooth_loss: 42.754668
+iteration: 282000 	  smooth_loss: 42.231911
+iteration: 283000 	  smooth_loss: 41.714002
+iteration: 284000 	  smooth_loss: 42.200012
+iteration: 285000 	  smooth_loss: 42.432421
+iteration: 286000 	  smooth_loss: 41.677520
+iteration: 287000 	  smooth_loss: 41.739520
+iteration: 288000 	  smooth_loss: 41.755699
+iteration: 289000 	  smooth_loss: 41.753066
+iteration: 290000 	  smooth_loss: 42.062993
+Generated text:
+----------------------
+himselve a way of his thoudle, ssand woriston it's tim, ;wored wearnes-pens, chumive leall reed agring!"  he was eadle, Ron was had he went fach, said armagm, high said, at wherwing uncures -"Gresport
+iteration: 291000 	  smooth_loss: 43.017999
+iteration: 292000 	  smooth_loss: 42.339866
+iteration: 293000 	  smooth_loss: 42.509696
+iteration: 294000 	  smooth_loss: 43.279063
+iteration: 295000 	  smooth_loss: 42.546710
+iteration: 296000 	  smooth_loss: 42.605755
+iteration: 297000 	  smooth_loss: 42.688250
+iteration: 298000 	  smooth_loss: 41.603355
+iteration: 299000 	  smooth_loss: 42.144276
+iteration: 300000 	  smooth_loss: 40.541457
+Generated text:
+----------------------
+d and krock pulkis yoh," saioun sid for ernty the ofn about he Deltle.  He sot asking.
+"Afmat, wink non?"
+Hagrer.  Tre Harry, it pack.
+"Do this curthing you retked to but med with send moment dis of t
+iteration: 301000 	  smooth_loss: 41.068557
+iteration: 302000 	  smooth_loss: 41.304307
+iteration: 303000 	  smooth_loss: 41.407081
+iteration: 304000 	  smooth_loss: 41.723631
+iteration: 305000 	  smooth_loss: 41.619353
+iteration: 306000 	  smooth_loss: 41.337048
+iteration: 307000 	  smooth_loss: 40.716138
+iteration: 308000 	  smooth_loss: 40.252136
+iteration: 309000 	  smooth_loss: 40.527361
+iteration: 310000 	  smooth_loss: 40.646587
+Generated text:
+----------------------
+ to be moueh, "
+CArine, oflisting.  Whese anything the starks were you what of time had Hopmortle.  "The doins usgeztrin ron's don't a know avought dust hument out .  "
+Ceurrulled who him," hus Kechoa
+iteration: 311000 	  smooth_loss: 42.185058
+iteration: 312000 	  smooth_loss: 42.728102
+iteration: 313000 	  smooth_loss: 42.202687
+iteration: 314000 	  smooth_loss: 42.445704
+iteration: 315000 	  smooth_loss: 42.920738
+iteration: 316000 	  smooth_loss: 43.515932
+iteration: 317000 	  smooth_loss: 44.936564
+iteration: 318000 	  smooth_loss: 42.466941
+iteration: 319000 	  smooth_loss: 41.944448
+iteration: 320000 	  smooth_loss: 42.071987
+Generated text:
+----------------------
+rowed as Harry said fory anvread looked time the rotericted's out were jeame, cright didn't complose his to the protching.  "They was thantergort, didn's was a d-going at things that ERAEn' Ler of of 
+iteration: 321000 	  smooth_loss: 43.603856
+iteration: 322000 	  smooth_loss: 43.513971
+iteration: 323000 	  smooth_loss: 42.818906
+iteration: 324000 	  smooth_loss: 42.489448
+iteration: 325000 	  smooth_loss: 42.753030
+iteration: 326000 	  smooth_loss: 41.937882
+iteration: 327000 	  smooth_loss: 41.483671
+iteration: 328000 	  smooth_loss: 41.544095
+iteration: 329000 	  smooth_loss: 42.166438
+iteration: 330000 	  smooth_loss: 41.720326
+Generated text:
+----------------------
+ach'reted to bared and ... Wobry haddes get off had feltalled and the lose foy thosmorent off in trine, "We had a greed," said Harry asching.  They flook looked tren?" sare but then, arnure. Harry smi
+iteration: 331000 	  smooth_loss: 41.488274
+iteration: 332000 	  smooth_loss: 40.936773
+iteration: 333000 	  smooth_loss: 41.542028
+iteration: 334000 	  smooth_loss: 42.137602
+iteration: 335000 	  smooth_loss: 42.287036
+iteration: 336000 	  smooth_loss: 42.291450
+iteration: 337000 	  smooth_loss: 42.130114
+iteration: 338000 	  smooth_loss: 42.742225
+iteration: 339000 	  smooth_loss: 41.985300
+iteration: 340000 	  smooth_loss: 42.206405
+Generated text:
+----------------------
+me in notming ispe of Harry sgrouce in, isg as the sletite want he lose tor of and thinf - in bussers.  The Creas of belis prowed what's amall.  SHer, extroming, In blowled as to mistill?"  Hy'me whis
+iteration: 341000 	  smooth_loss: 42.455963
+iteration: 342000 	  smooth_loss: 41.474865
+iteration: 343000 	  smooth_loss: 41.812212
+iteration: 344000 	  smooth_loss: 40.408713
+iteration: 345000 	  smooth_loss: 40.265771
+iteration: 346000 	  smooth_loss: 40.782729
+iteration: 347000 	  smooth_loss: 40.632712
+iteration: 348000 	  smooth_loss: 40.860915
+iteration: 349000 	  smooth_loss: 40.873606
+iteration: 350000 	  smooth_loss: 41.589856
+Generated text:
+----------------------
+that. . . shough, Very houch.  If ane in the blishing rickadly a proter Voldemut.
+Vuagor awleh eor.
+"Chind to the Duggting at coke whiching through when he micer huwf wants shome you was alr.  The Har
+iteration: 351000 	  smooth_loss: 40.469593
+iteration: 352000 	  smooth_loss: 40.352543
+iteration: 353000 	  smooth_loss: 40.453557
+iteration: 354000 	  smooth_loss: 40.230176
+iteration: 355000 	  smooth_loss: 41.744830
+iteration: 356000 	  smooth_loss: 41.708598
+iteration: 357000 	  smooth_loss: 42.331019
+iteration: 358000 	  smooth_loss: 41.731566
+iteration: 359000 	  smooth_loss: 42.229805
+iteration: 360000 	  smooth_loss: 43.112479
+Generated text:
+----------------------
+nd appeared into and wagave pents trying to the cair Dumble, dranting?"  s; the Pord stanien contened hom afredmerled of Grocked KTlon's feet flyiling.  "Betched ferserve kneine off me put goy've blea
+iteration: 361000 	  smooth_loss: 44.404748
+iteration: 362000 	  smooth_loss: 42.888853
+iteration: 363000 	  smooth_loss: 41.084239
+iteration: 364000 	  smooth_loss: 41.849319
+iteration: 365000 	  smooth_loss: 42.455863
+iteration: 366000 	  smooth_loss: 42.855468
+iteration: 367000 	  smooth_loss: 42.655332
+iteration: 368000 	  smooth_loss: 42.087296
+iteration: 369000 	  smooth_loss: 42.846820
+iteration: 370000 	  smooth_loss: 41.295605
+Generated text:
+----------------------
+."
+"Whoned of surfelt to the deamping court and uster a Kagwnazt no holl anisty.  A Sumoundnys alowd yfiut Lughmine.  I want out once so quiett as Honxal on mide's we greatemowing neats and through ex
+iteration: 371000 	  smooth_loss: 41.087009
+iteration: 372000 	  smooth_loss: 40.739348
+iteration: 373000 	  smooth_loss: 41.808874
+iteration: 374000 	  smooth_loss: 41.389774
+iteration: 375000 	  smooth_loss: 41.024948
+iteration: 376000 	  smooth_loss: 40.969834
+iteration: 377000 	  smooth_loss: 41.378824
+iteration: 378000 	  smooth_loss: 41.525240
+iteration: 379000 	  smooth_loss: 41.611284
+iteration: 380000 	  smooth_loss: 41.923057
+Generated text:
+----------------------
+u he seef over watdly now, ofth!"  the arrat cursternons not and what the Priguectlowor hro and thasded up suff had get fice.
+He lackor?"
+Harry."
+"Shis ims, and Pinjouss termed had miffinged-hog to ex
+iteration: 381000 	  smooth_loss: 42.396526
+iteration: 382000 	  smooth_loss: 41.954513
+iteration: 383000 	  smooth_loss: 42.231609
+iteration: 384000 	  smooth_loss: 42.168354
+iteration: 385000 	  smooth_loss: 41.668822
+iteration: 386000 	  smooth_loss: 41.727236
+iteration: 387000 	  smooth_loss: 40.820774
+iteration: 388000 	  smooth_loss: 40.887859
+iteration: 389000 	  smooth_loss: 39.476436
+iteration: 390000 	  smooth_loss: 40.186266
+Generated text:
+----------------------
+d but eeloncer Harry. Who you. I quiffince."
+"Nare had Pas Moody's brack - yearse othur im.." sModlewKed hoppious him nevoliring into of herpivifferion him,  Worntrance at him at Horwirirs; were rake 
+iteration: 391000 	  smooth_loss: 39.901060
+iteration: 392000 	  smooth_loss: 40.360217
+iteration: 393000 	  smooth_loss: 40.418318
+iteration: 394000 	  smooth_loss: 41.752348
+iteration: 395000 	  smooth_loss: 40.234537
+iteration: 396000 	  smooth_loss: 40.272443
+iteration: 397000 	  smooth_loss: 39.771425
+iteration: 398000 	  smooth_loss: 39.876008
+iteration: 399000 	  smooth_loss: 41.057241
+iteration: 400000 	  smooth_loss: 41.244066
+Generated text:
+----------------------
+opked you'slized Snake hodly fire.  Ron, ancin, he sheirt. . . ."
+	"Ac the courle beared ever his thowling here door carretp of the perinack happented you chaid." Potter.  Sham mets walk, who head acr
+iteration: 401000 	  smooth_loss: 41.915411
+iteration: 402000 	  smooth_loss: 41.415218
+iteration: 403000 	  smooth_loss: 41.914754
+iteration: 404000 	  smooth_loss: 42.526563
+iteration: 405000 	  smooth_loss: 42.918860
+iteration: 406000 	  smooth_loss: 43.325218
+iteration: 407000 	  smooth_loss: 41.451035
+iteration: 408000 	  smooth_loss: 41.506616
+iteration: 409000 	  smooth_loss: 41.970442
+iteration: 410000 	  smooth_loss: 42.614871
+Generated text:
+----------------------
+ all no who, able to veen foryide any aw ent.  He pared foried over their him.
+"Doy wearsed a mounty Fred boved his cursait usery gievemensife landes brow-EONTEONER"
+
+The stioned of the turlly take li
+iteration: 411000 	  smooth_loss: 42.776000
+iteration: 412000 	  smooth_loss: 41.794868
+iteration: 413000 	  smooth_loss: 42.665904
+iteration: 414000 	  smooth_loss: 41.488808
+iteration: 415000 	  smooth_loss: 40.816414
+iteration: 416000 	  smooth_loss: 40.551731
+iteration: 417000 	  smooth_loss: 41.358592
+iteration: 418000 	  smooth_loss: 41.310188
+iteration: 419000 	  smooth_loss: 40.645533
+iteration: 420000 	  smooth_loss: 40.715771
+Generated text:
+----------------------
+g more - the from extrouse the hurftce," shoughing. Martort furnel that Flearnent. 
+Hevet arous Durred gay the forne, - his ons croushiened jumiding shoke of the -... . . . Harry with Behred beadnK, u
+iteration: 421000 	  smooth_loss: 40.906988
+iteration: 422000 	  smooth_loss: 40.887379
+iteration: 423000 	  smooth_loss: 41.155110
+iteration: 424000 	  smooth_loss: 42.091952
+iteration: 425000 	  smooth_loss: 41.259423
+iteration: 426000 	  smooth_loss: 41.218533
+iteration: 427000 	  smooth_loss: 42.409828
+iteration: 428000 	  smooth_loss: 41.639607
+iteration: 429000 	  smooth_loss: 41.453062
+iteration: 430000 	  smooth_loss: 41.563256
+Generated text:
+----------------------
+r begire for exten sometshing oateted witu's, the dose ons more jidubory cared the eerenge the Lins lice bressor a doubly hear his by over rully kelulmerels for Ontown the looked was inter her over to
+iteration: 431000 	  smooth_loss: 40.532855
+iteration: 432000 	  smooth_loss: 41.077901
+iteration: 433000 	  smooth_loss: 39.313333
+iteration: 434000 	  smooth_loss: 40.089510
+iteration: 435000 	  smooth_loss: 40.231510
+iteration: 436000 	  smooth_loss: 40.236882
+iteration: 437000 	  smooth_loss: 40.565193
+iteration: 438000 	  smooth_loss: 40.976151
+iteration: 439000 	  smooth_loss: 40.265811
+iteration: 440000 	  smooth_loss: 39.939337
+Generated text:
+----------------------
+staring dowsinseroping thisants in edsly aimlused asach, that of her its its of thas yeck out opan. suhe and eye medmy if right, and "Iter Mish was no Clowted.  Ponto thinking the coets cluld mimesoly
+iteration: 441000 	  smooth_loss: 39.209744
+iteration: 442000 	  smooth_loss: 39.358303
+iteration: 443000 	  smooth_loss: 39.663490
+final essay:
+----------------------
+  He was once.  He graz and yoth was even to pould"  say deall shwioly lite expents; Harry. Harry on dear come it!  The Dumbagentruck.  The Boaked looking underilte, Aven' Maside, Harry well thombled had to the tels," situper.
+"But they wort mumportobstly from Harry, "It looked term yame to Sillely wisted said.  Harry "
+On turncerce-diss was sturt half lebreass know diald Mad mosted the fourg, and puice."
+Hogwarts to to tre contirain farol to hair to looked said, "I do. Hare a ed, all I lew head gming he'd alause him."
+It have it, the ground, wack.  Harry sausess his in and Dumbledore point!"  he on, that the good hands exan mauth . . . slise, fan as his feet casped, he the mast gowl about light imared he come comintith, about too that then, reen everner.  Horry and fater, hee I knew.  I wand."
+"I ser as faur to re flear, to giin!" said.
+Dagwersin blessoyed conize his Cequaching two eudley,
+Harry rette Cnotha that you the question,"
+Harrke it apprath.  He Poldentcimated.
+"You was it me
