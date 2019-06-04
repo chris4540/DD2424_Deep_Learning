@@ -54,19 +54,23 @@ if __name__ == "__main__":
     reader = TextLinesReader(lines)
     reader.process()
     seq = reader.get_seq()
+    print(len(seq))
 
     n_hidden = 100
-    rnn = VanillaRNN(n_hidden_node=n_hidden)
+    seq_length = 25
+    rnn = VanillaRNN(n_hidden_node=n_hidden, dtype='float64')
     optim = AdaGradOptim(rnn)
     smooth_loss = None
     n_iter = 0
-    for epoch in range(2):
-        # define the generator
-        input_gen = utils.window(seq, 25)
-        targets_gen = utils.window(seq[1:], 25)
-        h_prev = np.zeros((n_hidden, 1), dtype='float32')
-        for inputs, targets in zip(input_gen, targets_gen):
-            # forward
+    for epoch in range(10):
+        h_prev = np.zeros((n_hidden, 1), dtype='float64')
+        for e in range(0, len(seq), seq_length):
+            inputs = seq[e:e+seq_length]
+            targets = seq[e+1:e+seq_length+1]
+            if e + seq_length > len(seq):
+                inputs = seq[e:len(seq)-2]
+                targets = seq[e+1:len(seq)-1]
+
             logits = rnn(inputs, h_prev)
 
             # backward
@@ -85,7 +89,7 @@ if __name__ == "__main__":
             if n_iter % 1000 == 0:
                 print("iteration: %d \t  smooth_loss: %f" % (n_iter, smooth_loss))
             if n_iter % 10000 == 0:
-                seq = rnn.synthesize_seq(inputs[0], h_0=h_prev, length=200)
+                syn_seq = rnn.synthesize_seq(inputs[0], h_0=h_prev, length=200)
                 # translate it
-                char_seq = reader.map_idxs_to_chars(seq)
+                char_seq = reader.map_idxs_to_chars(syn_seq)
                 print(''.join(char_seq))
