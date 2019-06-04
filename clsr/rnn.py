@@ -20,7 +20,7 @@ class VanillaRNN(BaseNetwork):
         "n_hidden_node": 100,
         "init_sigma": 0.01,
         # learning rate
-        "eta": 0.1,
+        # "eta": 0.1,
     }
 
     def __init__(self, **params):
