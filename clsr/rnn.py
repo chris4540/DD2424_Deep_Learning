@@ -70,6 +70,13 @@ class VanillaRNN(BaseNetwork):
         return loss
 
     def forward(self, input_seq, h_0=None):
+        inputs = self._get_one_hot(input_seq)
+        inputs = inputs.astype(self.dtype)
+        if h_0 is None:
+            h_0 = np.zeros((self.n_hidden_node, 1), dtype=self.dtype)
+        return self._forward(inputs, h_0)
+
+    def _forward(self, inputs, h_0):
         """
         """
         # Do translation
@@ -82,11 +89,6 @@ class VanillaRNN(BaseNetwork):
         V = self.output_wgt
         c = self.output_bias
         # ==============================================================
-        if h_0 is None:
-            h_0 = np.zeros((m, 1), dtype=self.dtype)
-
-        inputs = self._get_one_hot(input_seq)
-        inputs = inputs.astype(self.dtype)
         n_steps = inputs.shape[1]
         # make ret
         ret = np.zeros((n_class, n_steps), dtype=self.dtype)
@@ -196,7 +198,7 @@ class VanillaRNN(BaseNetwork):
         ret[one_idx, np.arange(nlabels)] = 1
         return ret
 
-    def synthesize_seq(self, x_0, h_0=None, length=5):
+    def synthesize_seq(self, input_char_idx, h_0=None, length=5):
         """
         Consider the RNN as a generative model.
         Generate a peice of seq according to the current parameters
@@ -210,14 +212,14 @@ class VanillaRNN(BaseNetwork):
         K = self.n_features
         n_class = self.n_classes
 
-
         if h_0 is None:
             h_0 = np.zeros((m, 1), dtype=self.dtype)
 
-        # init h_t and x_t
+        x_0 = self._get_one_hot([input_char_idx])
         inputs = np.zeros((K, length))
-        inputs[:, 0] = x_0
-        outs = self.forward(inputs, h_0=h_0)
+        inputs[:, 0] = x_0[:, 0]
+
+        outs = self._forward(inputs, h_0=h_0)
 
         # draw the result one by one
         ret = list()
@@ -228,7 +230,7 @@ class VanillaRNN(BaseNetwork):
 
         return ret
 
-    def parameters():
+    def parameters(self):
         ret = [
             'hidden_wgts',
             'cell_bias',

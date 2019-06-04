@@ -46,6 +46,7 @@ class AdaGradOptim:
             theta -= update_amt
 
 
+
 if __name__ == "__main__":
     with open("rnn_data/goblet_book.txt", 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -54,12 +55,37 @@ if __name__ == "__main__":
     reader.process()
     seq = reader.get_seq()
 
-    rnn = VanillaRNN()
+    n_hidden = 100
+    rnn = VanillaRNN(n_hidden_node=n_hidden)
     optim = AdaGradOptim(rnn)
-    for part_seq in utils.chunks(seq, 25):
-        print(part_seq)
-        print(len(part_seq))
+    smooth_loss = None
+    n_iter = 0
+    for epoch in range(2):
+        # define the generator
+        input_gen = utils.window(seq, 25)
+        targets_gen = utils.window(seq[1:], 25)
+        h_prev = np.zeros((n_hidden, 1), dtype='float32')
+        for inputs, targets in zip(input_gen, targets_gen):
+            # forward
+            logits = rnn(inputs, h_prev)
 
-        # print(len(list(part_seq)))
-    # for epochs in range(1):
-    #     pass
+            # backward
+            optim.backward(logits, targets)
+
+            # calculate the loss
+            loss = rnn.cross_entropy(logits, targets)
+            if smooth_loss is None:
+                smooth_loss = loss
+            else:
+                smooth_loss = .999*smooth_loss + .001*loss
+
+            n_iter += 1
+
+            # print loss every 100
+            if n_iter % 1000 == 0:
+                print("iteration: %d \t  smooth_loss: %f" % (n_iter, smooth_loss))
+            if n_iter % 10000 == 0:
+                seq = rnn.synthesize_seq(inputs[0], h_0=h_prev, length=200)
+                # translate it
+                char_seq = reader.map_idxs_to_chars(seq)
+                print(''.join(char_seq))
