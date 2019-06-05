@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{cleveref}       % this package must be loaded at the last
 
 \setlength{\parskip}{1em}
 
@@ -45,6 +46,21 @@ For the test assertion, consider the following equation:
 \end{equation*}
 where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
 In the assertion, I set \texttt{atol} to be 1e-3 and \texttt{rtol} to be 1e-4.
+
+With these checking, I considered my analytical gradient calculations were bug free.
 \end{question}
+
+\begin{question}{ii}
+I ran the training for 10 epochs, the smooth function is plotted in 
+\cref{plt:smooth_lost_basic_rnn}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./basic_cost.png}
+    \caption{The smooth loss function plot}
+    \label{plt:smooth_lost_basic_rnn}
+\end{figure}
+\end{question}
+
 
 \end{document}

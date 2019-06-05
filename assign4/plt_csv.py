@@ -14,4 +14,5 @@ if __name__ == "__main__":
     ax.set_ylabel("Smooth Cost")
     fig = ax.get_figure()
     png_fname = csvfile_name + ".png"
-    fig.savefig(png_fname, bbox_inches='tight', dpi=100)
+    # fig.set_size_inches(12, 9)
+    fig.savefig(png_fname, bbox_inches='tight', dpi=200)
