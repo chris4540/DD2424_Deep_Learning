@@ -1,3 +1,6 @@
+"""
+Test the numerical grad
+"""
 from utils.load_batch import cifar10_DataLoader
 from utils.load_batch import load_batch
 from clsr.nn_kl import KLayerNeuralNetwork
