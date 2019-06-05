@@ -24,7 +24,7 @@ def chunks(l, n):
         yield l[i:i+n]
 
 
-def one_hot(labels):
+def one_hot(labels, nkind=10):
     """
     Create a one hot encoding matrix from labels
 
@@ -35,7 +35,7 @@ def one_hot(labels):
         one hot encoding matrix of the labels
     """
     one_idx = np.array(labels)
-    nkind = len(np.unique(one_idx))
+    # nkind = len(np.unique(one_idx))
     nlabels = len(one_idx)
     ret = np.zeros((nkind, nlabels))
     ret[one_idx, np.arange(nlabels)] = 1

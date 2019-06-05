@@ -291,8 +291,8 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 g_mat = g_mat * (h_mat > 0)
 
         ret = {
-            'grad_Ws': grad_Ws,
-            'grad_bs': grad_bs
+            'grad_W_mats': grad_Ws,
+            'grad_b_vecs': grad_bs
         }
         if self.batch_norm:
             ret['grad_scales'] = grad_scales
@@ -314,8 +314,8 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         n_layers = len(self.W_mats)
 
         grads = self._get_backward_grad(logits, labels, weight_decay)
-        grad_Ws = grads['grad_Ws']
-        grad_bs = grads['grad_bs']
+        grad_Ws = grads['grad_W_mats']
+        grad_bs = grads['grad_b_vecs']
         # update the params
         for l in range(n_layers):
             self.W_mats[l] = self.W_mats[l] - lrate * grad_Ws[l]
@@ -328,3 +328,13 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             for l in range(n_layers-1):
                 self.bn_scales[l] = self.bn_scales[l] - lrate * grad_scales[l]
                 self.bn_shifts[l] = self.bn_shifts[l] - lrate * grad_shifts[l]
+
+    def parameters(self):
+        ret = [
+            'W_mats',
+            'b_vecs',
+            'bn_shifts',
+            'bn_scales',
+        ]
+
+        return ret
