@@ -24,6 +24,7 @@ class TextFilter:
         ret = self.remove_ref_user(ret)
         ret = self.remove_hash_tag(ret)
         ret = self.remove_non_ascii_char(ret)
+        ret = self.rstrip(ret)
         return ret
 
     def remove_weblink(self, text):
@@ -44,6 +45,8 @@ class TextFilter:
     def remove_non_ascii_char(self, text):
         ret = re.sub(r'[^\x00-\x7F]+',' ', text)
         return ret
+    def rstrip(self, text):
+        return text.rstrip()
 
 
 
@@ -63,7 +66,8 @@ if __name__ == "__main__":
         for t in texts:
             filtered_txt = filter_.do_filter(t)
             if len(filtered_txt) > 0:
-                f.write("%s\n" % filtered_txt)
+                print(filtered_txt)
+                f.write("%s#\n" % filtered_txt)
     # filter_ = TextFilter()
     # text = """
     # Trump International Tower http://bit.ly/sqvQq
