@@ -108,12 +108,14 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         "dtype": "float32",
         "verbose": True,
         "wgt_init": "xavier",
+        # "wgt_init": "random",
+        "init_sig" : 1,
         "p_dropout": 0.0,
         "n_features": 3072,
         "n_classes": 10,
         "n_hidden_nodes": [50],
         "batch_norm": False,
-        "batch_norm_momentum": 0.7
+        "batch_norm_momentum": 0.7,
     }
 
     def __init__(self, **params):
