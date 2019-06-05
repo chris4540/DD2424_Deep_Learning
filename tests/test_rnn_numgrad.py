@@ -5,7 +5,7 @@ from utils.text_preproc import TextLinesReader
 from clsr.rnn import VanillaRNN
 from scipy.special import softmax
 import numpy as np
-
+from numpy.testing import assert_allclose
 
 def max_relative_err(grad1, grad2):
     eps = np.finfo(grad1.dtype).eps
@@ -40,7 +40,7 @@ def check_num_grad(rnn, inputs, targets):
             grad_theta_num[idx] = grad
     # ===========================================================
         print(k, max_relative_err(grad_theta_num, grads[k]))
-        print(k, np.allclose(grad_theta_num, grads[k], atol=1e-3, rtol=1e-4))
+        assert_allclose(grad_theta_num, grads[k], atol=1e-3, rtol=1e-4)
 
 if __name__ == "__main__":
     with open("rnn_data/goblet_book.txt", 'r', encoding='utf-8') as f:
