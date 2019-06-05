@@ -79,7 +79,7 @@ class BaseNetwork:
         return ret
 
     @staticmethod
-    def cross_entropy(logits, labels):
+    def cross_entropy(logits, labels, mode='mean'):
         """
         Return the cross entropy loss
         """
@@ -88,6 +88,9 @@ class BaseNetwork:
         p_true = p[labels, range(n_data)]
         log_likelihood = -np.log(p_true)
         loss = np.sum(log_likelihood)
+        if mode == 'mean':
+            loss /= n_data
+
         return loss
 
     def L2_penalty(self):
