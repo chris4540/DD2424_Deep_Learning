@@ -10,6 +10,7 @@ def max_relative_err(grad1, grad2):
     ret = dom / demon
     return np.max(ret)
 
+
 if __name__ == "__main__":
     test_data = load_batch("cifar-10-batches-py/test_batch")
     batch_size = 10
@@ -21,8 +22,8 @@ if __name__ == "__main__":
         test_inputs = inputs[:10, :]
         test_labels = labels
         break
-    print(test_inputs.shape)
-    print(test_labels.shape)
+    # print(test_inputs.shape)
+    # print(test_labels.shape)
 
 
     net = KLayerNeuralNetwork(
@@ -34,26 +35,28 @@ if __name__ == "__main__":
     grads = net._get_backward_grad(out, test_labels, weight_decay=0.0)
     # ========================================================================
     # print(grads)
-    net.eval()
-    theta = net.W_mats[0]
-    grad_theta_num = np.zeros(theta.shape)
-    h = 1e-5
-    h_inv = 1.0 / h
-    for idx in np.ndindex(theta.shape):
-        old_val = theta[idx]
-        theta[idx] = old_val - h
-        out = net(test_inputs)
-        l1 = net.cross_entropy(out, test_labels)
-
-        theta[idx] = old_val + h
-        out = net(test_inputs)
-        l2 = net.cross_entropy(out, test_labels)
-        grad = (l2-l1) * 0.5 * h_inv
-        grad_theta_num[idx] = grad
-    # ===========================================================
-    print(max_relative_err(grad_theta_num, grads['grad_W_mats'][0]))
-    # print(id(theta))
-    # print(id(net.W_mats[0]))
     # net.eval()
-    # loss += net.cross_entropy(out, labels)
+    for param in net.parameters():
+        thetas = getattr(net, param)
+        for i, theta in enumerate(thetas):
+            grad_theta_num = np.zeros(theta.shape)
+            h = 1e-5
+            h_inv = 1.0 / h
+            for idx in np.ndindex(theta.shape):
+                old_val = theta[idx]
+                theta[idx] = old_val - h
+                out = net(test_inputs)
+                l1 = net.cross_entropy(out, test_labels)
+
+                theta[idx] = old_val + h
+                out = net(test_inputs)
+                l2 = net.cross_entropy(out, test_labels)
+                grad = (l2-l1) * 0.5 * h_inv
+                grad_theta_num[idx] = grad
+            # -----------------------------------------
+            # obtain the analytical form
+            grad_an = grads['grad_' + param][i]
+            assert grad_an.shape == grad_theta_num.shape
+            name = "grad_%s.%d" % (param, i)
+            print(name, max_relative_err(grad_theta_num, grad_an))
 

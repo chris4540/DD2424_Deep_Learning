@@ -331,8 +331,9 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         ret = [
             'W_mats',
             'b_vecs',
-            'bn_shifts',
-            'bn_scales',
         ]
+        if self.batch_norm:
+            ret.append("bn_shifts")
+            ret.append("bn_scales")
 
         return ret
