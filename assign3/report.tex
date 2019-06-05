@@ -22,5 +22,28 @@
 \maketitle
 
 \section{Basic Part (Part 1)}
+\begin{question}{i}
+    I used the central difference method to calculate the numerical gradients
+    with respect to all the network parameters and used it check against with the
+    analytical gradients.
+
+    I used limited dimension of data (say the input dimension is 10) and 10
+    data to check with the numerical gradients.
+
+    I checked a 2-layer network and an one batch norm layer network.
+    For the pass criterion, I used the maximum relative error mentioned in assignment 1.
+    The highest value of the maximum relative errors is 0.002. The layer giving 
+    that value is the last linear layer. It is reasonably small and I considered
+    it is okay as the non-linearity of the activation layers.
+
+    I did the sanity check and the model can overfit with a batch of data.
+
+    Therefore I think that the model is bug free.
+\end{question}
+
+
+\begin{question}{ii}
+   
+\end{question}
 
 \end{document}
