@@ -5,6 +5,7 @@ for Assign2 bonus and Assign 3
 import numpy as np
 from scipy.special import softmax
 from lib_clsr.init import get_xavier_init
+from lib_clsr.init import get_random_init
 import utils
 
 class BaseNetwork:
@@ -51,6 +52,7 @@ class BaseNetwork:
         if self.wgt_init == "xavier":
             for in_dim, out_dim in utils.window(layer_dims, n=2):
                 W_mat, b_vec = get_xavier_init(in_dim, out_dim, dtype=self.dtype)
+                W_mat, b_vec = get_random_init(in_dim, out_dim, dtype=self.dtype)
                 self.W_mats.append(W_mat)
                 self.b_vecs.append(b_vec)
         elif self.wgt_init == "random":
