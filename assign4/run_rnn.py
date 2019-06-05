@@ -2,7 +2,6 @@ from utils.text_preproc import TextLinesReader
 from clsr.rnn import VanillaRNN
 from scipy.special import softmax
 import numpy as np
-import utils
 from utils.lrate import AdaGradOptim
 
 if __name__ == "__main__":
