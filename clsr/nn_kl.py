@@ -220,8 +220,6 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
         Usage:
         >>> model.train()
         >>> out = model.forward(inputs)
-        >>> grads = model.backward(out, labels)
-        >>> model.update(grads, lrate)
         """
         # get the number of layers
         n_layers = len(self.W_mats)
@@ -295,8 +293,8 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             'grad_b_vecs': grad_bs
         }
         if self.batch_norm:
-            ret['grad_scales'] = grad_scales
-            ret['grad_shifts'] = grad_shifts
+            ret['grad_bn_scales'] = grad_scales
+            ret['grad_bn_shifts'] = grad_shifts
 
         return ret
 
@@ -323,8 +321,8 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
 
         # update the batch norm
         if self.batch_norm:
-            grad_scales = grads['grad_scales']
-            grad_shifts = grads['grad_shifts']
+            grad_scales = grads['grad_bn_shifts']
+            grad_shifts = grads['grad_bn_scales']
             for l in range(n_layers-1):
                 self.bn_scales[l] = self.bn_scales[l] - lrate * grad_scales[l]
                 self.bn_shifts[l] = self.bn_shifts[l] - lrate * grad_shifts[l]
