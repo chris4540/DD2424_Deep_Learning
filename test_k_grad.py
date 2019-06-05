@@ -11,30 +11,30 @@ def max_relative_err(grad1, grad2):
     ret = dom / demon
     return np.max(ret)
 
-def check_num_grad(net, inputs, targets, check_params=None):
+def check_num_grad(model, inputs, targets, check_params=None):
     if check_params is None:
-        check_params = net.parameters()
+        check_params = model.parameters()
     # calculate the gradient analytically
-    net.train()
-    out = net(inputs)
-    grads = net._get_backward_grad(out, targets, weight_decay=0.0)
+    model.train()
+    out = model(inputs)
+    grads = model._get_backward_grad(out, targets, weight_decay=0.0)
     # calculate the numerical gradient
     h = 1e-5
     h_inv = 1.0 / h
-    net.eval()
+    model.eval()
     for param in check_params:
-        thetas = getattr(net, param)
+        thetas = getattr(model, param)
         for i, theta in enumerate(thetas):
             grad_theta_num = np.zeros(theta.shape)
             for idx in np.ndindex(theta.shape):
                 old_val = theta[idx]
                 theta[idx] = old_val - h
-                out = net(inputs)
-                l1 = net.cross_entropy(out, targets)
+                out = model(inputs)
+                l1 = model.cross_entropy(out, targets)
 
                 theta[idx] = old_val + h
-                out = net(inputs)
-                l2 = net.cross_entropy(out, targets)
+                out = model(inputs)
+                l2 = model.cross_entropy(out, targets)
                 grad = (l2-l1) * 0.5 * h_inv
                 grad_theta_num[idx] = grad
             # -----------------------------------------
