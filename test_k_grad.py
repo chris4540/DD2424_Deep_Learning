@@ -11,7 +11,9 @@ def max_relative_err(grad1, grad2):
     ret = dom / demon
     return np.max(ret)
 
-def check_num_grad(net, inputs, targets):
+def check_num_grad(net, inputs, targets, check_params=None):
+    if check_params is None:
+        check_params = net.parameters()
     # calculate the gradient analytically
     net.train()
     out = net(inputs)
@@ -20,7 +22,7 @@ def check_num_grad(net, inputs, targets):
     h = 1e-5
     h_inv = 1.0 / h
     net.eval()
-    for param in net.parameters():
+    for param in check_params:
         thetas = getattr(net, param)
         for i, theta in enumerate(thetas):
             grad_theta_num = np.zeros(theta.shape)
@@ -71,5 +73,4 @@ if __name__ == "__main__":
         n_features=10,
         n_hidden_nodes=[10], batch_norm=True, dtype='float64')
 
-    check_num_grad(net2, test_inputs, test_labels)
-
+    check_num_grad(net2, test_inputs, test_labels, check_params=['bn_shifts', 'bn_scales'])
