@@ -2,6 +2,8 @@ import time
 import numpy as np
 from itertools import islice
 from scipy.special import softmax
+from utils.lrate import StepLR
+from utils.lrate import CyclicLR
 
 def window(seq, n=2):
     """
@@ -56,7 +58,8 @@ def train(train_loader, net, weight_decay, scheduler):
         # grads = net.backward(out, labels, weight_decay)
         # net.backward(grads, lrate=scheduler.get_lr())
         net.backward(out, labels, weight_decay, lrate=scheduler.get_lr())
-        scheduler.step()
+        if isinstance(scheduler, CyclicLR):
+            scheduler.step()
         # ============================================
         # make prediction
         # apply softmax
@@ -65,6 +68,9 @@ def train(train_loader, net, weight_decay, scheduler):
         pred = np.argmax(s_mat, axis=0)
         correct += np.sum(pred == labels)
         total += labels.shape[0]
+
+    if isinstance(scheduler, StepLR):
+        scheduler.step()
 
     # print stats
     used_time = time.time() - st
