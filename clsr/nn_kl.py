@@ -43,9 +43,9 @@ class BatchNormalizeLayer:
         if self.training:
             batch_mean = np.mean(inputs, axis=1)[:, np.newaxis]
             batch_var = np.var(inputs, axis=1)[:, np.newaxis]
-            self.update_running(batch_mean, batch_var)
             self.cur_mean = batch_mean
             self.cur_var = batch_var
+            self.update_running(batch_mean, batch_var)
         else:
             batch_mean = self.running_mean
             batch_var = self.running_var
@@ -70,7 +70,32 @@ class BatchNormalizeLayer:
         # update running var
         self.running_var = alpha*self.running_var + beta*var
 
-    def back_pass(self, g_mat, z_mat):
+    # def back_pass(self, g_mat, s_cap):
+    # # def back_pass(self, g_mat, s_mat):
+    #     """
+    #     Implementation of BatchNormBackPass
+    #     See asignment for details
+
+    #     See also to have a clear picture:
+    #     https://kevinzakka.github.io/2016/09/14/batch_normalization/
+    #     """
+
+    #     sigma1 = (self.cur_var + self.eps)**(-0.5)
+    #     sigma2 = (self.cur_var + self.eps)**(-1.5)
+    #     g1 = g_mat * sigma1
+    #     g2 = g_mat * sigma2
+    #     d_mat = s_mat - self.cur_mean
+    #     c_mat = np.sum(g2 * d_mat, axis=1, keepdims=True)
+    #     # --------------------
+    #     # eqn 37
+    #     ret = g1 - np.sum()
+    #     # ret -= np.mean(g1, axis=1)[:, np.newaxis]
+    #     # ret -= (d_mat * c_mat) / n_data
+    #     # ret -= np.mean(d_mat * c_mat, axis=1)[:, np.newaxis]
+    #     return ret
+
+
+    def back_pass(self, g_mat, s_cap):
         """
         Implementation of BatchNormBackPass
         See asignment for details
@@ -78,21 +103,16 @@ class BatchNormalizeLayer:
         See also to have a clear picture:
         https://kevinzakka.github.io/2016/09/14/batch_normalization/
         """
-        sigma1 = (self.cur_var + self.eps)**(-0.5)
-        sigma2 = sigma1**3
 
-        #
-        g1 = g_mat * sigma1
-        g2 = g_mat * sigma2
-        d_mat = z_mat - self.cur_mean
-        c_mat = np.sum(g2 * d_mat, axis=1)[:, np.newaxis]
-
-        # --------------------
-        # eqn 37
-        ret = g1
-        ret -= np.mean(g1, axis=1)[:, np.newaxis]
-        ret -= np.mean(d_mat * c_mat, axis=1)[:, np.newaxis]
-        # --------------------
+        n_data = s_cap.shape[1]
+        # # --------------------
+        dom = (self.cur_var + self.eps)**(0.5) * n_data
+        # # --------------------
+        term1 = n_data * g_mat
+        term2 = np.sum(g_mat, axis=1, keepdims=True)
+        term3 = s_cap*np.sum(g_mat*s_cap, axis=1, keepdims=True)
+        nom = term1 - term2 - term3
+        ret = nom / dom
         return ret
 
     def train(self):
@@ -173,9 +193,9 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 self.z_mats.append(z_mat)
                 bn_layer = self.batch_norm_layer[i]
                 z_cap = bn_layer(z_mat)
-                z_mat = self.bn_scales[i] * z_cap + self.bn_shifts[i]
                 # store the batch norm layer output
                 self.z_caps.append(z_cap)
+                z_mat = self.bn_scales[i] * z_cap + self.bn_shifts[i]
 
             # ReLU activation function / rectifier
             h_mat = np.maximum(z_mat, 0)
@@ -200,7 +220,7 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             for ndim in self.n_hidden_nodes:
                 # the bn layers
                 self.batch_norm_layer.append(
-                    BatchNormalizeLayer(ndim, momentum=self.batch_norm_momentum)
+                    BatchNormalizeLayer(ndim, momentum=self.batch_norm_momentum, dtype=self.dtype)
                 )
                 # the shifts
                 self.bn_shifts.append(np.zeros((ndim, 1), dtype=self.dtype))
@@ -265,12 +285,14 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
 
                 grad_scales[l-1] = grad_scale
                 grad_shifts[l-1] = grad_shift
+                # ================================================================
                 # Propagate the gradients through the scale and shift
                 g_mat = g_mat * self.bn_scales[l-1]
                 # Propagate through the batch normalization
                 bn_layer = self.batch_norm_layer[l-1]
-                z_mat = self.z_mats[l-1]
-                g_mat = bn_layer.back_pass(g_mat, z_mat)
+                # z_mat = self.z_mats[l-1]
+                # print(z_mat.shape)
+                g_mat = bn_layer.back_pass(g_mat, z_cap)
 
             # ====================================================
             h_mat = self.hidden_output[l-1]

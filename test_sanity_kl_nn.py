@@ -31,6 +31,6 @@ if __name__ == "__main__":
 
     ntrain = train_data['labels'].shape[0]
     n_epoch = 500
-    scheduler = StepLR(0.01, 100, gamma=.1)
+    scheduler = StepLR(0.01, 30, gamma=.1)
     for epoch in range(n_epoch):
         train(train_loader, net, 0.0, scheduler)
