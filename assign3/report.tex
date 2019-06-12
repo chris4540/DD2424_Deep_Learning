@@ -27,23 +27,38 @@
     with respect to all the network parameters and used it check against with the
     analytical gradients.
 
-    I used limited dimension of data (say the input dimension is 10) and 10
-    data to check with the numerical gradients.
+    I checked two networks which are of 2, 3, and 4 layers with and without batch normalization.
 
-    I checked a 2-layer network and an one batch norm layer network.
-    For the pass criterion, I used the maximum relative error mentioned in assignment 1.
-    The highest value of the maximum relative errors is 0.002. The layer giving 
-    that value is the last linear layer. It is reasonably small and I considered
-    it is okay as the non-linearity of the activation layers.
+    I checked the maximum relative error which was mentioned in assignment and I
+    used the numpy function \texttt{numpy.testing.assert\_allclose} to test if
+    the gradients calculated analytically and numerically are closed element-wise.
+    During this time, the RNN model was set to be calculated in double precision.
 
-    I did the sanity check and the model can overfit with a batch of data.
+    For the maximum relative error, only the gradients of bias vectors went up to
+    1. This is because the numerical and analytical gradients are zero vectors and
+    therefore it is easily get the relative error to 1. These were verified by the
+    test assertions.
 
-    Therefore I think that the model is bug free.
+    I also checked if the numerical and analytical arrays were equals.
+
+    For the test assertion, consider the following equation:
+    \begin{equation*}
+        % absolute(a - b) <= (atol + rtol * absolute(b))
+        |a - b| \leq (\texttt{atol} + \texttt{rtol} * |b|)
+    \end{equation*}
+    where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
+    In the assertion, I set \texttt{atol} to be 1e-5 and \texttt{rtol} to be 1e-6.
+
+    In addition, I did the sanity checking to check if a 2-layer network can overfit
+    a small training set. I found that two networks (with or without batch normalization)
+    were able to overfit a small training set.
+
+    With these checking, I considered my analytical gradient calculations were bug free.
 \end{question}
 
 
 \begin{question}{ii}
-   
+
 \end{question}
 
 \end{document}
