@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{cleveref}
 
 \setlength{\parskip}{1em}
 
@@ -67,7 +68,25 @@
 
 
 \begin{question}{ii}
+    The evolution of the loss function of the 3-layer network with and without
+    batch normalization is shown in \cref{plt:loss_3l}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./loss_3l.png}
+        \caption{The loss function of the 3-layer network}
+        \label{plt:loss_3l}
+    \end{figure}
+\end{question}
 
+\begin{question}{iii}
+    The evolution of the loss function of the 6-layer network with and without
+    batch normalization is shown in \cref{plt:loss_6l}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./loss_6l.png}
+        \caption{The loss function of the 6-layer network}
+        \label{plt:loss_6l}
+    \end{figure}
 \end{question}
 
 \end{document}
