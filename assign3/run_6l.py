@@ -13,6 +13,7 @@ from clsr.nn_kl import KLayerNeuralNetwork
 import time
 from utils import train
 from utils import evaluate
+np.random.seed(10)
 
 if __name__ == "__main__":
     merged_data = get_all_train_data("cifar-10-batches-py")
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
     net = KLayerNeuralNetwork(
-        batch_norm=False,
+        batch_norm=True,
         batch_norm_momentum=0.7,
         n_hidden_nodes=[50, 30, 20, 20, 10, 10, 10, 10],
         p_dropout=0.0)

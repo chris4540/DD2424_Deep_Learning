@@ -11,6 +11,7 @@ if __name__ == "__main__":
 
     ax = df.plot(kind='line', legend=True, marker='x')
     loc = plticker.MultipleLocator(base=5) # this locator puts ticks at regular intervals
+    ax.set_xlim([0, 20])
     ax.xaxis.set_major_locator(loc)
     ax.set_ylabel("Loss")
     ax.set_xlabel("Epoch")
