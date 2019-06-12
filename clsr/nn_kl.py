@@ -70,44 +70,21 @@ class BatchNormalizeLayer:
         # update running var
         self.running_var = alpha*self.running_var + beta*var
 
-    # def back_pass(self, g_mat, s_cap):
-    # # def back_pass(self, g_mat, s_mat):
-    #     """
-    #     Implementation of BatchNormBackPass
-    #     See asignment for details
-
-    #     See also to have a clear picture:
-    #     https://kevinzakka.github.io/2016/09/14/batch_normalization/
-    #     """
-
-    #     sigma1 = (self.cur_var + self.eps)**(-0.5)
-    #     sigma2 = (self.cur_var + self.eps)**(-1.5)
-    #     g1 = g_mat * sigma1
-    #     g2 = g_mat * sigma2
-    #     d_mat = s_mat - self.cur_mean
-    #     c_mat = np.sum(g2 * d_mat, axis=1, keepdims=True)
-    #     # --------------------
-    #     # eqn 37
-    #     ret = g1 - np.sum()
-    #     # ret -= np.mean(g1, axis=1)[:, np.newaxis]
-    #     # ret -= (d_mat * c_mat) / n_data
-    #     # ret -= np.mean(d_mat * c_mat, axis=1)[:, np.newaxis]
-    #     return ret
-
-
     def back_pass(self, g_mat, s_cap):
         """
         Implementation of BatchNormBackPass
         See asignment for details
 
-        See also to have a clear picture:
+        Enployed a different way to calculate the backpass of batchnorm layer
+
+        Derives:
         https://kevinzakka.github.io/2016/09/14/batch_normalization/
         """
 
         n_data = s_cap.shape[1]
-        # # --------------------
+
+        # the dominator
         dom = (self.cur_var + self.eps)**(0.5) * n_data
-        # # --------------------
         term1 = n_data * g_mat
         term2 = np.sum(g_mat, axis=1, keepdims=True)
         term3 = s_cap*np.sum(g_mat*s_cap, axis=1, keepdims=True)
@@ -175,7 +152,7 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             self.hidden_output = [h_mat]
             if self.batch_norm:
                 self.z_caps = []  # the output of batch norm layer
-                self.z_mats = []  # the output of affine layers / fully-connected layer
+                # self.z_mats = []  # the output of affine layers / fully-connected layer
 
         nlayer = len(self.W_mats)
 
@@ -190,7 +167,7 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
             # apply batch norm
             if self.batch_norm:
                 # store the affine layer output
-                self.z_mats.append(z_mat)
+                # self.z_mats.append(z_mat)
                 bn_layer = self.batch_norm_layer[i]
                 z_cap = bn_layer(z_mat)
                 # store the batch norm layer output
@@ -290,8 +267,6 @@ class KLayerNeuralNetwork(TwoLayerNeuralNetwork):
                 g_mat = g_mat * self.bn_scales[l-1]
                 # Propagate through the batch normalization
                 bn_layer = self.batch_norm_layer[l-1]
-                # z_mat = self.z_mats[l-1]
-                # print(z_mat.shape)
                 g_mat = bn_layer.back_pass(g_mat, z_cap)
 
             # ====================================================
