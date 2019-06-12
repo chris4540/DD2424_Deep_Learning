@@ -49,9 +49,18 @@
     where \texttt{atol} and \texttt{rtol} are the tolerance parameters.
     In the assertion, I set \texttt{atol} to be 1e-5 and \texttt{rtol} to be 1e-6.
 
-    In addition, I did the sanity checking to check if a 2-layer network can overfit
+    In addition, I did the sanity checking to check if a 2-layer network
+    (with 50 hidden nodes) can overfit
     a small training set. I found that two networks (with or without batch normalization)
     were able to overfit a small training set.
+
+    The number of epochs was 200 and the initial learning rate was 0.05. The learning
+    rate was halved every 20 epochs.
+
+    With batch normalization, the loss after training was 0.244 and the training
+    accuracy was 96.000%.
+    Without batch normalization, the loss after training was 0.103 and the training
+    accuracy was 98.990%.
 
     With these checking, I considered my analytical gradient calculations were bug free.
 \end{question}
