@@ -23,9 +23,9 @@ def check_num_grad(model, inputs, targets, check_params=None):
     out = model(inputs)
     grads = model._get_backward_grad(out, targets, weight_decay=0.0)
     # calculate the numerical gradient
-    h = 1e-6
+    h = 5e-8
     h_inv = 1.0 / h
-    model.train()
+    # model.train()
     for param in check_params:
         thetas = getattr(model, param)
         for i, theta in enumerate(thetas):
@@ -49,36 +49,72 @@ def check_num_grad(model, inputs, targets, check_params=None):
             # do some checking
             name = "grad_%s.%d" % (param, i)
             print(name, max_relative_err(grad_theta_num, grad_an))
-            # assert_allclose(grad_theta_num, grad_an, atol=1e-3, rtol=1e-4)
+            assert_allclose(grad_theta_num, grad_an, atol=1e-5, rtol=1e-6)
 
 
 if __name__ == "__main__":
     test_data = load_batch("cifar-10-batches-py/test_batch")
-    batch_size = 50
+    batch_size = 10
+    n_features = 40
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
 
     test_inputs = None
     test_labels = None
     for inputs, labels in test_loader:
-        test_inputs = inputs[:100, :]
+        test_inputs = inputs[:n_features, :]
         test_labels = labels
         break
-    # print(test_inputs.shape)
-    # print(test_labels.shape)
+
+    net = KLayerNeuralNetwork(
+        p_dropout=0.0,
+        n_features=n_features,
+        n_hidden_nodes=[50],
+        batch_norm=True,
+        dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
+
+    net = KLayerNeuralNetwork(
+        p_dropout=0.0,
+        n_features=n_features,
+        n_hidden_nodes=[50, 50],
+        batch_norm=True,
+        dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
 
 
-    # net = KLayerNeuralNetwork(
-    #     p_dropout=0.0,
-    #     n_features=100,
-    #     n_hidden_nodes=[10, 10], batch_norm=False, dtype='float64')
-    # check_num_grad(net, test_inputs, test_labels)
-    net2 = KLayerNeuralNetwork(
+    net = KLayerNeuralNetwork(
+        p_dropout=0.0,
+        n_features=n_features,
+        n_hidden_nodes=[50, 50, 50],
+        batch_norm=False,
+        dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
+
+    # =================================================================
+    # check batch norm
+    net = KLayerNeuralNetwork(
         verbose=False,
         p_dropout=0.0,
-        n_features=100,
-        n_hidden_nodes=[10, 10],
+        n_features=n_features,
+        n_hidden_nodes=[50],
         batch_norm=True,
-        # batch_norm_momentum=0.7,
         dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
 
-    check_num_grad(net2, test_inputs, test_labels)
+    net = KLayerNeuralNetwork(
+        verbose=False,
+        p_dropout=0.0,
+        n_features=n_features,
+        n_hidden_nodes=[50, 50],
+        batch_norm=True,
+        dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
+
+    net = KLayerNeuralNetwork(
+        verbose=False,
+        p_dropout=0.0,
+        n_features=n_features,
+        n_hidden_nodes=[50, 50, 50],
+        batch_norm=True,
+        dtype='float64')
+    check_num_grad(net, test_inputs, test_labels)
