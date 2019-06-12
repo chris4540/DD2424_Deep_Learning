@@ -93,6 +93,9 @@ class BaseNetwork:
         n_data = labels.shape[0]
         p = softmax(logits, axis=0)
         p_true = p[labels, range(n_data)]
+
+        # add eps to prevent zeros
+        p_true += np.finfo(p_true.dtype).eps
         log_likelihood = -np.log(p_true)
         loss = np.sum(log_likelihood)
         if mode == 'mean':
