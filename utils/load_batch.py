@@ -65,20 +65,26 @@ class cifar10_DataLoader:
             >>> for inputs, labels in dataloader(data, batch_size=100):
                     # make use of inputs and labels
                     pass
-        TODO:
-            impl. shuffle
         """
         self.all_labels = data['labels']
         self.all_inputs = data['pixel_data']
         self.batch_size = batch_size
+        self.shuffle = shuffle
+        self.idx =  np.arange(self.all_labels.shape[0])
+
+    def _shuffle_idx(self):
+        np.random.shuffle(self.idx)
 
     def iterator(self):
+        if self.shuffle:
+            self._shuffle_idx()
         n_data = self.all_labels.shape[0]
         for j in range(int(np.ceil(n_data / self.batch_size))):
             j_s = j * self.batch_size
             j_e = (j+1) * self.batch_size
-            batch_inputs = self.all_inputs[:, j_s:j_e]
-            batch_labels = self.all_labels[j_s:j_e]
+            indices = self.idx[j_s:j_e]
+            batch_inputs = self.all_inputs[:, indices]
+            batch_labels = self.all_labels[indices]
             yield batch_inputs, batch_labels
 
     def __iter__(self):
