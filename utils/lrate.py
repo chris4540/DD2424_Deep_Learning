@@ -42,7 +42,7 @@ class StepLR(BaseOptimizer):
 
     def get_lr(self):
         n_step = self.total_step // self.step_size
-        ret = self.init_lr * ((self.gamma)**(-n_step))
+        ret = self.init_lr * ((self.gamma)**(n_step))
         return ret
 
 class CyclicLR(BaseOptimizer):
