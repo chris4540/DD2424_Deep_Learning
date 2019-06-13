@@ -1,0 +1,63 @@
+Done preprocessing!
+-------- TRAINING PARAMS --------
+dtype: float32
+verbose: True
+wgt_init: random
+init_sig: 0.1
+p_dropout: 0.0
+n_features: 3072
+n_classes: 10
+n_hidden_nodes: [50, 30, 20, 20, 10, 10, 10, 10]
+batch_norm: False
+batch_norm_momentum: 0.7
+-------- TRAINING PARAMS --------
+Weightings and bias are initialized with random method.
+--------- Train Schedule ---------
+ncycle:  2
+n_epoch:  20
+step_size:  2250
+iter_per_epoch:  450
+n_step_per_cycle:  5
+weight_decay:  0.005
+--------- Train Schedule ---------
+Train Time used: 3 	 Loss: 2.697 | Train Acc: 11.860% (5337/45000)
+[Evaluate] Valid. Acc.: 16.700% 	 Test Acc.: 15.550%
+Train Time used: 3 	 Loss: 2.158 | Train Acc: 19.944% (8975/45000)
+[Evaluate] Valid. Acc.: 23.360% 	 Test Acc.: 22.270%
+Train Time used: 3 	 Loss: 2.006 | Train Acc: 24.753% (11139/45000)
+[Evaluate] Valid. Acc.: 27.520% 	 Test Acc.: 26.630%
+Train Time used: 3 	 Loss: 1.911 | Train Acc: 27.729% (12478/45000)
+[Evaluate] Valid. Acc.: 29.800% 	 Test Acc.: 28.890%
+Train Time used: 3 	 Loss: 1.849 | Train Acc: 29.627% (13332/45000)
+[Evaluate] Valid. Acc.: 30.620% 	 Test Acc.: 31.200%
+Train Time used: 3 	 Loss: 1.795 | Train Acc: 31.411% (14135/45000)
+[Evaluate] Valid. Acc.: 32.320% 	 Test Acc.: 33.470%
+Train Time used: 3 	 Loss: 1.741 | Train Acc: 33.829% (15223/45000)
+[Evaluate] Valid. Acc.: 34.180% 	 Test Acc.: 34.930%
+Train Time used: 4 	 Loss: 1.691 | Train Acc: 36.120% (16254/45000)
+[Evaluate] Valid. Acc.: 36.880% 	 Test Acc.: 37.350%
+Train Time used: 3 	 Loss: 1.642 | Train Acc: 38.264% (17219/45000)
+[Evaluate] Valid. Acc.: 38.200% 	 Test Acc.: 38.610%
+Train Time used: 3 	 Loss: 1.596 | Train Acc: 40.167% (18075/45000)
+[Evaluate] Valid. Acc.: 38.260% 	 Test Acc.: 38.770%
+Train Time used: 3 	 Loss: 1.582 | Train Acc: 40.767% (18345/45000)
+[Evaluate] Valid. Acc.: 39.120% 	 Test Acc.: 39.180%
+Train Time used: 3 	 Loss: 1.609 | Train Acc: 39.849% (17932/45000)
+[Evaluate] Valid. Acc.: 38.480% 	 Test Acc.: 38.760%
+Train Time used: 3 	 Loss: 1.637 | Train Acc: 39.069% (17581/45000)
+[Evaluate] Valid. Acc.: 34.740% 	 Test Acc.: 34.780%
+Train Time used: 3 	 Loss: 1.656 | Train Acc: 38.516% (17332/45000)
+[Evaluate] Valid. Acc.: 34.780% 	 Test Acc.: 34.150%
+Train Time used: 3 	 Loss: 1.672 | Train Acc: 37.916% (17062/45000)
+[Evaluate] Valid. Acc.: 30.820% 	 Test Acc.: 30.540%
+Train Time used: 3 	 Loss: 1.651 | Train Acc: 38.896% (17503/45000)
+[Evaluate] Valid. Acc.: 35.960% 	 Test Acc.: 35.840%
+Train Time used: 3 	 Loss: 1.599 | Train Acc: 40.922% (18415/45000)
+[Evaluate] Valid. Acc.: 39.740% 	 Test Acc.: 39.580%
+Train Time used: 3 	 Loss: 1.549 | Train Acc: 42.989% (19345/45000)
+[Evaluate] Valid. Acc.: 41.780% 	 Test Acc.: 41.760%
+Train Time used: 3 	 Loss: 1.493 | Train Acc: 45.027% (20262/45000)
+[Evaluate] Valid. Acc.: 42.620% 	 Test Acc.: 43.590%
+Train Time used: 3 	 Loss: 1.434 | Train Acc: 47.138% (21212/45000)
+[Evaluate] Valid. Acc.: 43.900% 	 Test Acc.: 44.200%
+[Result] Valid. Acc.: 43.900% 	 Test Acc.: 44.200%
