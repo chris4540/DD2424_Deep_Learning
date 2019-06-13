@@ -42,19 +42,39 @@ EOF
 # tests/utils.py
 # "
 
-# Assign 4
-files="
-tests/test_rnn_numgrad.py
-tests/test_textline_reader.py
-assign4/plt_basic_rnn_cost.sh
-assign4/plt_csv.py
-assign4/run_preproc.py
-assign4/run_rnn.py
-assign4/run_tweets.py
-utils/text_preproc.py
-utils/lrate.py
-"
+# # Assign 4
+# files="
+# tests/test_rnn_numgrad.py
+# tests/test_textline_reader.py
+# assign4/plt_basic_rnn_cost.sh
+# assign4/plt_csv.py
+# assign4/run_preproc.py
+# assign4/run_rnn.py
+# assign4/run_tweets.py
+# utils/text_preproc.py
+# utils/lrate.py
+# "
 
+# Assign 3
+files="
+utils/__init__.py
+utils/handle_data.py
+utils/load_batch.py
+utils/lrate.py
+lib_clsr/init.py
+clsr/nn_kl.py
+clsr/base.py
+assign3/plt_csv.py
+assign3/plt_json.py
+assign3/run_3l.py
+assign3/run_6l.py
+assign3/run_optim_wd.py
+assign3/run_sen_init.py
+assign3/search_lambda_3l.py
+assign3/make_cmp_csvs.sh
+assign3/make_csvs.sh
+assign3/run_sen_exp.sh
+"
 for file in ${files}; do
     echo ${file}
     echo "# ================================================================================================" >> ./submission_code.py
