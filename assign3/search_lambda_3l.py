@@ -26,7 +26,7 @@ def draw_lambda_val(l_min, l_max):
     return 10**log_lambda
 
 
-def get_valid_score(train_loader, valid_loader, step_size, weight_decay):
+def get_valid_score(train_loader, valid_loader, n_epoch, step_size, weight_decay):
     print("weight_decay: ", weight_decay)
     net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0, batch_norm=True, batch_norm_momentum=0.7)
     scheduler = CyclicLR(eta_min=1e-5, eta_max=1e-1, step_size=step_size)
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     test_loader = cifar10_DataLoader(test_data, batch_size=batch_size)
     # ==================================================================
     ntrain = train_data['labels'].shape[0]
-    n_step_per_cycle = 3
+    n_step_per_cycle = 5
     ncycle = 2
     n_epoch = ncycle*n_step_per_cycle*2
     iter_per_epoch = int(np.ceil(ntrain / batch_size))
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     results = list()
     for _ in range(20):
-        w_decay = draw_lambda_val(-5, -1)
+        w_decay = draw_lambda_val(-5, -3)
         best_valid = get_valid_score(train_loader, valid_loader, step_size, w_decay)
         results.append(
             {

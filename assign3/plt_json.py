@@ -11,5 +11,6 @@ if __name__ == "__main__":
 
     ax = df.plot(kind='line', legend=True, marker='x', logx=True)
     ax.set_ylabel("Validation Acc.")
+    ax.set_ylabel("lambda")
     fig = ax.get_figure()
     fig.savefig(json_name+'.png', bbox_inches='tight', dpi=200)
