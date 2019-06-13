@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # ==================================================================
     ntrain = train_data['labels'].shape[0]
     n_step_per_cycle = 5
-    ncycle = 2
+    ncycle = 3
     n_epoch = ncycle*n_step_per_cycle*2
     iter_per_epoch = int(np.ceil(ntrain / batch_size))
     step_size = n_step_per_cycle*iter_per_epoch
@@ -86,8 +86,8 @@ if __name__ == "__main__":
 
     results = list()
     for _ in range(20):
-        w_decay = draw_lambda_val(-5, -3)
-        best_valid = get_valid_score(train_loader, valid_loader, step_size, w_decay)
+        w_decay = draw_lambda_val(-4, -2)
+        best_valid = get_valid_score(train_loader, valid_loader, n_epoch, step_size, w_decay)
         results.append(
             {
                 "weight_decay": w_decay,
