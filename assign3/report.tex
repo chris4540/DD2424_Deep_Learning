@@ -88,5 +88,39 @@
         \label{plt:loss_6l}
     \end{figure}
 \end{question}
+\begin{question}{iv}
+    I did coarse-to-fine random search.
+    For the coarse search, I did a random search on \texttt{lambda} in log scale.
+    I drew 20 \texttt{lambda} values from the uniform distribution in log scale.
+    The lower bound and the upper bound of the uniform distribution of $\log_{10}(\texttt{lambda})$
+    were -5 and -1 respectivelly. I ran only 2 cycle and set the step size as
+    \begin{align*}
+        \texttt{n\_s} = 2 ~ \texttt{floor}(n / n\_batch)
+    \end{align*}
+    The coarse search result is plotted in \cref{plt:coarse_search}.
+    I got the validation accuracy 52.28 \% when \texttt{lambda} equals to 0.00115.
 
+    For the fine search, I did the same but I changed the range of
+    $\log_{10}(\texttt{lambda})$ to [-2, -4]. I changed it since
+    \cref{plt:coarse_search} indicated that we can obtain a optimal performance
+    when $\log_{10}(\texttt{lambda})$ in between -2 and -4.
+    I also changed the step size as
+    \begin{align*}
+        \texttt{n\_s} = 3 ~ \texttt{floor}(n / n\_batch)
+    \end{align*}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./coarse_search.png}
+        \caption{The coarse search result}
+        \label{plt:coarse_search}
+    \end{figure}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./fine_search.png}
+        \caption{The fine search result}
+        \label{plt:fine_search}
+    \end{figure}
+\end{question}
 \end{document}
