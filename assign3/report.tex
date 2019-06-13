@@ -5,6 +5,8 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{subcaption}
+% \usepackage{mwe}
+% \usepackage{subfig}
 \usepackage{cleveref}
 
 \setlength{\parskip}{1em}
@@ -88,6 +90,7 @@
         \label{plt:loss_6l}
     \end{figure}
 \end{question}
+
 \begin{question}{iv}
     I did coarse-to-fine random search.
     For the coarse search, I did a random search on \texttt{lambda} in log scale.
@@ -112,7 +115,7 @@
     The fine search result is plotted in \cref{plt:fine_search}.
     I got the validation accuracy 52.38\% when \texttt{lambda} equals to 0.00560.
 
-    The test accuracy of the corresponding \texttt{lambda} value was 52.020\%
+    The test accuracy of the corresponding optimal \texttt{lambda} value was 52.89\%
 
     \begin{figure}[h]
         \centering
@@ -128,4 +131,52 @@
         \label{plt:fine_search}
     \end{figure}
 \end{question}
+
+% Q5
+\begin{question}{v}
+
+    The required plots are shown in \cref{fig:all_sig}.
+
+    \begin{figure}
+        \begin{subfigure}{.5\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{1e-1.png}
+        \caption{}
+        \label{fig:sig_1e-1}
+    \end{subfigure}%
+    \begin{subfigure}{.5\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{1e-3.png}
+        \caption{}
+        \label{fig:sig_1e-3}
+    \end{subfigure}\\[1ex]
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=0.5\textwidth]{1e-4.png}
+        \caption{}
+        \label{fig:sig_1e-4}
+        \end{subfigure}
+        \caption{
+            Three sigmas values for initialization.
+            \cref{fig:sig_1e-1} is for \texttt{sig} = \texttt{1e-1};
+            \cref{fig:sig_1e-3} is for \texttt{sig} = \texttt{1e-3};
+            \cref{fig:sig_1e-4} is for \texttt{sig} = \texttt{1e-4}
+        }
+        \label{fig:all_sig}
+    \end{figure}
+
+    Obviously, training with batch normalization is more stable and robust as
+    we see in \cref{fig:sig_1e-3} or \cref{fig:sig_1e-4}. Without batch normalization,
+    we cannot train the networks when the initial sigmas were \texttt{1e-3} and \texttt{1e-4}.
+
+    With the batch normalization, we can train a network with the initialization weighting
+    drawing from a standard normal with a small variance.
+    It is usefull in He initialization scheme since the variance of the normal distribution
+    of the weight matrix is very small when the number of incoming nodes are large.
+
+    We can see that even without batch normalization, the network is trainable when the sigma value is
+    \texttt{1e-1} (see \cref{fig:sig_1e-1})
+    and thus training without batch normalization is sensitive to the sigma value.
+\end{question}
+
 \end{document}
