@@ -7,8 +7,8 @@ def get_random_init(in_dim, out_dim, std, dtype=np.float32):
     """
     This initialization scheme follows assignment1
     """
-    W_mat = (std**2) * np.random.randn(out_dim, in_dim).astype(dtype)
-    b_vec = (std**2) * np.random.randn(out_dim, 1).astype(dtype)
+    W_mat = std * np.random.randn(out_dim, in_dim).astype(dtype)
+    b_vec = std * np.random.randn(out_dim, 1).astype(dtype)
     return W_mat, b_vec
 
 def get_xavier_init(in_dim, out_dim, dtype=np.float32):
