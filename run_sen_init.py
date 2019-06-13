@@ -39,9 +39,9 @@ if __name__ == "__main__":
     # net = KLayerNeuralNetwork(n_hidden_nodes=[50, 50], p_dropout=0.0, batch_norm=True)
     net = KLayerNeuralNetwork(p_dropout=0.0,
         n_hidden_nodes= [50, 30, 20, 20, 10, 10, 10, 10],
-        batch_norm=True,
+        batch_norm=is_bn,
         wgt_init="random",
-        init_sig=sig
+        init_sig=init_sig
         )
     ntrain = train_data['labels'].shape[0]
     n_step_per_cycle = 5
