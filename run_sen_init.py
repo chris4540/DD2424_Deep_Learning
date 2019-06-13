@@ -13,10 +13,11 @@ import time
 from utils import train
 from utils import evaluate
 import os
-
+from ast import literal_eval
 if __name__ == "__main__":
     # Obtain the value from environement varaible
-    is_bn = bool(os.environ.get("is_bn", False))
+    is_bn = literal_eval(os.environ.get("is_bn", "False"))
+
     init_sig = float(os.environ.get("init_sig", 1e-1))
 
     merged_data = get_all_train_data("cifar-10-batches-py")
